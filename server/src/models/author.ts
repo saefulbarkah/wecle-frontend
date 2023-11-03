@@ -5,6 +5,7 @@ const authorSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  name: String,
 });
 
 type TAuthor = InferSchemaType<typeof authorSchema>;

@@ -1,10 +1,6 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
 const userSchema = new Schema({
-  id: {
-    type: Schema.Types.ObjectId,
-    default: Schema.Types.ObjectId,
-  },
   name: {
     type: String,
     required: true,
