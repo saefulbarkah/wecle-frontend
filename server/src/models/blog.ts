@@ -1,8 +1,13 @@
 import mongoose, { InferSchemaType, Schema } from 'mongoose';
+import { authorSchema } from './author.js';
 
 const blogSchema = new Schema({
   title: {
     type: String,
+    required: true,
+  },
+  author: {
+    type: authorSchema,
     required: true,
   },
   body: {
