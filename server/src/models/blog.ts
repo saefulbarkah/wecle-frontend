@@ -1,5 +1,4 @@
 import mongoose, { InferSchemaType, Schema } from 'mongoose';
-import { authorSchema } from './author.js';
 
 const blogSchema = new Schema({
   title: {
@@ -7,8 +6,8 @@ const blogSchema = new Schema({
     required: true,
   },
   author: {
-    type: authorSchema,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Author',
   },
   body: {
     type: String,

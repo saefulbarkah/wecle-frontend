@@ -1,11 +1,10 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
-export const authorSchema = new Schema({
-  id: {
+const authorSchema = new Schema({
+  user: {
     type: Schema.Types.ObjectId,
-    default: Schema.ObjectId,
+    ref: 'User',
   },
-  name: String,
 });
 
 type TAuthor = InferSchemaType<typeof authorSchema>;
