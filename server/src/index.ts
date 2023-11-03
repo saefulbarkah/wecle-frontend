@@ -6,6 +6,9 @@ import * as route from './routes/index.js';
 const app = express();
 const port = 4000;
 
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 app.get('/', (req, res) => {
   res.send('express + typescript');
 });
