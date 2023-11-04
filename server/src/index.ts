@@ -4,6 +4,7 @@ import { DB_URL } from './config/db.js';
 import * as route from './routes/index.js';
 import User from './models/user.js';
 import Author from './models/author.js';
+import protectedRequest from './middleware/protect-api.js';
 
 const app = express();
 const port = 4000;
@@ -24,7 +25,7 @@ app.get('/clear', async (req, res) => {
 
 // route lists
 app.use('/auth', route.auth);
-app.use('/authors', route.author);
+app.use('/authors', protectedRequest, route.author);
 
 mongoose
   .connect(DB_URL)
