@@ -1,6 +1,6 @@
 import mongoose, { InferSchemaType, Schema } from 'mongoose';
 
-const blogSchema = new Schema({
+const articleSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -22,8 +22,8 @@ const blogSchema = new Schema({
     default: Date.now,
   },
 });
-type Blog = InferSchemaType<typeof blogSchema>;
+type ArticleType = InferSchemaType<typeof articleSchema>;
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Article = mongoose.model<ArticleType>('Article', articleSchema);
 
-export default Blog;
+export default Article;
