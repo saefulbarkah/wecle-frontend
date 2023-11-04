@@ -8,6 +8,7 @@ const articleSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'Author',
+    requird: true,
   },
   body: {
     type: String,
@@ -16,6 +17,7 @@ const articleSchema = new Schema({
   slug: {
     type: String,
     required: true,
+    unique: true,
   },
   date: {
     type: Date,
