@@ -7,15 +7,15 @@ import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
 
 const createArticle = async (req: Request, res: Response) => {
   try {
-    const { author, body, title } = req.body as articleType;
-    articleSchema.parse({ author, body, title });
+    const { author, content, title } = req.body as articleType;
+    articleSchema.parse({ author, content, title });
 
     // make slug
     const randomizer = nanoid(10);
     const capTitle = toCapitalizeString(title);
     const slug = `${toSlug(capTitle)}-${randomizer}`;
 
-    await Article.create({ author, body, title, slug });
+    await Article.create({ author, content, title, slug });
     res.send('Article success created');
   } catch (error) {
     zodErrorHandling(error, res);

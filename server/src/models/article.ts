@@ -10,7 +10,7 @@ const articleSchema = new Schema({
     ref: 'Author',
     requird: true,
   },
-  body: {
+  content: {
     type: String,
     required: true,
   },

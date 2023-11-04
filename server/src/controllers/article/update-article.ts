@@ -8,15 +8,15 @@ import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
 const updateArticle = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const { body, title, author } = req.body;
-    articleSchema.parse({ body, title, author });
+    const { content, title, author } = req.body;
+    articleSchema.parse({ content, title, author });
 
     // make slug
     const randomizer = nanoid(10);
     const capTitle = toCapitalizeString(title);
     const slug = `${toSlug(capTitle)}-${randomizer}`;
 
-    await Article.updateOne({ _id: id }, { body, title, slug });
+    await Article.updateOne({ _id: id }, { content, title, slug });
     res.send('Article updated successfully');
   } catch (error) {
     zodErrorHandling(error, res);
