@@ -22,7 +22,9 @@ app.get('/clear', async (req, res) => {
   res.send('cleared all collection');
 });
 
+// route lists
 app.use('/auth', route.auth);
+app.use('/authors', route.author);
 
 mongoose
   .connect(DB_URL)
