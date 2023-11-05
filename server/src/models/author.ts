@@ -6,6 +6,14 @@ const authorSchema = new Schema({
     ref: 'User',
   },
   name: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 type TAuthor = InferSchemaType<typeof authorSchema>;

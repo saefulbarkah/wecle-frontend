@@ -5,6 +5,8 @@ import * as route from './routes/index.js';
 import User from './models/user.js';
 import Author from './models/author.js';
 import protectedRequest from './middleware/protect-api.js';
+import Article from './models/article.js';
+import comments from './models/comments.js';
 
 const app = express();
 const port = 4000;
@@ -20,6 +22,8 @@ app.get('/', (req, res) => {
 app.get('/clear', async (req, res) => {
   await User.deleteMany();
   await Author.deleteMany();
+  await Article.deleteMany();
+  await comments.deleteMany();
   res.send('cleared all collection');
 });
 
@@ -27,6 +31,7 @@ app.get('/clear', async (req, res) => {
 app.use('/auth', route.auth);
 app.use('/authors', protectedRequest, route.author);
 app.use('/article', protectedRequest, route.article);
+app.use('/comments', protectedRequest, route.comment);
 
 mongoose
   .connect(DB_URL)

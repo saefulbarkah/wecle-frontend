@@ -14,12 +14,22 @@ const articleSchema = new Schema({
     type: String,
     required: true,
   },
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   slug: {
     type: String,
     required: true,
     unique: true,
   },
-  date: {
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
     type: Date,
     default: Date.now,
   },

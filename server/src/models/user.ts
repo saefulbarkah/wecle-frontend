@@ -16,6 +16,14 @@ const userSchema = new Schema({
   avatar: {
     type: String,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 type userType = InferSchemaType<typeof userSchema>;
