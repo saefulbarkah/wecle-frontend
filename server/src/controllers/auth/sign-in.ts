@@ -2,8 +2,9 @@ import { Response, Request } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
 import { createToken } from '../../lib/jwt.js';
-import zodErrorHandling from '../../lib/zod-error-handling.js';
+import errorhandling from '../../lib/error-handling.js';
 import { z } from 'zod';
+import { NotFoundError, ValidationError } from '../../errors/index.js';
 
 type Tuser = {
   email: string;
@@ -26,17 +27,23 @@ const signIn = async (req: Request, res: Response) => {
 
     // check if any user
     const user = await User.findOne({ email: email });
-    if (!user) throw Error('Invalid Credentials');
+    if (!user) throw new NotFoundError('Invalid Credentials');
 
     // validation password
-    const validatePassword = bcrypt.compare(password, user.password);
-    if (!validatePassword) throw Error('Email or password incorrect');
+    const validatePassword = await bcrypt.compare(password, user.password);
+    if (!validatePassword) {
+      throw new ValidationError('Email or password incorrect');
+    }
 
     // create token
     const token = createToken(user._id);
-    res.send({ user: user.email, token });
+    res.cookie('auth', token, { httpOnly: true, secure: true });
+    res.send({
+      user: { email: user.email, name: user.name, avatar: user.avatar },
+      token,
+    });
   } catch (error) {
-    zodErrorHandling(error, res);
+    errorhandling(error as Error, res);
   }
 };
 

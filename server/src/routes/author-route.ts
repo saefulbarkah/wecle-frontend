@@ -5,5 +5,6 @@ const router = express.Router();
 
 // route lists
 router.get('/', authorController.lists);
+router.patch('/update', authorController.updateAuthor);
 
 export default router;

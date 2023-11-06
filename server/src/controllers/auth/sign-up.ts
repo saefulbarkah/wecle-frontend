@@ -1,10 +1,11 @@
 import { Response, Request } from 'express';
 import { z } from 'zod';
-import zodErrorHandling from '../../lib/zod-error-handling.js';
+import errorhandling from '../../lib/error-handling.js';
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
 import Author from '../../models/author.js';
 import { createToken } from '../../lib/jwt.js';
+import { ValidationError } from '../../errors/index.js';
 
 type Tuser = {
   name: string;
@@ -36,7 +37,7 @@ const signUp = async (req: Request, res: Response) => {
 
     // check if email already use
     const user = await User.findOne({ email });
-    if (user) throw Error('email is already use');
+    if (user) throw new ValidationError('email is already use');
 
     // hash password
     const saltRound = 10;
@@ -48,7 +49,8 @@ const signUp = async (req: Request, res: Response) => {
     if (avatar) {
       newAvatar = avatar;
     } else {
-      newAvatar = 'is new';
+      const encodeURL = encodeURIComponent(name);
+      newAvatar = `https://ui-avatars.com/api/?name=${encodeURL}`;
     }
 
     // create new user
@@ -70,7 +72,7 @@ const signUp = async (req: Request, res: Response) => {
 
     res.send({ user: newUser.email, token });
   } catch (error) {
-    zodErrorHandling(error, res);
+    errorhandling(error as Error, res);
   }
 };
 

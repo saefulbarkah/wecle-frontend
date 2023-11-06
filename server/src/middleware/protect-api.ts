@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import { ValidationError } from '../errors/index.js';
 
 const protectedRequest = async (
   req: Request,
@@ -14,7 +15,10 @@ const protectedRequest = async (
 
   const token = authorization.split(' ')[1];
   try {
-    jwt.verify(token, process.env.SECRET_JWT as string);
+    const data = jwt.verify(token, process.env.SECRET_JWT as string);
+    const { _id } = data as { _id: string };
+    const findUser = await User.findOne({ _id: _id });
+    if (!findUser) throw new ValidationError('Invalid Token');
     next();
   } catch (error) {
     res.status(400).json({ error: 'Unauthorized', message: 'Invalid Token' });
