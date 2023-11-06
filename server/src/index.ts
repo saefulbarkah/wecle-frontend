@@ -13,13 +13,14 @@ import cors from 'cors';
 const app = express();
 const port = 4000;
 
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: true, origin: process.env.ORIGIN_CORS }));
 app.use(cookieParser());
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.get('/', (req, res) => {
-  res.send('express + typescript');
+  res.cookie('testing', 'edanken');
+  res.json('express + typescript');
 });
 
 // clear collection
