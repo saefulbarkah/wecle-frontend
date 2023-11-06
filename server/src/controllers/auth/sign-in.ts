@@ -30,9 +30,10 @@ const signIn = async (req: Request, res: Response) => {
     if (!user) throw new NotFoundError('Invalid Credentials');
 
     // validation password
-    const validatePassword = bcrypt.compare(password, user.password);
-    if (!validatePassword)
+    const validatePassword = await bcrypt.compare(password, user.password);
+    if (!validatePassword) {
       throw new ValidationError('Email or password incorrect');
+    }
 
     // create token
     const token = createToken(user._id);
