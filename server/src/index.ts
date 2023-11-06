@@ -8,10 +8,12 @@ import protectedRequest from './middleware/protect-api.js';
 import Article from './models/article.js';
 import comments from './models/comments.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
 const port = 4000;
 
+app.use(cors({ credentials: true }));
 app.use(cookieParser());
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
