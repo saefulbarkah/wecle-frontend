@@ -11,7 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--quick-sans)', ...defaultTheme.fontFamily.sans],
+        sans: ['var(--quick-sand)', ...defaultTheme.fontFamily.sans],
+        serif: ['var(--source-serif)'],
       },
       colors: {
         primary: {
