@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
+import { Navbar } from '@/components/navbar';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -24,7 +25,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${quick.variable} ${sourceSerif.variable} font-serif`}>
+      <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
+        <Navbar />
         {children}
       </body>
     </html>
