@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navbar';
+import AtomProviders from '@/providers/atom-provider';
+import { AuthOverlay } from '@/features/auth';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -26,8 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
-        <Navbar />
-        {children}
+        <AtomProviders>
+          <Navbar />
+          <AuthOverlay />
+          {children}
+        </AtomProviders>
       </body>
     </html>
   );
