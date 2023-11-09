@@ -37,12 +37,11 @@ export const NotificationMenu = () => {
               {Array(10)
                 .fill(null)
                 .map((item, i) => (
-                  <>
+                  <React.Fragment key={i}>
                     <div
                       className={`flex justify-between px-5 py-3 cursor-pointer transition ${
                         i > 2 ? 'bg-white hover:bg-primary/5' : 'bg-primary/5'
                       }`}
-                      key={item}
                     >
                       <div className="flex gap-2">
                         <Avatar className="w-8 h-8">
@@ -63,7 +62,7 @@ export const NotificationMenu = () => {
                       </div>
                     </div>
                     <hr />
-                  </>
+                  </React.Fragment>
                 ))}
             </div>
           </div>
