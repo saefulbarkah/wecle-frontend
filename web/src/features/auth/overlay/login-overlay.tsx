@@ -4,6 +4,7 @@ import SwitchMenuAuth from './switch-menu';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, loginType } from '@/schemas/login-schema';
+import useLogin from '../api/login';
 
 const LoginOverlay = () => {
   const {
@@ -14,8 +15,10 @@ const LoginOverlay = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onLogin = async () => {
-    console.log('testing');
+  const { mutateAsync: login, isPending } = useLogin();
+
+  const onLogin = async (data: loginType) => {
+    await login(data);
   };
 
   return (
@@ -28,16 +31,18 @@ const LoginOverlay = () => {
       >
         <div className="flex flex-col gap-10">
           <Input.Text
-            {...register('email')}
             error={errors.email}
             placeholder="Email"
+            {...register('email')}
           />
           <Input.Password
             placeholder="Password"
             error={errors.password}
             {...register('password')}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" isLoading={isPending}>
+            Submit
+          </Button>
         </div>
       </form>
       <p className="mt-2 text-sm">
