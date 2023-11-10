@@ -36,12 +36,15 @@ const signIn = async (req: Request, res: Response) => {
     }
 
     // create token
-    const token = createToken(user._id);
+    const tokenStore = {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+    };
+    const token = createToken(tokenStore);
     res.cookie('auth', token, { httpOnly: true, secure: true });
-    res.send({
-      user: { email: user.email, name: user.name, avatar: user.avatar },
-      token,
-    });
+    res.status(200).json({ token });
   } catch (error) {
     errorhandling(error as Error, res);
   }

@@ -16,8 +16,8 @@ const protectedRequest = async (
   const token = authorization.split(' ')[1];
   try {
     const data = jwt.verify(token, process.env.SECRET_JWT as string);
-    const { _id } = data as { _id: string };
-    const findUser = await User.findOne({ _id: _id });
+    const { id } = data as { id: string };
+    const findUser = await User.findOne({ _id: id });
     if (!findUser) throw new ValidationError('Invalid Token');
     next();
   } catch (error) {
