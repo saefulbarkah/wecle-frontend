@@ -1,4 +1,4 @@
-export default function Home() {
+export default async function Home() {
   return (
     <p className="text-secondary">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci

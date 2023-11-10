@@ -4,6 +4,7 @@ import './globals.css';
 import { Navbar } from '@/components/navbar';
 import AtomProviders from '@/providers/atom-provider';
 import { AuthOverlay } from '@/features/auth';
+import QueryProvider from '@/providers/query-provider';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -28,11 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
-        <AtomProviders>
-          <Navbar />
-          <AuthOverlay />
-          {children}
-        </AtomProviders>
+        <QueryProvider>
+          <AtomProviders>
+            <Navbar />
+            <AuthOverlay />
+            {children}
+          </AtomProviders>
+        </QueryProvider>
       </body>
     </html>
   );
