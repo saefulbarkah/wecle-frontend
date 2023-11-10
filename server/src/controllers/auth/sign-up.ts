@@ -67,10 +67,7 @@ const signUp = async (req: Request, res: Response) => {
       user: newUser._id,
     });
 
-    // create token
-    const token = createToken(newUser._id);
-
-    res.send({ user: newUser.email, token });
+    res.send({ response: 'Register succesfully' });
   } catch (error) {
     errorhandling(error as Error, res);
   }

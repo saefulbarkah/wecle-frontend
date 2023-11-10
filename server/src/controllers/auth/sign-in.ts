@@ -43,7 +43,11 @@ const signIn = async (req: Request, res: Response) => {
       avatar: user.avatar,
     };
     const token = createToken(tokenStore);
-    res.cookie('auth', token, { httpOnly: true, secure: true });
+    res.cookie('auth', token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 42141515 * 1000,
+    });
     res.status(200).json({ token });
   } catch (error) {
     errorhandling(error as Error, res);
