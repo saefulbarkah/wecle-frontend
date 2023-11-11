@@ -5,11 +5,10 @@ import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';
 import { useAtom } from 'jotai';
 import { openAuthState } from '@/features/auth/store';
-import { useSession } from '@/hooks/sessions/useSession';
+import { User } from '@/hooks/sessions/session';
 
-export const Navbar = () => {
+export const Navbar = ({ session }: { session: User }) => {
   const [openAuth, setOpenAuth] = useAtom(openAuthState);
-  const { data: user } = useSession();
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 border border-b bg-white">
@@ -19,10 +18,10 @@ export const Navbar = () => {
             <SearchMenu />
           </div>
           <div className="flex items-center gap-2">
-            <WriteMenu />
+            <WriteMenu session={session} />
             <NotificationMenu />
-            {user ? (
-              <UserMenu />
+            {session ? (
+              <UserMenu session={session} />
             ) : (
               <Button
                 className="font-semibold"
