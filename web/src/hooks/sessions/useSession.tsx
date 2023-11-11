@@ -9,10 +9,9 @@ const getUser = async (): Promise<User> => {
   return response.data;
 };
 
-const useSession = () => {
+export const useSession = () => {
   return useQuery({
     queryKey: ['session'],
     queryFn: getUser,
   });
 };
-export default useSession;

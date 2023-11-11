@@ -5,7 +5,7 @@ import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';
 import { useAtom } from 'jotai';
 import { openAuthState } from '@/features/auth/store';
-import useSession from '@/hooks/sessions/useSession';
+import { useSession } from '@/hooks/sessions/useSession';
 
 export const Navbar = () => {
   const [openAuth, setOpenAuth] = useAtom(openAuthState);
