@@ -6,6 +6,7 @@ import AtomProviders from '@/providers/atom-provider';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';
 import { getServerSession } from '@/hooks/sessions';
+import NextTopLoader from 'nextjs-toploader';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -31,6 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
+        <NextTopLoader />
         <QueryProvider>
           <AtomProviders>
             <Navbar session={session} />
