@@ -6,6 +6,10 @@ export async function getServerSession() {
   const req = {
     token: cookie.get('auth')?.value,
   };
-  const response = await api.post('/auth/verify', req);
-  return response.data;
+  try {
+    const response = await api.post('/auth/verify', req);
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 }

@@ -1,8 +1,6 @@
 import { getServerSession } from '@/hooks/sessions';
 
 export default async function Home() {
-  const session = await getServerSession();
-  console.log(session);
   return (
     <p className="text-secondary">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
