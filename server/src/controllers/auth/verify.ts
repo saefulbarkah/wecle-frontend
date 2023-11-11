@@ -2,13 +2,16 @@ import { Request, Response } from 'express';
 import User from '../../models/user.js';
 import { ValidationError } from '../../errors/index.js';
 import errorHandling from '../../lib/error-handling.js';
+import jwt from 'jsonwebtoken';
 
 export default async function verifyUser(req: Request, res: Response) {
-  const { id } = req.body;
+  const { token } = req.body;
   try {
+    const decode = jwt.verify(token, process.env.SECRET_JWT as string);
+    const { id } = decode as { id: string };
     const isUser = await User.findOne({ _id: id });
     if (!isUser) return new ValidationError('Unathorization');
-    res.send('success');
+    res.json(decode);
   } catch (error) {
     errorHandling(error as Error, res);
   }
