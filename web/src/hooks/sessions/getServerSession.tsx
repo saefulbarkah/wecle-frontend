@@ -1,5 +1,6 @@
 import api from '@/api';
 import { cookies } from 'next/headers';
+import { SessionType } from '.';
 
 export async function getServerSession() {
   const cookie = cookies();

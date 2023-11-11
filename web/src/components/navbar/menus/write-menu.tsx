@@ -4,9 +4,9 @@ import React from 'react';
 import { PenSquare } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { openAuthState } from '@/features/auth/store';
-import { User } from '@/hooks/sessions/session';
+import { SessionType } from '@/hooks/sessions/type';
 
-export const WriteMenu = ({ session }: { session: User }) => {
+export const WriteMenu = ({ session }: { session: SessionType }) => {
   const [openAuth, setOpenAuth] = useAtom(openAuthState);
 
   return (

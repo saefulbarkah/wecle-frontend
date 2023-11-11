@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useLogout } from '@/features/auth/api/logout';
-import { User as TUser } from '@/hooks/sessions/session';
+import { SessionType } from '@/hooks/sessions/type';
 import { censorEmail } from '@/lib/utils';
 import { Bookmark, Paperclip, SignalHigh, User } from 'lucide-react';
 import Image from 'next/image';
@@ -38,7 +38,7 @@ const menuItems = [
   },
 ];
 
-export const UserMenu = ({ session }: { session: TUser }) => {
+export const UserMenu = ({ session }: { session: SessionType }) => {
   const { mutate: logout } = useLogout();
   return (
     <DropdownMenu>
