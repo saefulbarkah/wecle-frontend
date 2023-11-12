@@ -3,12 +3,11 @@
 import React from 'react';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';
-import { useAtom } from 'jotai';
-import { openAuthState } from '@/features/auth/store';
+import { useAuthOverlay } from '@/features/auth/store';
 import { SessionType } from '@/hooks/sessions/type';
 
 export const Navbar = ({ session }: { session: SessionType }) => {
-  const [openAuth, setOpenAuth] = useAtom(openAuthState);
+  const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 border border-b bg-white">
@@ -26,7 +25,7 @@ export const Navbar = ({ session }: { session: SessionType }) => {
               <Button
                 className="font-semibold"
                 variant={'default'}
-                onClick={() => setOpenAuth(true)}
+                onClick={() => setOverlayAuth(true)}
               >
                 Sign in
               </Button>

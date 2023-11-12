@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navbar';
-import AtomProviders from '@/providers/atom-provider';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';
 import { getServerSession } from '@/hooks/sessions';
@@ -34,11 +33,9 @@ export default async function RootLayout({
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
         <NextTopLoader />
         <QueryProvider>
-          <AtomProviders>
-            <Navbar session={session} />
-            <AuthOverlay />
-            {children}
-          </AtomProviders>
+          <Navbar session={session} />
+          <AuthOverlay />
+          {children}
         </QueryProvider>
       </body>
     </html>
