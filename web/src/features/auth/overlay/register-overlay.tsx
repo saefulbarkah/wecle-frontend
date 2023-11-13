@@ -4,16 +4,20 @@ import SwitchMenuAuth from './switch-menu';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, registerType } from '@/schemas/register-schema';
+import { useRegister } from '../api/register';
 
 const RegisterOverlay = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<registerType>({ resolver: zodResolver(registerSchema) });
+  const { mutateAsync: createNewAccount, isPending } = useRegister();
 
-  const onRegister = async () => {
-    console.log('register');
+  const onRegister = async (data: registerType) => {
+    await createNewAccount(data);
+    reset();
   };
   return (
     <div className="flex flex-col items-center justify-center">
@@ -35,7 +39,9 @@ const RegisterOverlay = () => {
             {...register('password')}
             error={errors.password}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" isLoading={isPending}>
+            Submit
+          </Button>
         </div>
       </form>
       <p className="mt-2 text-sm">
