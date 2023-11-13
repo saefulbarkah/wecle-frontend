@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '../errors/index.js';
+import { ApiResponse } from '../types/index.js';
 
 const errorHandling = (error: Error, res: Response) => {
   if (error instanceof z.ZodError) {
@@ -10,14 +11,34 @@ const errorHandling = (error: Error, res: Response) => {
         field: item.path[0],
       };
     });
-    res.status(400).json(errorMsg);
+    const response: ApiResponse = {
+      status: 400,
+      response: 'error',
+      message: 'Invalid request',
+      error: errorMsg,
+    };
+    res.status(response.status).json(response);
   } else if (error instanceof NotFoundError) {
-    res.status(404).json({ error: error.message });
+    const response: ApiResponse = {
+      response: 'error',
+      status: 404,
+      message: error.message,
+    };
+    res.status(response.status).json(response);
   } else if (error instanceof ValidationError) {
-    res.status(400).json({ error: error.message });
+    const response: ApiResponse = {
+      response: 'error',
+      status: 400,
+      message: error.message,
+    };
+    res.status(response.status).json(response);
   } else {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    const response: ApiResponse = {
+      response: 'error',
+      status: 500,
+      message: 'Internal server error',
+    };
+    res.status(response.status).json(response);
   }
 };
 
