@@ -1,7 +1,7 @@
-export type ApiResponse<TData = null> = {
+export type ApiResponse = {
   status: 200 | 201 | 204 | 400 | 401 | 404 | 500;
   response: 'success' | 'error';
   message: string;
   error?: any;
-  data?: TData;
+  data?: any;
 };

@@ -68,12 +68,13 @@ const signUp = async (req: Request, res: Response) => {
       user: newUser._id,
     });
 
-    res.status(201).json({
+    const response: ApiResponse = {
       status: 201,
       response: 'success',
       message: 'Register succesfully',
-      data: null,
-    } as ApiResponse<null>);
+    };
+
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

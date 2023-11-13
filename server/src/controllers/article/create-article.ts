@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
 import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 const createArticle = async (req: Request, res: Response) => {
   try {
@@ -25,7 +26,12 @@ const createArticle = async (req: Request, res: Response) => {
     const slug = `${toSlug(capTitle)}-${randomizer}`;
 
     await Article.create({ author, content, title, slug });
-    res.send('Article success created');
+    const response: ApiResponse = {
+      status: 201,
+      message: 'Article created successfully',
+      response: 'success',
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

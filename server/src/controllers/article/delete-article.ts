@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Article from '../../models/article.js';
 import errorHandling from '../../lib/error-handling.js';
 import { NotFoundError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 export default async function deleteArticle(req: Request, res: Response) {
   try {
@@ -14,8 +15,12 @@ export default async function deleteArticle(req: Request, res: Response) {
         'The specified article does not exist for deletion'
       );
     }
-
-    res.send('Article deleted successfully');
+    const response: ApiResponse = {
+      status: 201,
+      message: 'Article deleted successfully',
+      response: 'success',
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorHandling(error as Error, res);
   }
