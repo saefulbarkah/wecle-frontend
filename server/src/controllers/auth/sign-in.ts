@@ -5,6 +5,7 @@ import { createToken } from '../../lib/jwt.js';
 import errorhandling from '../../lib/error-handling.js';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 type Tuser = {
   email: string;
@@ -48,7 +49,13 @@ const signIn = async (req: Request, res: Response) => {
       secure: true,
       maxAge: 42141515 * 1000,
     });
-    res.status(200).json({ token });
+    const response: ApiResponse = {
+      status: 200,
+      message: 'Welcome back, ' + user.name + '!',
+      response: 'success',
+      data: { token },
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

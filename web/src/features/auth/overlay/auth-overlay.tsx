@@ -1,27 +1,29 @@
 'use client';
 import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
-import { useAtom } from 'jotai';
 import React from 'react';
-import { isUserHaveAccount, openAuthState } from '../store';
 import LoginOverlay from './login-overlay';
 import RegisterOverlay from './register-overlay';
+import { useAuthOverlay, useMenuAuth } from '../store';
 
 export const AuthOverlay = () => {
-  const [isOpen, setOpen] = useAtom(openAuthState);
-  const [isMenuLogin, setMenuLogin] = useAtom(isUserHaveAccount);
+  const menu = useMenuAuth((state) => state.menu);
+  const setMenu = useMenuAuth((state) => state.setMenu);
+  const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
+  const openOverlayAuth = useAuthOverlay((state) => state.isOpen);
+
   return (
     <Dialog
-      open={isOpen}
+      open={openOverlayAuth}
       onOpenChange={() => {
-        setOpen(false);
+        setOverlayAuth(false);
         setTimeout(() => {
-          setMenuLogin(true);
+          setMenu('LOGIN');
         }, 200);
       }}
     >
       <DialogOverlay className="bg-black/20" />
       <DialogContent className="min-h-screen min-w-full sm:min-h-[26rem] sm:min-w-[20rem]">
-        {isMenuLogin ? <LoginOverlay /> : <RegisterOverlay />}
+        {menu === 'LOGIN' ? <LoginOverlay /> : <RegisterOverlay />}
       </DialogContent>
     </Dialog>
   );

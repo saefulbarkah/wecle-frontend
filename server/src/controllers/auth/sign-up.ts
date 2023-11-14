@@ -6,6 +6,7 @@ import User from '../../models/user.js';
 import Author from '../../models/author.js';
 import { createToken } from '../../lib/jwt.js';
 import { ValidationError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 type Tuser = {
   name: string;
@@ -67,7 +68,13 @@ const signUp = async (req: Request, res: Response) => {
       user: newUser._id,
     });
 
-    res.send({ response: 'Register succesfully' });
+    const response: ApiResponse = {
+      status: 201,
+      response: 'success',
+      message: 'Register succesfully',
+    };
+
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

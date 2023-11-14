@@ -5,6 +5,7 @@ import errorhandling from '../../lib/error-handling.js';
 import Article from '../../models/article.js';
 import User from '../../models/user.js';
 import { ValidationError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 const createComment = async (req: Request, res: Response) => {
   const { articleId, text, userId } = req.body as commentType;
@@ -33,7 +34,12 @@ const createComment = async (req: Request, res: Response) => {
       { _id: articleId },
       { $push: { comments: comment._id } }
     );
-    res.send('create comment succesfully');
+    const response: ApiResponse = {
+      status: 201,
+      message: 'Comment created successfully',
+      response: 'success',
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

@@ -3,6 +3,7 @@ import errorhandling from '../../lib/error-handling.js';
 import { commentSchema, commentType } from '../../schema/comment-schema.js';
 import comments from '../../models/comments.js';
 import { NotFoundError } from '../../errors/index.js';
+import { ApiResponse } from '../../types/index.js';
 
 const updateComment = async (req: Request, res: Response) => {
   try {
@@ -29,7 +30,12 @@ const updateComment = async (req: Request, res: Response) => {
       }
     );
 
-    res.send('Update comment succesfully');
+    const response: ApiResponse = {
+      status: 200,
+      message: 'Comment updated successfully',
+      response: 'success',
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

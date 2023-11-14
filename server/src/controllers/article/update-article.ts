@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
 import { NotFoundError, ValidationError } from '../../errors/index.js';
 import Author from '../../models/author.js';
+import { ApiResponse } from '../../types/index.js';
 
 const updateArticle = async (req: Request, res: Response) => {
   try {
@@ -35,7 +36,12 @@ const updateArticle = async (req: Request, res: Response) => {
       { content, title, slug, updatedAt: Date.now() }
     );
 
-    res.send('Article updated successfully');
+    const response: ApiResponse = {
+      status: 201,
+      message: 'Article updated successfully',
+      response: 'success',
+    };
+    res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
   }

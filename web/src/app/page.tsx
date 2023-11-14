@@ -1,3 +1,5 @@
+import { getServerSession } from '@/hooks/sessions';
+
 export default async function Home() {
   return (
     <p className="text-secondary">

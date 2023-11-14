@@ -1,4 +1,2 @@
-import { atom } from 'jotai';
-
-export const openAuthState = atom<boolean>(false);
-export const isUserHaveAccount = atom<boolean>(true);
+export * from './overlay-store';
+export * from './auth-menu-store';
