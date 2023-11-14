@@ -1,6 +1,7 @@
 import api from '@/api';
 import { cookies } from 'next/headers';
 import { SessionType } from './type';
+import { ApiResponse } from '@/types';
 
 export async function getServerSession(): Promise<SessionType> {
   const cookie = cookies();
@@ -8,8 +9,11 @@ export async function getServerSession(): Promise<SessionType> {
     token: cookie.get('auth')?.value,
   };
   try {
-    const response = await api.post('/auth/verify', req);
-    return response.data;
+    const response = await api.post<ApiResponse<SessionType>>(
+      '/auth/verify',
+      req
+    );
+    return response.data.data;
   } catch (error) {
     throw error;
   }

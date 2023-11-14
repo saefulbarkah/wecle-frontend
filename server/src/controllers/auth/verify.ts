@@ -13,7 +13,12 @@ export default async function verifyUser(req: Request, res: Response) {
   try {
     // get token
     const { token } = req.body;
-    if (!token) throw new UnauthorizedError('Invalid token');
+    if (!token)
+      return res.json({
+        message: 'Required token',
+        response: 'success',
+        data: null,
+      } as ApiResponse);
 
     // decoding token
     const decode = jwt.verify(token, process.env.SECRET_JWT as string);

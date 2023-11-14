@@ -3,4 +3,4 @@ export type SessionType = {
   name: string;
   email: string;
   avatar: string;
-};
+} | null;
