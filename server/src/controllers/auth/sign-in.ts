@@ -44,11 +44,6 @@ const signIn = async (req: Request, res: Response) => {
       avatar: user.avatar,
     };
     const token = createToken(tokenStore);
-    res.cookie('auth', token, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 42141515 * 1000,
-    });
     const response: ApiResponse = {
       status: 200,
       message: 'Welcome back, ' + user.name + '!',
