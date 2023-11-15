@@ -50,6 +50,12 @@ const signIn = async (req: Request, res: Response) => {
       response: 'success',
       data: { token },
     };
+    res.cookie('auth', token, {
+      secure: true,
+      httpOnly: true,
+      maxAge: 51251516 * 1000,
+      sameSite: 'none',
+    });
     res.status(response.status).json(response);
   } catch (error) {
     errorhandling(error as Error, res);
