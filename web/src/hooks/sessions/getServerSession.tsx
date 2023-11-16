@@ -15,6 +15,6 @@ export async function getServerSession(): Promise<SessionType> {
     );
     return response.data.data;
   } catch (error) {
-    throw error;
+    return null;
   }
 }
