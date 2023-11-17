@@ -39,7 +39,7 @@ export default async function RootLayout({
         <QueryProvider>
           <Navbar session={session} />
           <AuthOverlay />
-          {children}
+          <div className="container mt-5 py-2">{children}</div>
         </QueryProvider>
       </body>
     </html>
