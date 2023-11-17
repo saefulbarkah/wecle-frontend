@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LucidePlus } from 'lucide-react';
 import React from 'react';
+import { ForYou } from './for-you';
 
 const menus = [
   {
@@ -44,10 +45,7 @@ export const ListArticle = () => {
         </TabsList>
         <div className="mt-5">
           <TabsContent value={'for-you'} className="h-[200vh]">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad eos
-            obcaecati molestiae iure voluptate aliquam magnam, consequuntur
-            tenetur provident reprehenderit ducimus velit atque accusantium
-            commodi adipisci blanditiis illum ratione aliquid!
+            <ForYou />
           </TabsContent>
         </div>
       </Tabs>
