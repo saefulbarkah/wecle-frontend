@@ -44,7 +44,12 @@ export const UserMenu = ({ session }: { session: SessionType }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <Image src={session!.avatar} alt={session!.name} fill unoptimized />
+          <Image
+            src={session!.avatar as string}
+            alt={session!.name as string}
+            fill
+            unoptimized
+          />
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[250px] px-0 py-0">
@@ -69,7 +74,9 @@ export const UserMenu = ({ session }: { session: SessionType }) => {
             onClick={() => logout()}
           >
             <span>Sign out</span>
-            <span className="text-xs">{censorEmail(session!.email)}</span>
+            <span className="text-xs">
+              {censorEmail(session!.email as string)}
+            </span>
           </button>
         </div>
       </DropdownMenuContent>

@@ -5,3 +5,29 @@ export type ApiResponse<TData = null> = {
   error: any;
   data: TData;
 };
+
+export type ArticleType = {
+  _id: string;
+  title: string;
+  author: {
+    _id: string;
+    user: {
+      _id: string;
+      name: string;
+      avatar: string;
+    };
+    name: string;
+  };
+  content: string;
+  comments: {
+    _id: string;
+    user: {
+      _id: string;
+      name: string;
+      avatar: string;
+    };
+    text: string;
+  }[];
+  slug: string;
+  date: Date;
+};

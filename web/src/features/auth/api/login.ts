@@ -19,13 +19,14 @@ const useLogin = () => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
 
   return useMutation<
-    AxiosResponse<ApiResponse<loginType>>,
+    AxiosResponse<ApiResponse<{ token: string }>>,
     AxiosError<ApiResponse>,
     loginType
   >({
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: async (res) => {
+      const data = res.data.data;
       nproggres.done();
       setOverlayAuth(false);
       toast.success('Login sucesss');

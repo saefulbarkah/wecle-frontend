@@ -1,16 +1,19 @@
 'use client';
 
-import React from 'react';
-import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
-import { Button } from '../ui/button';
+import React, { useState } from 'react';
 import { useAuthOverlay } from '@/features/auth/store';
 import { SessionType } from '@/hooks/sessions/type';
+import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
+import { Button } from '../ui/button';
 
 export const Navbar = ({ session }: { session: SessionType }) => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
+
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 border border-b bg-white">
+      <nav
+        className={`transition sticky z-50 top-0 left-0 right-0 border border-b bg-white`}
+      >
         <div className="h-[60px] flex items-center px-10 justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">Medium</h2>
