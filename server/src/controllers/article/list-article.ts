@@ -25,6 +25,7 @@ export default async function listArticle(req: Request, res: Response) {
       status: 200,
       message: 'Opration success',
       response: 'success',
+      data: data,
     };
     res.status(response.status).json(response);
   } catch (error) {
