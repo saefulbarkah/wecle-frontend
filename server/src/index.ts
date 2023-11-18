@@ -35,7 +35,7 @@ app.get('/clear', async (req, res) => {
 // route lists
 app.use('/auth', route.auth);
 app.use('/authors', protectedRequest, route.author);
-app.use('/article', protectedRequest, route.article);
+app.use('/article', route.article);
 app.use('/comments', protectedRequest, route.comment);
 
 mongoose
