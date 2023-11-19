@@ -25,7 +25,6 @@ const Content = ({ children, value, className }: TabsContentProps) => {
         className={cn('min-h-[calc(100vh-140px)]', className)}
       >
         {children}
-        <ForYou />
       </TabsContent>
     </div>
   );
