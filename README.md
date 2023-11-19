@@ -1,2 +1,1 @@
-# medium-clone
- 
+
