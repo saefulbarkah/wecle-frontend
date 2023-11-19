@@ -41,7 +41,7 @@ export default async function RootLayout({
           <QueryProvider>
             <Navbar session={session} />
             <AuthOverlay />
-            <div className="container mt-2">{children}</div>
+            <div>{children}</div>
           </QueryProvider>
         </CookiesProvider>
       </body>

@@ -37,10 +37,10 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                     href={`/article/${item.slug}`}
                     className="flex flex-col gap-1 mt-2"
                   >
-                    <h2 className="text-lg font-semibold font-serif">
-                      {item.title}
-                    </h2>
-                    <p className="line-clamp-3 text-sm">{item.content}</p>
+                    <h2 className="text-lg font-bold">{item.title}</h2>
+                    <p className="line-clamp-3 text-md font-serif">
+                      {item.content}
+                    </p>
                   </Link>
                 </div>
               </div>

@@ -16,7 +16,7 @@ export const Navbar = ({ session }: { session: SessionType }) => {
       >
         <div className="h-[60px] flex items-center px-10 justify-between">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-semibold">Medium</h2>
+            <h2 className="text-xl font-semibold">WeCle</h2>
             <SearchMenu />
           </div>
           <div className="flex items-center gap-2">

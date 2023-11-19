@@ -36,8 +36,10 @@ const useLogin = () => {
       nproggres.start();
     },
     onError: (res) => {
-      if (res.response?.status === 400) {
-        toast.error(res.response.data.message);
+      const statusCode = res.response?.status;
+      const msg = res.response?.data.message as string;
+      if (statusCode === 400 || statusCode === 404) {
+        toast.error(msg);
       }
       nproggres.done();
     },

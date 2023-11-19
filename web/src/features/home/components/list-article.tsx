@@ -19,7 +19,7 @@ export const ListArticle = () => {
   const [activeMenu, setActiveMenu] = React.useState(menus[0].value);
 
   return (
-    <>
+    <div className="flex-1 px-10">
       <Tabs defaultValue={activeMenu} onValueChange={setActiveMenu}>
         <TabsList className="bg-white flex items-center justify-start h-[50px] p-0 sticky w-full z-40 top-[60px]">
           <div className="mt-[20px] flex items-center justify-start gap-5 w-full relative">
@@ -44,11 +44,11 @@ export const ListArticle = () => {
           </div>
         </TabsList>
         <div className="mt-5">
-          <TabsContent value={'for-you'} className="h-[200vh]">
+          <TabsContent value={'for-you'} className="min-h-[calc(100vh-140px)]">
             <ForYou />
           </TabsContent>
         </div>
       </Tabs>
-    </>
+    </div>
   );
 };
