@@ -4,7 +4,7 @@ import { Search } from 'lucide-react';
 
 export const SearchMenu = () => {
   return (
-    <div className="relative">
+    <div className="relative hidden lg:block">
       <input
         type="text"
         className="peer rounded-xl text-sm h-10 bg-secondary-50 placeholder:text-sm pl-10 pr-4 outline-none"
