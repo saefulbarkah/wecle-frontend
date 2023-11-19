@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   return (
-    <div className="flex mx-[100px]">
+    <div className="lg:flex lg:mx-[100px]">
       <ListArticle />
       <SideContent />
     </div>

@@ -12,3 +12,18 @@ export function censorEmail(email: string) {
   const censoredEmail = censoredUsername + '@' + parts[1];
   return censoredEmail;
 }
+
+export function limitText({ text, limit }: { text: string; limit: number }) {
+  if (text.length > limit) {
+    const lastSpaceIndex = text.lastIndexOf(' ', limit);
+
+    const truncatedText =
+      lastSpaceIndex !== -1
+        ? text.substring(0, lastSpaceIndex)
+        : text.substring(0, limit);
+
+    return truncatedText + '...';
+  } else {
+    return text;
+  }
+}

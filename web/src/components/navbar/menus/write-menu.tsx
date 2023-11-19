@@ -10,7 +10,7 @@ export const WriteMenu = ({ session }: { session: SessionType }) => {
 
   return (
     <button
-      className="flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2"
+      className="hidden lg:flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2 "
       onClick={() => {
         if (!session) setOverlayAuth(true);
       }}

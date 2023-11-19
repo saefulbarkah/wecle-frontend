@@ -5,6 +5,7 @@ import { useAuthOverlay } from '@/features/auth/store';
 import { SessionType } from '@/hooks/sessions/type';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';
+import { SearchMobile } from './menus/search-mobile';
 
 export const Navbar = ({ session }: { session: SessionType }) => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
@@ -21,6 +22,7 @@ export const Navbar = ({ session }: { session: SessionType }) => {
           </div>
           <div className="flex items-center gap-2">
             <WriteMenu session={session} />
+            <SearchMobile />
             <NotificationMenu />
             {session ? (
               <UserMenu session={session} />
