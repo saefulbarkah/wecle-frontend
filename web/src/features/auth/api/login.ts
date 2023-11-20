@@ -26,11 +26,11 @@ const useLogin = () => {
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: async (res) => {
-      const data = res.data.data;
+      const data = res.data;
       nproggres.done();
       setOverlayAuth(false);
-      toast.success('Login sucesss');
       router.refresh();
+      toast.success(data.message);
     },
     onMutate: () => {
       nproggres.start();
