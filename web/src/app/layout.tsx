@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/navbar';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';
 import NextTopLoader from 'nextjs-toploader';
@@ -41,9 +40,8 @@ export default async function RootLayout({
             <Toaster />
             <NextTopLoader />
             <QueryProvider>
-              <Navbar session={session} />
               <AuthOverlay />
-              <div>{children}</div>
+              {children}
             </QueryProvider>
           </AuthProvider>
         </CookiesProvider>
