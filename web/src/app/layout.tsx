@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { description, keywords, title } from '@/lib/meta-data';
 import { CookiesProvider } from 'next-client-cookies/server';
 import { getServerSession } from '@/hooks/sessions/server';
+import AuthProvider from '@/providers/auth-provider';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -36,13 +37,15 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
         <CookiesProvider>
-          <Toaster />
-          <NextTopLoader />
-          <QueryProvider>
-            <Navbar session={session} />
-            <AuthOverlay />
-            <div>{children}</div>
-          </QueryProvider>
+          <AuthProvider token={session?.token}>
+            <Toaster />
+            <NextTopLoader />
+            <QueryProvider>
+              <Navbar session={session} />
+              <AuthOverlay />
+              <div>{children}</div>
+            </QueryProvider>
+          </AuthProvider>
         </CookiesProvider>
       </body>
     </html>

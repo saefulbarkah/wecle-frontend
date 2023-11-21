@@ -3,5 +3,5 @@ export type SessionType = {
   name?: string;
   email?: string;
   avatar?: string;
-  token?: string;
+  token?: string | null;
 } | null;

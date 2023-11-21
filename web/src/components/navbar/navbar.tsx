@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useAuthOverlay } from '@/features/auth/store';
+import React from 'react';
+import { useAuth, useAuthOverlay } from '@/features/auth/store';
 import { SessionType } from '@/hooks/sessions/type';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';

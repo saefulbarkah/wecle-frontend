@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import User from '../../models/user.js';
-import {
-  NotFoundError,
-  UnauthorizedError,
-  ValidationError,
-} from '../../errors/index.js';
+import { ValidationError } from '../../errors/index.js';
 import errorHandling from '../../lib/error-handling.js';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../../types/index.js';
+
+type responseData = {
+  id: string;
+  email: string;
+  avatar: string;
+  token?: string;
+};
 
 export default async function verifyUser(req: Request, res: Response) {
   try {
@@ -22,17 +25,20 @@ export default async function verifyUser(req: Request, res: Response) {
 
     // decoding token
     const decode = jwt.verify(token, process.env.SECRET_JWT as string);
-    const { id } = decode as { id: string };
+    const data = decode as responseData;
 
     // get user
-    const isUser = await User.findOne({ _id: id });
+    const isUser = await User.findOne({ _id: data.id });
     if (!isUser) throw new ValidationError('Unathorization');
 
     const response: ApiResponse = {
       status: 200,
       message: 'Opration success',
       response: 'success',
-      data: decode,
+      data: {
+        ...data,
+        token,
+      },
     };
     res.status(response.status).json(response);
   } catch (error) {
