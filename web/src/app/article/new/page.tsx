@@ -1,4 +1,4 @@
-import { CreateArticle } from '@/features/article/create';
+import { CreateArticle, NavbarArticle } from '@/features/article/create';
 import React from 'react';
 import { getServerSession } from '@/hooks/sessions/server';
 import { redirect } from 'next/navigation';
@@ -14,5 +14,10 @@ export const metadata: Metadata = {
 export default async function page() {
   const session = await getServerSession();
   if (!session) return redirect('/');
-  return <CreateArticle />;
+  return (
+    <>
+      <NavbarArticle />
+      <CreateArticle />
+    </>
+  );
 }

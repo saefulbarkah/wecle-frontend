@@ -4,7 +4,7 @@ import { PublishMenu } from './publish-menu';
 import { NotificationMenu, UserMenu } from '@/components/navbar/menus';
 import { useAuth } from '@/features/auth/store';
 
-export default function NavbarArticle() {
+export const NavbarArticle = () => {
   const session = useAuth((state) => state.session);
   return (
     <div className="sticky top-0 inset-x-0 w-full">
@@ -22,4 +22,4 @@ export default function NavbarArticle() {
       </div>
     </div>
   );
-}
+};
