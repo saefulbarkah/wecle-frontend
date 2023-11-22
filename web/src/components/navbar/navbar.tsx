@@ -6,6 +6,8 @@ import { SessionType } from '@/hooks/sessions/type';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { Button } from '../ui/button';
 import { SearchMobile } from './menus/search-mobile';
+import { Avatar } from '../ui/avatar';
+import Image from 'next/image';
 
 export const Navbar = ({ session }: { session: SessionType }) => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
@@ -27,13 +29,19 @@ export const Navbar = ({ session }: { session: SessionType }) => {
             {session ? (
               <UserMenu session={session} />
             ) : (
-              <Button
-                className="font-semibold"
-                variant={'default'}
-                onClick={() => setOverlayAuth(true)}
-              >
-                Sign in
-              </Button>
+              <button onClick={() => setOverlayAuth(true)}>
+                <Avatar>
+                  <Image
+                    fill
+                    src={
+                      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
+                    }
+                    priority
+                    alt="placeholder"
+                    unoptimized
+                  />
+                </Avatar>
+              </button>
             )}
           </div>
         </div>
