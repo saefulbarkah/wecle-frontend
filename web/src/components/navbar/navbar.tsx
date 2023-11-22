@@ -13,7 +13,7 @@ export const Navbar = ({ session }: { session: SessionType }) => {
   return (
     <>
       <nav
-        className={`transition sticky z-50 top-0 left-0 right-0 border border-b bg-white`}
+        className={`transition sticky z-40 top-0 left-0 right-0 border border-b bg-white`}
       >
         <div className="h-[60px] flex items-center px-10 justify-between">
           <div className="flex items-center gap-2">
