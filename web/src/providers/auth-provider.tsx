@@ -1,16 +1,25 @@
 'use client';
 
 import { useAuth } from '@/features/auth/store';
+import { SessionType } from '@/hooks/sessions/type';
 import React, { useEffect } from 'react';
 
 type authProps = React.PropsWithChildren & {
-  token?: string | null;
+  session: SessionType;
 };
-function AuthProvider({ children, token = null }: authProps) {
+function AuthProvider({ children, session = null }: authProps) {
   const setToken = useAuth((state) => state.setToken);
+  const setSession = useAuth((state) => state.setSession);
 
   useEffect(() => {
-    setToken(token);
+    if (!session) return;
+    setToken(session.token as string);
+    setSession({
+      id: session.id,
+      avatar: session.avatar,
+      email: session.email,
+      name: session.name,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

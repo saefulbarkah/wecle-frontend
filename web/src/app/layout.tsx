@@ -36,7 +36,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
         <CookiesProvider>
-          <AuthProvider token={session?.token}>
+          <AuthProvider session={session}>
             <Toaster />
             <NextTopLoader />
             <QueryProvider>

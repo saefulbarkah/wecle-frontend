@@ -19,7 +19,7 @@ export const NotificationMenu = () => {
           <Bell />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-96 -translate-x-5 translate-y-2 relative p-0">
+      <DropdownMenuContent className="w-96 translate-y-2 relative p-0">
         <div className="relative">
           <div className="p-2 flex items-center justify-between">
             <h2 className="font-semibold">Notifications</h2>
