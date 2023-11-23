@@ -8,6 +8,7 @@ import Focus from '@tiptap/extension-focus';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
 import Dropcursor from '@tiptap/extension-dropcursor';
+import Image from '@tiptap/extension-image';
 import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
 import { useEditorStore } from './store';
 import './editor.css';
@@ -26,6 +27,9 @@ export const Editor = () => {
       Text,
       HardBreak,
       Dropcursor,
+      Image.configure({
+        allowBase64: true,
+      }),
       Paragraph.configure({
         HTMLAttributes: {
           class: 'font-serif text-xl',
@@ -53,7 +57,7 @@ export const Editor = () => {
     editorProps: {
       attributes: {
         class:
-          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none',
+          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none pt-[2.5rem] mb-[5rem]',
       },
     },
     autofocus: true,

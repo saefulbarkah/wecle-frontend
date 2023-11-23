@@ -4,15 +4,17 @@ import { Editor, FloatingMenu as Menu } from '@tiptap/react';
 import { ImagePlus, LucidePlus } from 'lucide-react';
 import React, { useState } from 'react';
 import { AnimatePresence, Variants, motion } from 'framer-motion';
+import { nanoid } from 'nanoid';
 
-type props = {
+type floatingProps = {
   editor: Editor | null;
 };
 
-export const FloatingMenu = ({ editor }: props) => {
+export const FloatingMenu = ({ editor }: floatingProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
   if (!editor) return;
+
   return (
     <Menu
       editor={editor}
@@ -42,30 +44,7 @@ export const FloatingMenu = ({ editor }: props) => {
               >
                 <div className="min-w-[400px] bg-white">
                   <div className="flex items-center gap-3">
-                    <Button
-                      variant={'outline'}
-                      className="rounded-full cursor-pointer border-slate-900/50"
-                      size={'icon'}
-                      onClick={() => alert('upload image')}
-                    >
-                      <ImagePlus />
-                    </Button>
-                    <Button
-                      variant={'outline'}
-                      className="rounded-full cursor-pointer border-slate-900/50"
-                      size={'icon'}
-                      onClick={() => alert('upload image')}
-                    >
-                      <ImagePlus />
-                    </Button>
-                    <Button
-                      variant={'outline'}
-                      className="rounded-full cursor-pointer border-slate-900/50"
-                      size={'icon'}
-                      onClick={() => alert('upload image')}
-                    >
-                      <ImagePlus />
-                    </Button>
+                    <UploadImage editor={editor} />
                   </div>
                 </div>
               </motion.div>
@@ -74,5 +53,61 @@ export const FloatingMenu = ({ editor }: props) => {
         </div>
       </div>
     </Menu>
+  );
+};
+
+type uploadImageProps = React.PropsWithChildren & floatingProps & {};
+const UploadImage = ({ editor }: uploadImageProps) => {
+  const fileRef = React.useRef<HTMLInputElement | null>(null);
+
+  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const fileName = file.name.split('.')[0];
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext('2d');
+
+      ctx?.drawImage(img, 0, 0);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            const result = reader.result as string;
+            editor?.chain().focus().setImage({ src: result }).run();
+          };
+        },
+        'image/jpeg',
+        0.5
+      );
+    };
+  };
+
+  return (
+    <label className="relative">
+      <input
+        type="file"
+        ref={fileRef}
+        className="hidden peer"
+        onChange={handleUploadImage}
+      />
+      <Button
+        variant={'outline'}
+        className="rounded-full cursor-pointer border-slate-900/50"
+        size={'icon'}
+        onClick={() => fileRef.current?.click()}
+      >
+        <ImagePlus />
+      </Button>
+    </label>
   );
 };
