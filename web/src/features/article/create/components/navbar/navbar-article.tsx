@@ -7,7 +7,7 @@ import { useAuth } from '@/features/auth/store';
 export const NavbarArticle = () => {
   const session = useAuth((state) => state.session);
   return (
-    <div className="sticky top-0 inset-x-0 w-full">
+    <div className="sticky top-0 inset-x-0 w-full bg-white z-50">
       <div className="container h-[60px] flex items-center justify-between">
         <div className="flex items-center space-x-5">
           <h2 className="text-xl font-semibold">WeCle</h2>
