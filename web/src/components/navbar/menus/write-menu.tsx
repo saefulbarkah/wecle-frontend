@@ -11,7 +11,7 @@ export const WriteMenu = ({ session }: { session: SessionType }) => {
 
   return (
     <Link
-      href={`${session ? '/article/new' : '#login'}`}
+      href={`${session ? 'article/new' : '#login'}`}
       className="hidden lg:flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2 "
       onClick={() => {
         if (!session) return setOverlayAuth(true);

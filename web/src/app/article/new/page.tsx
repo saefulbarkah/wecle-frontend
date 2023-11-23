@@ -15,9 +15,9 @@ export default async function page() {
   const session = await getServerSession();
   if (!session) return redirect('/');
   return (
-    <>
+    <div>
       <NavbarArticle />
       <CreateArticle />
-    </>
+    </div>
   );
 }
