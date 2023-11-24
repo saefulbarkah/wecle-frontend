@@ -10,17 +10,33 @@ import HardBreak from '@tiptap/extension-hard-break';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
 import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
-import { useEditorStore } from './store';
 import './editor.css';
 import { BoldIcon } from 'lucide-react';
 import { FloatingMenu } from './menus/floating-menu';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import { nanoid } from 'nanoid';
+import { useDraft } from '@/hooks';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const CustomDocument = Document.extend({
   content: 'heading block*',
 });
 
+const uuid = nanoid(5);
+
 export const Editor = () => {
-  const content = useEditorStore((state) => state.content);
+  const router = useRouter();
+  const query = useSearchParams();
+  const { create, findArticle } = useDraft({
+    onSuccessCreate: ({ id }) => {
+      router.push('?draftId=' + id);
+    },
+  });
+
+  const [content, setContent] = useState('');
+  const [value] = useDebounce(content, 500);
+
   const editor = useEditor({
     extensions: [
       CustomDocument,
@@ -62,7 +78,33 @@ export const Editor = () => {
     },
     autofocus: true,
     content: content,
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
+    },
   });
+
+  useEffect(() => {
+    const draftId = query.get('draftId');
+    const article = findArticle(draftId);
+    editor?.commands.setContent(article as string);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, editor]);
+
+  useEffect(() => {
+    const queryID = query.get('draftId');
+    const find = findArticle(queryID);
+    if (!find) {
+      return create({
+        id: uuid,
+        content: value,
+      });
+    }
+    create({
+      id: queryID as string,
+      content: value,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <>
