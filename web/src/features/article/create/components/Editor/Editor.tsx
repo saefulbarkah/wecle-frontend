@@ -28,7 +28,7 @@ const uuid = nanoid(5);
 export const Editor = () => {
   const router = useRouter();
   const query = useSearchParams();
-  const { create, findArticle } = useDraft({
+  const { create, findArticle, session, setArticle, data } = useDraft({
     onSuccessCreate: ({ id }) => {
       router.push('?draftId=' + id);
     },
@@ -83,26 +83,41 @@ export const Editor = () => {
     },
   });
 
+  // rendered firs time
   useEffect(() => {
     const draftId = query.get('draftId');
     const article = findArticle(draftId);
-    editor?.commands.setContent(article as string);
+    editor?.commands.setContent(article?.content as string);
+    if (article) {
+      return setArticle(article);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, editor]);
 
+  // saving draft automatically
   useEffect(() => {
     const queryID = query.get('draftId');
     const find = findArticle(queryID);
-    if (!find) {
-      return create({
-        id: uuid,
+    if (session) {
+      if (!find) {
+        setArticle({
+          id: uuid,
+          content: value,
+          user_id: session?.id,
+        });
+        return create({
+          id: uuid,
+          content: value,
+          user_id: session?.id,
+        });
+      }
+      create({
+        id: queryID as string,
         content: value,
+        user_id: session?.id,
       });
     }
-    create({
-      id: queryID as string,
-      content: value,
-    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 

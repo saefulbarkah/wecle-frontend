@@ -6,23 +6,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useDraft } from '@/hooks';
 import React, { useState } from 'react';
 
 export const PublishMenu = () => {
   const [isDisabled, setDisabled] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const { data } = useDraft();
+
+  const handlePublish = () => {
+    if (!data) return;
+    console.log('published');
+  };
 
   return (
     <div className="relative">
       <Popover
-        open={isDisabled ? showAlert : false}
+        open={data?.content ? false : showAlert}
         onOpenChange={setShowAlert}
       >
         <PopoverTrigger asChild>
           <Button
             variant={'success'}
             size={'sm'}
-            className={`${isDisabled && 'opacity-50'}`}
+            className={`${data?.content ? 'opacity-100' : 'opacity-50'}`}
+            onClick={() => handlePublish()}
           >
             Publish
           </Button>
@@ -40,7 +48,7 @@ export const PublishMenu = () => {
               <polygon
                 points="7.538,2 1,12 7.538,2"
                 stroke="rgba(100, 116, 139, 0.2)" // Border color
-                stroke-width="0.7" // Border width
+                strokeWidth="0.7" // Border width
                 fill="transparent" // Make the triangle transparent to show only the border
               />
 
@@ -48,7 +56,7 @@ export const PublishMenu = () => {
               <polygon
                 points="7.538,2 14,12 7.538,2"
                 stroke="rgba(100, 116, 139, 0.2)" // Border color
-                stroke-width="0.7" // Border width
+                strokeWidth="0.7" // Border width
                 fill="transparent" // Make the triangle transparent to show only the border
               />
             </svg>

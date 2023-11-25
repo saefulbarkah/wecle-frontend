@@ -10,20 +10,24 @@ type article = {
 
 type State = {
   draft: article[];
+  article: article | null;
 };
 
 type Action = {
   createArticle: (article: article) => void;
+  setArticle: (article: article | null) => void;
 };
 
 export const useArticleState = create<State & Action>()(
   persist(
     (set, get) => ({
       draft: [],
+      article: null,
       createArticle: (value) => {
         const article = get().draft;
-        const filter = article.some((item) => item.id === value.id);
-        if (filter) {
+        const isExistsAricleID = article.some((item) => item.id === value.id);
+
+        if (isExistsAricleID) {
           return set((state) => ({
             draft: state.draft.map((item) =>
               item.id === value.id ? { ...item, ...value } : item
@@ -34,6 +38,7 @@ export const useArticleState = create<State & Action>()(
           draft: [...state.draft, value],
         }));
       },
+      setArticle: (data) => set({ article: data }),
     }),
     {
       name: 'Article',

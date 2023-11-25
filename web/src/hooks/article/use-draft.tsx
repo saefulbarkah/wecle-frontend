@@ -34,10 +34,12 @@ export const useDraft = (options?: DraftHookOptions) => {
     if (!id) return;
     const find = articleState.draft.find((item) => item.id === id);
     if (!find) return;
-    return find.content;
+    return find;
   };
 
   return {
+    data: articleState.article,
+    setArticle: articleState.setArticle,
     session,
     draft: articleState.draft,
     create: handleCreate,
