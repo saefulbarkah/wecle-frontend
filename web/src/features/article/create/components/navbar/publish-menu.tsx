@@ -28,7 +28,7 @@ export const PublishMenu = () => {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="relative translate-y-4 rounded-lg shadow-sm">
-          <i className="absolute top-0 inset-x-0 translate-x-[80%] sm:translate-x-[75%] md:translate-x-[75%] lg:translate-x-[48%] -translate-y-3">
+          <i className="absolute pointer-events-none cursor-none top-0 inset-x-0 translate-x-[80%] sm:translate-x-[75%] md:translate-x-[75%] lg:translate-x-[48%] -translate-y-3">
             <svg xmlns="http://www.w3.org/2000/svg">
               {/* Main Triangle */}
               <polygon
