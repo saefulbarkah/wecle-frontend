@@ -1,10 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useAuth, useAuthOverlay } from '@/features/auth/store';
+import { useAuthOverlay } from '@/features/auth/store';
 import { SessionType } from '@/hooks/sessions/type';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
-import { Button } from '../ui/button';
 import { SearchMobile } from './menus/search-mobile';
 import { Avatar } from '../ui/avatar';
 import Image from 'next/image';

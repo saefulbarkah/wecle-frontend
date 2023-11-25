@@ -9,6 +9,7 @@ import { description, keywords, title } from '@/lib/meta-data';
 import { CookiesProvider } from 'next-client-cookies/server';
 import { getServerSession } from '@/hooks/sessions/server';
 import AuthProvider from '@/providers/auth-provider';
+import { CreatePortal } from '@/components/create-portal';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -37,7 +38,9 @@ export default async function RootLayout({
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
         <CookiesProvider>
           <AuthProvider session={session}>
-            <Toaster />
+            <CreatePortal>
+              <Toaster />
+            </CreatePortal>
             <NextTopLoader />
             <QueryProvider>
               <AuthOverlay />
