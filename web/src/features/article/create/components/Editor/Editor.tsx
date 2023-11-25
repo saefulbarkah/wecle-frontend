@@ -34,6 +34,7 @@ export const Editor = () => {
     },
   });
 
+  const [contentJSON, setContentJSON] = useState<any>();
   const [content, setContent] = useState('');
   const [value] = useDebounce(content, 500);
 
@@ -79,6 +80,7 @@ export const Editor = () => {
     autofocus: true,
     content: content,
     onUpdate: ({ editor }) => {
+      setContentJSON(editor.getJSON());
       setContent(editor.getHTML());
     },
   });
@@ -99,19 +101,23 @@ export const Editor = () => {
     const queryID = query.get('draftId');
     const find = findArticle(queryID);
     if (session) {
+      const title = contentJSON.content[0].content[0].text;
       if (!find) {
         setArticle({
+          title,
           id: uuid,
           content: value,
           user_id: session?.id,
         });
         return create({
+          title,
           id: uuid,
           content: value,
           user_id: session?.id,
         });
       }
       create({
+        title,
         id: queryID as string,
         content: value,
         user_id: session?.id,

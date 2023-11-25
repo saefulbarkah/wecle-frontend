@@ -3,6 +3,7 @@ import React from 'react';
 import { PublishMenu } from './publish-menu';
 import { NotificationMenu, UserMenu } from '@/components/navbar/menus';
 import { useAuth } from '@/features/auth/store';
+import { DraftMenu } from './draft-menu';
 
 export const NavbarArticle = () => {
   const session = useAuth((state) => state.session);
@@ -14,6 +15,7 @@ export const NavbarArticle = () => {
           <p className="font-serif text-sm">Draft in SaefulBarkah</p>
         </div>
         <div className="flex items-center space-x-3">
+          <DraftMenu />
           <PublishMenu />
           {/* <OptionMenu /> */}
           <NotificationMenu />

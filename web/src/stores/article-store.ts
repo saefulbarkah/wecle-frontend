@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 type article = {
   id: string;
   content: string;
+  title: string;
   user_id: string;
   status?: 'draft';
 };
