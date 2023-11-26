@@ -2,9 +2,9 @@ import { Response, Request, NextFunction } from 'express';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
-import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
+import { Author } from '../../models/author.js';
 
 type Tuser = {
   name: string;
@@ -30,7 +30,7 @@ const userSchema = z
   });
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password, name, avatar } = req.body as Tuser;
+  const { email, password, name } = req.body as Tuser;
   try {
     userSchema.parse({ email, name, password });
 
@@ -43,28 +43,32 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
     const salt = await bcrypt.genSalt(saltRound);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    // check avatar value
-    let newAvatar;
-    if (avatar) {
-      newAvatar = avatar;
-    } else {
-      const encodeURL = encodeURIComponent(name);
-      newAvatar = `https://ui-avatars.com/api/?name=${encodeURL}`;
-    }
+    // generate avatar
+    const encodeURL = encodeURIComponent(name);
+    const newAvatar = `https://ui-avatars.com/api/?name=${encodeURL}`;
 
     // create new user
     const newUser = await User.create({
-      name: name,
       email: email,
       password: hashPassword,
-      avatar: newAvatar,
+      author: null,
     });
 
     // create new author
-    await Author.create({
-      name: newUser.name,
+    const auhtor = await Author.create({
+      name: name,
+      avatar: newAvatar,
+      about: null,
       user: newUser._id,
     });
+
+    // update author on user
+    await User.updateOne(
+      { _id: newUser._id },
+      {
+        author: auhtor._id,
+      }
+    );
 
     const response: ApiResponse = {
       status: 201,

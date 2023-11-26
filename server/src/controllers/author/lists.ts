@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import Author from '../../models/author.js';
 import { ApiResponse } from '../../types/index.js';
+import { Author } from '../../models/author.js';
 
 const lists = async (req: Request, res: Response, next: NextFunction) => {
   try {
