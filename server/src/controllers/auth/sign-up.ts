@@ -1,10 +1,8 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { z } from 'zod';
-import errorhandling from '../../lib/error-handling.js';
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
 import Author from '../../models/author.js';
-import { createToken } from '../../lib/jwt.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
@@ -31,7 +29,7 @@ const userSchema = z
     email: true,
   });
 
-const signUp = async (req: Request, res: Response) => {
+const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, name, avatar } = req.body as Tuser;
   try {
     userSchema.parse({ email, name, password });
@@ -76,7 +74,7 @@ const signUp = async (req: Request, res: Response) => {
 
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

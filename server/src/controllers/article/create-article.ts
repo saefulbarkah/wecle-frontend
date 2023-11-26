@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-import errorhandling from '../../lib/error-handling.js';
+import { NextFunction, Request, Response } from 'express';
 import { articleSchema, articleType } from '../../schema/article-schema.js';
 import Article from '../../models/article.js';
 import { nanoid } from 'nanoid';
@@ -8,7 +7,11 @@ import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
-const createArticle = async (req: Request, res: Response) => {
+const createArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { author, content, title } = req.body as articleType;
     articleSchema.parse({ author, content, title });
@@ -33,7 +36,7 @@ const createArticle = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

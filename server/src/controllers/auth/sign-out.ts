@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
-import errorHandling from '../../lib/error-handling.js';
+import { NextFunction, Request, Response } from 'express';
 import { ApiResponse } from '../../types/index.js';
 
-const signOut = async (req: Request, res: Response) => {
+const signOut = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.clearCookie('auth');
     const response: ApiResponse = {
@@ -12,7 +11,7 @@ const signOut = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 };
 

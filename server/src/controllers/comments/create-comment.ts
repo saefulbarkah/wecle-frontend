@@ -1,13 +1,16 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { commentType } from '../../schema/comment-schema.js';
 import comments from '../../models/comments.js';
-import errorhandling from '../../lib/error-handling.js';
 import Article from '../../models/article.js';
 import User from '../../models/user.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
-const createComment = async (req: Request, res: Response) => {
+const createComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { articleId, text, userId } = req.body as commentType;
   try {
     // validation
@@ -41,7 +44,7 @@ const createComment = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 
