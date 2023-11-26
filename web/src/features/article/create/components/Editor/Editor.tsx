@@ -34,6 +34,7 @@ export const Editor = () => {
     },
   });
 
+  const [contentJSON, setContentJSON] = useState<any>();
   const [content, setContent] = useState('');
   const [value] = useDebounce(content, 500);
 
@@ -79,9 +80,30 @@ export const Editor = () => {
     autofocus: true,
     content: content,
     onUpdate: ({ editor }) => {
+      setContentJSON(editor.getJSON());
       setContent(editor.getHTML());
     },
   });
+
+  const updateOrCreateDraft = () => {
+    const queryID = query.get('draftId') as string;
+    const title = contentJSON?.content[0].content[0].text || '';
+    const articleData = {
+      title,
+      id: uuid || queryID,
+      content: value,
+      user_id: session?.id,
+    };
+
+    if (session && value) {
+      if (!findArticle(queryID)) {
+        setArticle(articleData);
+        create(articleData);
+      } else {
+        create(articleData);
+      }
+    }
+  };
 
   // rendered firs time
   useEffect(() => {
@@ -96,28 +118,7 @@ export const Editor = () => {
 
   // saving draft automatically
   useEffect(() => {
-    const queryID = query.get('draftId');
-    const find = findArticle(queryID);
-    if (session) {
-      if (!find) {
-        setArticle({
-          id: uuid,
-          content: value,
-          user_id: session?.id,
-        });
-        return create({
-          id: uuid,
-          content: value,
-          user_id: session?.id,
-        });
-      }
-      create({
-        id: queryID as string,
-        content: value,
-        user_id: session?.id,
-      });
-    }
-
+    updateOrCreateDraft();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 

@@ -6,17 +6,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useCreateArticle } from '@/features/article';
 import { useDraft } from '@/hooks';
 import React, { useState } from 'react';
 
 export const PublishMenu = () => {
-  const [isDisabled, setDisabled] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const { data } = useDraft();
+  const { mutate } = useCreateArticle();
 
   const handlePublish = () => {
     if (!data) return;
-    console.log('published');
+    mutate({
+      title: data.title,
+      content: data.content,
+      user_id: data.user_id as string,
+    });
   };
 
   return (

@@ -4,6 +4,7 @@ import { useAuth } from '@/features/auth/store';
 import { useArticleState } from '@/stores/article-store';
 
 type createArticle = {
+  title: string;
   content: string;
   id: string;
   user_id?: string;
@@ -20,6 +21,7 @@ export const useDraft = (options?: DraftHookOptions) => {
   const handleCreate = (val: createArticle) => {
     if (session) {
       articleState.createArticle({
+        title: val.title,
         id: val.id,
         content: val.content,
         user_id: session.id,
