@@ -3,13 +3,13 @@ import mongoose from 'mongoose';
 import { DATABASE_URL, NODE_ENV } from './config/config.js';
 import * as route from './routes/index.js';
 import User from './models/user.js';
-import Author from './models/author.js';
 import protectedRequest from './middleware/protect-api.js';
 import Article from './models/article.js';
 import comments from './models/comments.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import errorHandling from './lib/error-handling.js';
+import { Author } from './models/author.js';
 
 const app = express();
 const port = 4000;

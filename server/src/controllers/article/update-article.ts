@@ -4,8 +4,8 @@ import Article from '../../models/article.js';
 import { nanoid } from 'nanoid';
 import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
 import { ValidationError } from '../../errors/index.js';
-import Author from '../../models/author.js';
 import { ApiResponse } from '../../types/index.js';
+import { Author } from '../../models/author.js';
 
 const updateArticle = async (
   req: Request,

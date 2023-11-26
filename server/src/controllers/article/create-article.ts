@@ -3,9 +3,9 @@ import { articleSchema, articleType } from '../../schema/article-schema.js';
 import Article from '../../models/article.js';
 import { nanoid } from 'nanoid';
 import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
-import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
+import { Author } from '../../models/author.js';
 
 const createArticle = async (
   req: Request,

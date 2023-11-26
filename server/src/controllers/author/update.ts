@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { authorSchema, authorType } from '../../schema/auhtor-schema.js';
-import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
+import { Author } from '../../models/author.js';
 
 export default async function updateAuthor(
   req: Request,

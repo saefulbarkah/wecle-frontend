@@ -5,6 +5,7 @@ import { createToken } from '../../lib/jwt.js';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
+import { TAuthor } from '../../models/author.js';
 
 type Tuser = {
   email: string;
@@ -26,7 +27,9 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
     loginSchema.parse({ email, password });
 
     // check if any user
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }).populate<{
+      author: TAuthor;
+    }>('author');
     if (!user) throw new NotFoundError('Invalid Credentials');
 
     // validation password
@@ -39,13 +42,13 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
     const tokenStore = {
       id: user._id,
       email: user.email,
-      name: user.name,
-      avatar: user.avatar,
+      name: user.author.name,
+      avatar: user.author.avatar,
     };
     const token = createToken(tokenStore);
     const response: ApiResponse = {
       status: 200,
-      message: 'Welcome back, ' + user.name + '!',
+      message: 'Welcome back, ' + user.author.name + '!',
       response: 'success',
       data: { token },
     };

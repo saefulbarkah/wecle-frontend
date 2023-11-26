@@ -1,12 +1,13 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
 const authorSchema = new Schema({
+  name: String,
+  about: String,
+  avatar: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  name: String,
-  about: String,
   createdAt: {
     type: Date,
     default: Date.now,
@@ -21,4 +22,4 @@ type TAuthor = InferSchemaType<typeof authorSchema>;
 
 const Author = mongoose.model<TAuthor>('Author', authorSchema);
 
-export default Author;
+export { Author, TAuthor };

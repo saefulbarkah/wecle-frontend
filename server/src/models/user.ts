@@ -1,9 +1,9 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
 const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'Author',
   },
   email: {
     type: String,
@@ -12,9 +12,6 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-  },
-  avatar: {
-    type: String,
   },
   createdAt: {
     type: Date,
