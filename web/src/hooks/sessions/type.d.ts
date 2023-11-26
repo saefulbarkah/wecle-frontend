@@ -4,4 +4,5 @@ export type SessionType = {
   email?: string;
   avatar?: string;
   token?: string | null;
+  author_id?: string;
 } | null;

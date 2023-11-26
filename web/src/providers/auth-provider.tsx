@@ -19,6 +19,7 @@ function AuthProvider({ children, session = null }: authProps) {
       avatar: session.avatar,
       email: session.email,
       name: session.name,
+      author_id: session.author_id,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

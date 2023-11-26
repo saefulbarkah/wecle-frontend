@@ -92,7 +92,7 @@ export const Editor = () => {
       title,
       id: uuid || queryID,
       content: value,
-      user_id: session?.id,
+      author_id: session?.author_id,
     };
 
     if (session && value) {

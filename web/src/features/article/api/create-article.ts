@@ -2,31 +2,38 @@
 
 import api from '@/api';
 import { useAuth } from '@/features/auth/store';
+import { article } from '@/stores/article-store';
 import { ApiResponse } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 
-type createArticle = {
-  title: string;
-  content: string;
-  user_id: string;
+type post = Pick<article, 'content' | 'title'> & {
+  author: string;
 };
 
-type response = AxiosResponse<ApiResponse<createArticle>>;
+type response = AxiosResponse<ApiResponse<Partial<post>>>;
 
 export const useCreateArticle = () => {
   const token = useAuth((state) => state.token);
 
-  const post = (data: createArticle) => {
-    return api.post('/article/create', data, {
-      headers: {
-        Authorization: 'bearer ' + token,
+  const post = (data: post) => {
+    return api.post<post, response, post>(
+      '/article/create',
+      {
+        content: data.content,
+        title: data.title,
+        author: data.author,
       },
-    });
+      {
+        headers: {
+          Authorization: 'bearer ' + token,
+        },
+      }
+    );
   };
 
-  return useMutation<response, AxiosError<ApiResponse>, createArticle>({
+  return useMutation<response, AxiosError<ApiResponse>, post>({
     mutationKey: ['create-article'],
     mutationFn: post,
     onSuccess: (res) => {

@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type article = {
+export type article = {
   id: string;
   content: string;
   title: string;
-  user_id?: string;
+  author_id?: string;
   status?: 'draft';
 };
 
