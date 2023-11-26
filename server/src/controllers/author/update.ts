@@ -1,11 +1,14 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { authorSchema, authorType } from '../../schema/auhtor-schema.js';
-import errorHandling from '../../lib/error-handling.js';
 import Author from '../../models/author.js';
 import { ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
-export default async function updateAuthor(req: Request, res: Response) {
+export default async function updateAuthor(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { _id, about, name } = req.body as authorType;
     const updateSchema = authorSchema.pick({ _id: true });
@@ -35,6 +38,6 @@ export default async function updateAuthor(req: Request, res: Response) {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 }

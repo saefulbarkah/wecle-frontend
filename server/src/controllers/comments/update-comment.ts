@@ -1,11 +1,14 @@
-import { Request, Response } from 'express';
-import errorhandling from '../../lib/error-handling.js';
+import { NextFunction, Request, Response } from 'express';
 import { commentSchema, commentType } from '../../schema/comment-schema.js';
 import comments from '../../models/comments.js';
 import { NotFoundError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
-const updateComment = async (req: Request, res: Response) => {
+const updateComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const commentId = req.params.commentId;
 
@@ -37,7 +40,7 @@ const updateComment = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

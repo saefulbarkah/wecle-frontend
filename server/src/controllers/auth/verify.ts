@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User from '../../models/user.js';
 import { ValidationError } from '../../errors/index.js';
-import errorHandling from '../../lib/error-handling.js';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../../types/index.js';
 
@@ -12,7 +11,11 @@ type responseData = {
   token?: string;
 };
 
-export default async function verifyUser(req: Request, res: Response) {
+export default async function verifyUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     // get token
     const { token } = req.body;
@@ -42,6 +45,6 @@ export default async function verifyUser(req: Request, res: Response) {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 }

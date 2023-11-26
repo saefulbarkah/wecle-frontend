@@ -1,14 +1,17 @@
-import { Request, Response } from 'express';
-import errorhandling from '../../lib/error-handling.js';
+import { NextFunction, Request, Response } from 'express';
 import { articleSchema } from '../../schema/article-schema.js';
 import Article from '../../models/article.js';
 import { nanoid } from 'nanoid';
 import { toCapitalizeString, toSlug } from '../../lib/convert-string.js';
-import { NotFoundError, ValidationError } from '../../errors/index.js';
+import { ValidationError } from '../../errors/index.js';
 import Author from '../../models/author.js';
 import { ApiResponse } from '../../types/index.js';
 
-const updateArticle = async (req: Request, res: Response) => {
+const updateArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const articleId = req.params.id;
     const { content, title, author } = req.body;
@@ -43,7 +46,7 @@ const updateArticle = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

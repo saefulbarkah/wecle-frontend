@@ -1,8 +1,7 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../../models/user.js';
 import { createToken } from '../../lib/jwt.js';
-import errorhandling from '../../lib/error-handling.js';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
@@ -19,7 +18,7 @@ const loginSchema = z
   })
   .required();
 
-const signIn = async (req: Request, res: Response) => {
+const signIn = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body as Tuser;
 
   try {
@@ -58,7 +57,7 @@ const signIn = async (req: Request, res: Response) => {
     });
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

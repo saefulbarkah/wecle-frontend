@@ -1,10 +1,13 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import comments from '../../models/comments.js';
-import errorhandling from '../../lib/error-handling.js';
 import { NotFoundError } from '../../errors/index.js';
 import { ApiResponse } from '../../types/index.js';
 
-const deleteComment = async (req: Request, res: Response) => {
+const deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const id = req.params.commentId;
     const result = await comments.deleteOne({ _id: id });
@@ -22,7 +25,7 @@ const deleteComment = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorhandling(error as Error, res);
+    next(error);
   }
 };
 

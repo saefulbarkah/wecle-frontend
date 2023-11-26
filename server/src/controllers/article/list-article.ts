@@ -1,9 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Article from '../../models/article.js';
-import errorHandling from '../../lib/error-handling.js';
 import { ApiResponse } from '../../types/index.js';
 
-export default async function listArticle(req: Request, res: Response) {
+export default async function listArticle(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const data = await Article.find({})
       .populate({
@@ -29,6 +32,6 @@ export default async function listArticle(req: Request, res: Response) {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 }

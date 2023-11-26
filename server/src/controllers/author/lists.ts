@@ -1,9 +1,8 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Author from '../../models/author.js';
-import errorHandling from '../../lib/error-handling.js';
 import { ApiResponse } from '../../types/index.js';
 
-const lists = async (req: Request, res: Response) => {
+const lists = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await Author.find({}).populate('user', 'name avatar email');
     let resources;
@@ -20,7 +19,7 @@ const lists = async (req: Request, res: Response) => {
     };
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 };
 

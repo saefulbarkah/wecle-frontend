@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../../types/index.js';
 import { UnauthorizedError, ValidationError } from '../../errors/index.js';
-import errorHandling from '../../lib/error-handling.js';
 import User from '../../models/user.js';
 
-const Me = async (req: Request, res: Response) => {
+const Me = async (req: Request, res: Response, next: NextFunction) => {
   const authToken = req.cookies.auth;
   try {
     if (!authToken) throw new UnauthorizedError('Required token');
@@ -28,7 +27,7 @@ const Me = async (req: Request, res: Response) => {
 
     res.status(response.status).json(response);
   } catch (error) {
-    errorHandling(error as Error, res);
+    next(error);
   }
 };
 
