@@ -19,10 +19,6 @@ import { nanoid } from 'nanoid';
 import { useDraft } from '@/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const CustomDocument = Document.extend({
-  content: 'heading block*',
-});
-
 const uuid = nanoid(5);
 
 export const Editor = () => {
@@ -34,13 +30,12 @@ export const Editor = () => {
     },
   });
 
-  const [contentJSON, setContentJSON] = useState<any>();
   const [content, setContent] = useState('');
   const [value] = useDebounce(content, 500);
 
   const editor = useEditor({
     extensions: [
-      CustomDocument,
+      Document,
       Text,
       HardBreak,
       Dropcursor,
@@ -80,23 +75,27 @@ export const Editor = () => {
     autofocus: true,
     content: content,
     onUpdate: ({ editor }) => {
-      setContentJSON(editor.getJSON());
       setContent(editor.getHTML());
     },
   });
 
   const updateOrCreateDraft = () => {
     const queryID = query.get('draftId') as string;
-    const title = contentJSON?.content[0].content[0].text || '';
+    const find = findArticle(queryID);
+    let id = queryID;
+    if (!find) {
+      id = uuid;
+    }
+
     const articleData = {
-      title,
-      id: uuid || queryID,
+      title: '',
+      id: id,
       content: value,
       author_id: session?.author_id,
     };
 
     if (session && value) {
-      if (!findArticle(queryID)) {
+      if (!find) {
         setArticle(articleData);
         create(articleData);
       } else {
