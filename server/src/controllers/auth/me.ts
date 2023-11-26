@@ -25,6 +25,7 @@ const Me = async (req: Request, res: Response, next: NextFunction) => {
         name: user.author.name,
         email: user.email,
         avatar: user.author.avatar,
+        author_id: user.author._id,
         token: authToken,
       },
     };

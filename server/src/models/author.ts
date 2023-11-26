@@ -1,6 +1,10 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
 const authorSchema = new Schema({
+  _id: {
+    type: Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
   name: String,
   about: String,
   avatar: String,

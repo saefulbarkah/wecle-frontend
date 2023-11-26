@@ -44,6 +44,7 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
       email: user.email,
       name: user.author.name,
       avatar: user.author.avatar,
+      author_id: user.author._id,
     };
     const token = createToken(tokenStore);
     const response: ApiResponse = {
