@@ -43,14 +43,9 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
     const salt = await bcrypt.genSalt(saltRound);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    // check avatar value
-    let newAvatar;
-    if (avatar) {
-      newAvatar = avatar;
-    } else {
-      const encodeURL = encodeURIComponent(name);
-      newAvatar = `https://ui-avatars.com/api/?name=${encodeURL}`;
-    }
+    // generate avatar
+    const encodeURL = encodeURIComponent(name);
+    const newAvatar = `https://ui-avatars.com/api/?name=${encodeURL}`;
 
     // create new user
     const newUser = await User.create({
