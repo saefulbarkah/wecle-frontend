@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/navbar';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';
 import NextTopLoader from 'nextjs-toploader';
@@ -9,6 +8,8 @@ import { Toaster } from 'react-hot-toast';
 import { description, keywords, title } from '@/lib/meta-data';
 import { CookiesProvider } from 'next-client-cookies/server';
 import { getServerSession } from '@/hooks/sessions/server';
+import AuthProvider from '@/providers/auth-provider';
+import { CreatePortal } from '@/components/create-portal';
 
 const quick = Quicksand({
   subsets: ['latin'],
@@ -36,13 +37,16 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
         <CookiesProvider>
-          <Toaster />
-          <NextTopLoader />
-          <QueryProvider>
-            <Navbar session={session} />
-            <AuthOverlay />
-            <div className="container mt-2">{children}</div>
-          </QueryProvider>
+          <AuthProvider session={session}>
+            <CreatePortal>
+              <Toaster />
+            </CreatePortal>
+            <NextTopLoader />
+            <QueryProvider>
+              <AuthOverlay />
+              {children}
+            </QueryProvider>
+          </AuthProvider>
         </CookiesProvider>
       </body>
     </html>

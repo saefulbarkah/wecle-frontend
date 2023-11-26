@@ -11,6 +11,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-white hover:bg-primary-600/90',
+        dark: 'bg-slate-900 text-white hover:bg-slate-900/90',
         destructive:
           'bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         outline:
@@ -20,6 +21,8 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
         link: 'text-primary underline-offset-4 hover:underline dark:text-slate-50',
+        success:
+          'text-white hover:bg-success/95 bg-success active:bg-success/90',
       },
       size: {
         default: 'h-10 px-4 py-2',

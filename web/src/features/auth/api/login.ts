@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/navigation';
 import nproggres from 'nprogress';
-import { useAuthOverlay } from '../store';
+import { useAuth, useAuthOverlay } from '../store';
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/types';
 
@@ -17,6 +17,7 @@ const login = async (data: loginType) => {
 const useLogin = () => {
   const router = useRouter();
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
+  const setToken = useAuth((state) => state.setToken);
 
   return useMutation<
     AxiosResponse<ApiResponse<{ token: string }>>,
@@ -26,18 +27,21 @@ const useLogin = () => {
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: async (res) => {
-      const data = res.data.data;
+      const response = res.data;
       nproggres.done();
       setOverlayAuth(false);
-      toast.success('Login sucesss');
       router.refresh();
+      toast.success(response.message);
+      setToken(response.data.token);
     },
     onMutate: () => {
       nproggres.start();
     },
     onError: (res) => {
-      if (res.response?.status === 400) {
-        toast.error(res.response.data.message);
+      const statusCode = res.response?.status;
+      const msg = res.response?.data.message as string;
+      if (statusCode === 400 || statusCode === 404) {
+        toast.error(msg);
       }
       nproggres.done();
     },
