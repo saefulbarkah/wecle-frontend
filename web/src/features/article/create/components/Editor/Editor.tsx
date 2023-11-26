@@ -85,6 +85,26 @@ export const Editor = () => {
     },
   });
 
+  const updateOrCreateDraft = () => {
+    const queryID = query.get('draftId') as string;
+    const title = contentJSON?.content[0].content[0].text || '';
+    const articleData = {
+      title,
+      id: uuid || queryID,
+      content: value,
+      user_id: session?.id,
+    };
+
+    if (session && value) {
+      if (!findArticle(queryID)) {
+        setArticle(articleData);
+        create(articleData);
+      } else {
+        create(articleData);
+      }
+    }
+  };
+
   // rendered firs time
   useEffect(() => {
     const draftId = query.get('draftId');
@@ -98,32 +118,7 @@ export const Editor = () => {
 
   // saving draft automatically
   useEffect(() => {
-    const queryID = query.get('draftId');
-    const find = findArticle(queryID);
-    if (session) {
-      const title = contentJSON.content[0].content[0].text;
-      if (!find) {
-        setArticle({
-          title,
-          id: uuid,
-          content: value,
-          user_id: session?.id,
-        });
-        return create({
-          title,
-          id: uuid,
-          content: value,
-          user_id: session?.id,
-        });
-      }
-      create({
-        title,
-        id: queryID as string,
-        content: value,
-        user_id: session?.id,
-      });
-    }
-
+    updateOrCreateDraft();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 

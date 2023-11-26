@@ -5,7 +5,7 @@ type article = {
   id: string;
   content: string;
   title: string;
-  user_id: string;
+  user_id?: string;
   status?: 'draft';
 };
 
