@@ -8,5 +8,8 @@ router.get('/lists', articleController.list);
 router.post('/create', protectedRequest, articleController.create);
 router.delete('/delete', protectedRequest, articleController.delete);
 router.put('/update/:id', protectedRequest, articleController.update);
+router.post('/save/draft', protectedRequest, articleController.saveDraft);
+router.get('/lists/draft', protectedRequest, articleController.draftLists);
+router.patch('/find/draft', protectedRequest, articleController.findDraft);
 
 export default router;

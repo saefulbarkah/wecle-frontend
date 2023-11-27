@@ -7,8 +7,9 @@ export default async function listArticle(
   res: Response,
   next: NextFunction
 ) {
+  const { status = 'RELEASE' } = req.query as { status: 'DRAFT' | 'RELEASE' };
   try {
-    const data = await Article.find({})
+    const data = await Article.find({ status: status })
       .populate({
         path: 'author',
         populate: {

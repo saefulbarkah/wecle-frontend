@@ -29,3 +29,12 @@ export class UnauthorizedError extends Error {
     this.statusCode = 401;
   }
 }
+
+export class ErrorMessage {
+  static authorNotExistForArticleCreation(): string {
+    return 'The specified author does not exist for article creation.';
+  }
+  static authorNotExistForArticleUpdate(): string {
+    return 'The specified author does not exist for article update.';
+  }
+}
