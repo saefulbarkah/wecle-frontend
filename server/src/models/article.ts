@@ -14,6 +14,10 @@ const articleSchema = new Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ['DRAFT', 'RELEASE'],
+  },
   comments: [
     {
       type: Schema.Types.ObjectId,
@@ -34,6 +38,7 @@ const articleSchema = new Schema({
     default: Date.now,
   },
 });
+
 type ArticleType = InferSchemaType<typeof articleSchema>;
 
 const Article = mongoose.model<ArticleType>('Article', articleSchema);

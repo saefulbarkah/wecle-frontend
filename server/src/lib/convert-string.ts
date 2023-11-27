@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 export function toCapitalizeString(value: string) {
   const results = value.toLowerCase();
   return results
@@ -8,4 +10,11 @@ export function toCapitalizeString(value: string) {
 
 export function toSlug(value: string) {
   return value.split(' ').join('-');
+}
+
+export function strUUID(text: string) {
+  const randomizer = nanoid(10);
+  const capTitle = toCapitalizeString(text);
+  const slug = `${toSlug(capTitle)}-${randomizer}`;
+  return slug;
 }
