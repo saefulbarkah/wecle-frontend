@@ -7,7 +7,7 @@ type createArticle = {
   title: string;
   content: string;
   id: string;
-  user_id?: string;
+  author_id?: string;
 };
 
 interface DraftHookOptions {
@@ -19,16 +19,14 @@ export const useDraft = (options?: DraftHookOptions) => {
   const session = useAuth((state) => state.session);
 
   const handleCreate = (val: createArticle) => {
-    if (session) {
-      articleState.createArticle({
-        title: val.title,
-        id: val.id,
-        content: val.content,
-        user_id: session.id,
-      });
-      if (options?.onSuccessCreate) {
-        options.onSuccessCreate(val);
-      }
+    articleState.createArticle({
+      title: val.title,
+      id: val.id,
+      content: val.content,
+      author_id: val.author_id,
+    });
+    if (options?.onSuccessCreate) {
+      options.onSuccessCreate(val);
     }
   };
 

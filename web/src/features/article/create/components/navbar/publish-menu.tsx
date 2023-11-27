@@ -20,7 +20,7 @@ export const PublishMenu = () => {
     mutate({
       title: data.title,
       content: data.content,
-      user_id: data.user_id as string,
+      author: data.author_id as string,
     });
   };
 
