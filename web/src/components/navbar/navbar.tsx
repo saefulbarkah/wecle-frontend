@@ -24,7 +24,7 @@ export const Navbar = ({ session }: { session: SessionType }) => {
           <div className="flex items-center gap-2">
             <WriteMenu session={session} />
             <SearchMobile />
-            <NotificationMenu />
+            {session && <NotificationMenu />}
             {session ? (
               <UserMenu session={session} />
             ) : (
