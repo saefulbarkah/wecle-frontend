@@ -15,20 +15,23 @@ import {
   DialogOverlay,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useDraft } from '@/hooks';
+import { useDraftLists } from '@/features/article/api/draft-list';
+import { useQueryClient } from '@tanstack/react-query';
 import { LucideArchive } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export const DraftMenu = () => {
-  const { draft } = useDraft();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { data, isLoading } = useDraftLists();
+  const queryClient = useQueryClient();
 
   const handleDraft = (id: string) => {
     router.push('?draftId=' + id);
     setOpen(false);
   };
+
   return (
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -45,13 +48,13 @@ export const DraftMenu = () => {
             <CommandList className="max-h-full">
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup heading="Draft">
-                {draft.map((item) => (
+                {data?.map((item) => (
                   <CommandItem
-                    key={item.id}
+                    key={item._id}
                     className="text-md flex text-start"
                   >
                     <span
-                      onClick={() => handleDraft(item.id)}
+                      onClick={() => handleDraft(item._id)}
                       className="w-full cursor-pointer truncate"
                     >
                       {item.title}

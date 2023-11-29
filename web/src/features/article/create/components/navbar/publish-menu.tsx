@@ -7,34 +7,29 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useCreateArticle } from '@/features/article';
-import { useDraft } from '@/hooks';
+import { useArticleState } from '@/stores/article-store';
 import React, { useState } from 'react';
 
 export const PublishMenu = () => {
   const [showAlert, setShowAlert] = useState(false);
-  const { data } = useDraft();
   const { mutate } = useCreateArticle();
+  const article = useArticleState((state) => state.article);
 
   const handlePublish = () => {
-    if (!data) return;
-    mutate({
-      title: data.title,
-      content: data.content,
-      author: data.author_id as string,
-    });
+    if (!article) return;
   };
 
   return (
     <div className="relative">
       <Popover
-        open={data?.content ? false : showAlert}
+        open={article?.content ? false : showAlert}
         onOpenChange={setShowAlert}
       >
         <PopoverTrigger asChild>
           <Button
             variant={'success'}
             size={'sm'}
-            className={`${data?.content ? 'opacity-100' : 'opacity-50'}`}
+            className={`${article?.content ? 'opacity-100' : 'opacity-50'}`}
             onClick={() => handlePublish()}
           >
             Publish
@@ -66,8 +61,8 @@ export const PublishMenu = () => {
               />
             </svg>
           </i>
-          <p className="text-center">
-            you are disallowed to publish when content is nothing
+          <p className="text-center text-danger font-semibold">
+            You are disallowed to publish when content is empty
           </p>
         </PopoverContent>
       </Popover>

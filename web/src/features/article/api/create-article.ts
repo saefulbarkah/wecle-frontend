@@ -2,13 +2,13 @@
 
 import api from '@/api';
 import { useAuth } from '@/features/auth/store';
-import { article } from '@/stores/article-store';
+import { articleType } from '@/stores/article-store';
 import { ApiResponse } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 
-type post = Pick<article, 'content' | 'title'> & {
+type post = Pick<articleType, 'content' | 'title'> & {
   author: string;
 };
 

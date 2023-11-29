@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import Paragraph from '@tiptap/extension-paragraph';
@@ -15,23 +16,22 @@ import { BoldIcon } from 'lucide-react';
 import { FloatingMenu } from './menus/floating-menu';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { nanoid } from 'nanoid';
-import { useDraft } from '@/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useTitleState } from './title-editor';
+import { useEditorStore } from './store';
+import { useSaveDraft } from '@/features/article/api/save-to-draft-article';
+import { useAuth } from '@/features/auth/store';
+import { useSearchParams } from 'next/navigation';
+import { articleType, useArticleState } from '@/stores/article-store';
 
-const uuid = nanoid(5);
-
-export const Editor = () => {
-  const router = useRouter();
-  const query = useSearchParams();
-  const { create, findArticle, session, setArticle, data } = useDraft({
-    onSuccessCreate: ({ id }) => {
-      router.push('?draftId=' + id);
-    },
-  });
-
+export const ContentEditor = ({ data }: { data?: articleType | null }) => {
+  const session = useAuth((state) => state.session);
+  const editorState = useEditorStore((state) => state);
   const [content, setContent] = useState('');
-  const [value] = useDebounce(content, 500);
+  const [value] = useDebounce(content, 1000);
+  const { mutate } = useSaveDraft();
+  const titleState = useTitleState((state) => state.title);
+  const [title] = useDebounce(titleState, 1000);
+  const articleState = useArticleState((state) => state);
 
   const editor = useEditor({
     extensions: [
@@ -69,57 +69,58 @@ export const Editor = () => {
     editorProps: {
       attributes: {
         class:
-          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none pt-[2.5rem] mb-[5rem]',
+          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none mb-[5rem]',
       },
     },
-    autofocus: true,
-    content: content,
+    content: '',
     onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
+      const content = editor.getHTML();
+      setContent(content);
+      articleState.setArticle({ content: content });
     },
   });
 
-  const updateOrCreateDraft = () => {
-    const queryID = query.get('draftId') as string;
-    const find = findArticle(queryID);
-    let id = queryID;
-    if (!find) {
-      id = uuid;
-    }
+  const saveToDraft = async () => {
+    if (!session) return;
 
-    const articleData = {
-      title: '',
-      id: id,
-      content: value,
-      author_id: session?.author_id,
-    };
+    // validate title
+    if (
+      articleState.article?.title?.trim() === '' ||
+      !articleState.article?.title
+    )
+      return;
 
-    if (session && value) {
-      if (!find) {
-        setArticle(articleData);
-        create(articleData);
-      } else {
-        create(articleData);
-      }
-    }
+    mutate({
+      data: {
+        _id: data?._id,
+        title: articleState.article.title,
+        content: articleState.article.content,
+        author: session.author_id,
+      },
+      token: session.token as string,
+    });
   };
 
-  // rendered firs time
-  useEffect(() => {
-    const draftId = query.get('draftId');
-    const article = findArticle(draftId);
-    editor?.commands.setContent(article?.content as string);
-    if (article) {
-      return setArticle(article);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, editor]);
+  const bindingDraft = () => {
+    if (!data) return;
+    editor?.commands.setContent(data.content as string);
+    articleState.setArticle(data);
+  };
 
-  // saving draft automatically
   useEffect(() => {
-    updateOrCreateDraft();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+    if (editorState.focus.content) {
+      editor?.commands.focus();
+    }
+  }, [editorState.focus.content]);
+
+  useEffect(() => {
+    saveToDraft();
+  }, [value, title]);
+
+  // binding draft
+  useEffect(() => {
+    bindingDraft();
+  }, [data]);
 
   return (
     <>
