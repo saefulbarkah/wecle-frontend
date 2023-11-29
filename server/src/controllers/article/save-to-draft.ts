@@ -9,11 +9,11 @@ import { ErrorMessage, ValidationError } from '../../errors/index.js';
 const saveToDraft = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, author, content, title } = req.body as articleType;
-    await articleSchema.parseAsync({
-      author,
-      content,
-      title,
-    });
+    // const customSchema = articleSchema.pick({ author: true });
+    // await customSchema.parseAsync({
+    //   author,
+    // });
+
     const slug = strUUID(title);
 
     const isAuthor = await Author.findOne({ _id: author });
