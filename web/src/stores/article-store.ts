@@ -14,14 +14,15 @@ type State = {
 
 type Action = {
   setArticle: (article: articleType | null) => void;
+  reset: () => void;
 };
 
 export const useArticleState = create<State & Action>((set) => ({
   article: {
     _id: null,
     author: null,
-    title: '',
-    content: '',
+    title: null,
+    content: null,
     status: 'DRAFT',
   },
 
@@ -29,4 +30,15 @@ export const useArticleState = create<State & Action>((set) => ({
     set((state) => ({
       article: { ...state.article, ...data },
     })),
+
+  reset: () =>
+    set({
+      article: {
+        _id: null,
+        author: null,
+        title: null,
+        content: null,
+        status: 'DRAFT',
+      },
+    }),
 }));

@@ -1,1 +1,1 @@
-export * from './api/create-article';
+export * from './api/update-article';

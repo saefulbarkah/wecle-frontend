@@ -81,6 +81,12 @@ export const ContentEditor = ({
     content: '',
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
+      const isEmpty = editor.isEmpty;
+      if (isEmpty) {
+        setContent('');
+        articleState.setArticle({ content: '' });
+        return;
+      }
       setContent(content);
       articleState.setArticle({ content: content });
     },

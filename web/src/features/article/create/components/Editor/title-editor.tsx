@@ -74,6 +74,12 @@ export const TitleEditor = ({
       const getJSON = editor.getJSON();
       if (!getJSON.content) return;
       const title = getJSON.content?.[0].content?.[0].text || '';
+      const isEmpty = editor.isEmpty;
+      if (isEmpty) {
+        state.setTitle('');
+        articleState.setArticle({ title: '' });
+        return;
+      }
       state.setTitle(title);
       articleState.setArticle({ title: title });
     },

@@ -6,21 +6,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useCreateArticle } from '@/features/article';
+import { useUpdateArticle } from '@/features/article';
+import { useAuth } from '@/features/auth/store';
 import { useArticleState } from '@/stores/article-store';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export const PublishMenu = () => {
+  const token = useAuth((state) => state.token);
   const [showAlert, setShowAlert] = useState(false);
-  const { mutate } = useCreateArticle();
+  const { mutate } = useUpdateArticle();
   const article = useArticleState((state) => state.article);
 
   const handlePublish = () => {
-    if (!article) return;
+    if (!article._id || !article.content) return;
+    if (article.content === '') {
+      return toast.error('Make sure your content is not empty');
+    }
     mutate({
-      author: article.author as string,
-      content: article.content,
-      title: article.title,
+      data: {
+        status: 'RELEASE',
+        author: article.author as string,
+      },
+      id: article._id as string,
+      token: token as string,
     });
   };
 
