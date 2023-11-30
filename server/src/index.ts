@@ -26,11 +26,29 @@ app.get('/', (req, res) => {
 
 // clear collection
 app.get('/clear', async (req, res) => {
-  await User.deleteMany();
-  await Author.deleteMany();
-  await Article.deleteMany();
-  await comments.deleteMany();
-  res.send('cleared all collection');
+  let schemaData;
+  const schema = req.query.schema as string;
+  switch (schema) {
+    case 'user':
+      await User.deleteMany();
+      schemaData = 'user';
+      break;
+    case 'author':
+      await Author.deleteMany();
+      schemaData = 'author';
+      break;
+    case 'article':
+      await Article.deleteMany();
+      schemaData = 'article';
+      break;
+    case 'comment':
+      await comments.deleteMany();
+      schemaData = 'comment';
+      break;
+    default:
+      break;
+  }
+  res.send(`cleared ${schemaData}`);
 });
 
 // route lists
