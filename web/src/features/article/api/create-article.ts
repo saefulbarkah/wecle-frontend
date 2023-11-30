@@ -6,6 +6,7 @@ import { articleType } from '@/stores/article-store';
 import { ApiResponse } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 type post = Pick<articleType, 'content' | 'title'> & {
@@ -16,6 +17,7 @@ type response = AxiosResponse<ApiResponse<Partial<post>>>;
 
 export const useCreateArticle = () => {
   const token = useAuth((state) => state.token);
+  const router = useRouter();
 
   const post = (data: post) => {
     return api.post<post, response, post>(
@@ -38,6 +40,7 @@ export const useCreateArticle = () => {
     mutationFn: post,
     onSuccess: (res) => {
       toast.success('Your article has published');
+      router.replace('/');
     },
     onError: (res) => {
       const data = res.response?.data;
