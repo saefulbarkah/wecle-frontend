@@ -26,7 +26,13 @@ const OnlyHeadingDocument = Document.extend({
   content: 'heading block*',
 });
 
-export const TitleEditor = ({ data }: { data?: articleType }) => {
+export const TitleEditor = ({
+  data,
+  editable,
+}: {
+  data?: articleType;
+  editable: boolean;
+}) => {
   const editorState = useEditorStore((state) => state);
   const state = useTitleState((state) => state);
   const articleState = useArticleState((state) => state);
@@ -85,6 +91,10 @@ export const TitleEditor = ({ data }: { data?: articleType }) => {
   useEffect(() => {
     rebindingTitle();
   }, [data]);
+
+  useEffect(() => {
+    editor?.setEditable(editable);
+  }, [editable]);
 
   return <EditorContent editor={editor} />;
 };

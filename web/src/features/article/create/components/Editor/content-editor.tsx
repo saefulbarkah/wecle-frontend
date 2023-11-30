@@ -23,7 +23,13 @@ import { useAuth } from '@/features/auth/store';
 import { useSearchParams } from 'next/navigation';
 import { articleType, useArticleState } from '@/stores/article-store';
 
-export const ContentEditor = ({ data }: { data?: articleType | null }) => {
+export const ContentEditor = ({
+  data,
+  editable,
+}: {
+  data?: articleType | null;
+  editable: boolean;
+}) => {
   const session = useAuth((state) => state.session);
   const editorState = useEditorStore((state) => state);
   const [content, setContent] = useState('');
@@ -121,6 +127,10 @@ export const ContentEditor = ({ data }: { data?: articleType | null }) => {
   useEffect(() => {
     bindingDraft();
   }, [data]);
+
+  useEffect(() => {
+    editor?.setEditable(editable);
+  }, [editable]);
 
   return (
     <>

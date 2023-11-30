@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { ContentEditor, TitleEditor } from './Editor';
 import { useFindDraft } from '../../api/get-draft-article';
 import { useSearchParams } from 'next/navigation';
+import { useIsMutating } from '@tanstack/react-query';
 
 export const CreateArticle = () => {
+  const isPublishing = useIsMutating({ mutationKey: ['create-article'] });
   const query = useSearchParams();
   const [paramId, setParamId] = useState<string | null>(null);
   const { data: article, isLoading } = useFindDraft({
@@ -26,8 +28,8 @@ export const CreateArticle = () => {
               <div className="absolute inset-0 backdrop-blur-sm z-50 mt-[60px] cursor-not-allowed"></div>
             </>
           )}
-          <TitleEditor data={article} />
-          <ContentEditor data={article} />
+          <TitleEditor data={article} editable={Boolean(!isPublishing)} />
+          <ContentEditor data={article} editable={Boolean(!isPublishing)} />
         </div>
       </div>
     </>

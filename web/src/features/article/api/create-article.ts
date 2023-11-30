@@ -37,7 +37,7 @@ export const useCreateArticle = () => {
     mutationKey: ['create-article'],
     mutationFn: post,
     onSuccess: (res) => {
-      toast.success(res.data.message);
+      toast.success('Your article has published');
     },
     onError: (res) => {
       const data = res.response?.data;
