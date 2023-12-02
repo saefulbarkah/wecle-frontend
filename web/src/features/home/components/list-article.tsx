@@ -21,6 +21,7 @@ const Content = ({ children, value, className }: TabsContentProps) => {
   return (
     <div className="mt-10">
       <TabsContent
+        role="tab-menu"
         value={value}
         className={cn('min-h-[calc(100vh-140px)]', className)}
       >
@@ -35,7 +36,11 @@ export const ListArticle = () => {
 
   return (
     <div className="lg:flex-1">
-      <Tabs defaultValue={activeMenu} onValueChange={setActiveMenu}>
+      <Tabs
+        defaultValue={activeMenu}
+        onValueChange={setActiveMenu}
+        aria-label="tab-menu"
+      >
         <TabsList className="bg-white flex items-center justify-center lg:justify-start h-[60px] p-0 sticky w-full z-40 top-[62px]">
           <div className="mt-[20px] lg:px-10">
             <div className="flex items-center justify-center gap-5 w-full relative">
