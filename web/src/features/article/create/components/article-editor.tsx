@@ -5,6 +5,7 @@ import { ContentEditor, TitleEditor } from './Editor';
 import { useFindDraft } from '../../api/get-draft-article';
 import { useSearchParams } from 'next/navigation';
 import { useIsMutating } from '@tanstack/react-query';
+import { useArticleState } from '@/stores/article-store';
 
 export const CreateArticle = () => {
   const isPublishing = useIsMutating({ mutationKey: ['create-article'] });

@@ -24,7 +24,7 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
               >
                 <Avatar className="w-[30px] h-[30px]">
                   <Image
-                    alt={item.author.name}
+                    alt={`avatar`}
                     src={`${item.author.avatar}`}
                     fill
                     unoptimized
@@ -45,11 +45,11 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 </Link>
                 <Image
                   src={'https://picsum.photos/1280/720'}
-                  unoptimized
                   alt="testing"
                   sizes="100vw"
-                  width={300}
-                  height={300}
+                  width={0}
+                  height={0}
+                  priority
                   className="w-[80px] h-[56px] lg:h-[112px] lg:w-[112px] object-cover border"
                 />
               </div>

@@ -14,7 +14,7 @@ const classVariant = cva([
 
 const NavigateCreateArticle = () => {
   return (
-    <Link href={'article/new'} className={cn(classVariant())}>
+    <Link href={'/article/new'} className={cn(classVariant())}>
       <PenSquare className="w-6 h-6" />
       <span className="text-sm font-semibold">Write</span>
     </Link>

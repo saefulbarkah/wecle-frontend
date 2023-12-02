@@ -20,7 +20,6 @@ import { useTitleState } from './title-editor';
 import { useEditorStore } from './store';
 import { useSaveDraft } from '@/features/article/api/save-to-draft-article';
 import { useAuth } from '@/features/auth/store';
-import { useSearchParams } from 'next/navigation';
 import { articleType, useArticleState } from '@/stores/article-store';
 
 export const ContentEditor = ({
@@ -50,7 +49,7 @@ export const ContentEditor = ({
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: 'font-serif text-xl',
+          class: 'font-serif',
         },
       }),
       Heading.configure({
@@ -103,12 +102,10 @@ export const ContentEditor = ({
     }
 
     // validate title
-    if (
-      (articleState.article?.title?.trim() === '' &&
-        !articleState.article?.title) ||
-      !value
-    )
-      return;
+    if (!articleState.article?.title || !articleState.article.content) return;
+    if (articleState.article?.title?.trim() === '') {
+      return console.log('make sure your title not empty for saved to draft');
+    }
 
     mutate({
       data: {
