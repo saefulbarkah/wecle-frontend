@@ -95,10 +95,10 @@ export const ContentEditor = ({
   const saveToDraft = async () => {
     if (!session) return;
     let id = null;
-    if (data && !articleState.article) {
+    if (data) {
       id = data._id;
     }
-    if (articleState.article && !data) {
+    if (articleState.article) {
       id = articleState.article._id;
     }
 
