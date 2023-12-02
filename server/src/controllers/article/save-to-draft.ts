@@ -9,11 +9,11 @@ import { ErrorMessage, ValidationError } from '../../errors/index.js';
 const saveToDraft = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, author, content, title } = req.body as articleType;
-    await articleSchema.parseAsync({
-      author,
-      content,
-      title,
-    });
+    // const customSchema = articleSchema.pick({ author: true });
+    // await customSchema.parseAsync({
+    //   author,
+    // });
+
     const slug = strUUID(title);
 
     const isAuthor = await Author.findOne({ _id: author });
@@ -26,14 +26,16 @@ const saveToDraft = async (req: Request, res: Response, next: NextFunction) => {
       $and: [{ _id: id }, { author: author }],
     });
 
+    let data = null;
     if (!isExistOnDraft) {
-      await Article.create({
+      const result = await Article.create({
         title,
         author,
         content,
         slug,
         status: 'DRAFT',
       });
+      data = result;
     } else {
       await Article.updateOne(
         { _id: isExistOnDraft._id },
@@ -51,6 +53,7 @@ const saveToDraft = async (req: Request, res: Response, next: NextFunction) => {
       message: 'Saving to draft successfully',
       response: 'success',
       status: 201,
+      data,
     };
 
     res.status(response.status).json(response);

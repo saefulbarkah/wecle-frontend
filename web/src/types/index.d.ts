@@ -11,12 +11,11 @@ export type ArticleType = {
   title: string;
   author: {
     _id: string;
+    name: string;
+    avatar: string;
     user: {
       _id: string;
-      name: string;
-      avatar: string;
     };
-    name: string;
   };
   content: string;
   comments: {

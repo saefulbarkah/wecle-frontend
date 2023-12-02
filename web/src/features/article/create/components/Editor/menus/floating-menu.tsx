@@ -71,7 +71,7 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const uploadImageSchema = z
   .custom<File>()
-  .refine((file) => file.size >= MAX_FILE_SIZE, {
+  .refine((file) => file.size <= MAX_FILE_SIZE, {
     message: 'Max file size is 5MB',
   })
   .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {

@@ -14,8 +14,9 @@ const updateArticle = async (
 ) => {
   try {
     const articleId = req.params.id;
-    const { content, title, author } = req.body;
-    articleSchema.parse({ content, title, author });
+    const { content, title, author, status } = req.body;
+    const customSchema = articleSchema.pick({ author: true });
+    await customSchema.parseAsync({ author });
 
     // validation before update
     const isAuthor = await Author.findOne({ _id: author });
@@ -30,13 +31,16 @@ const updateArticle = async (
       );
 
     // make slug
-    const randomizer = nanoid(10);
-    const capTitle = toCapitalizeString(title);
-    const slug = `${toSlug(capTitle)}-${randomizer}`;
+    let slug;
+    if (title) {
+      const randomizer = nanoid(10);
+      const capTitle = toCapitalizeString(title);
+      slug = `${toSlug(capTitle)}-${randomizer}`;
+    }
 
     await Article.updateOne(
       { _id: articleId },
-      { content, title, slug, updatedAt: Date.now() }
+      { content, title, slug, status, updatedAt: Date.now() }
     );
 
     const response: ApiResponse = {

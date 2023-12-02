@@ -11,7 +11,7 @@ const draftLists = async (req: Request, res: Response, next: NextFunction) => {
     const author = await Author.findOne({ _id: author_id });
     if (!author) throw new ValidationError('Invalid Author');
 
-    const data = await Article.find({ author: author._id });
+    const data = await Article.find({ author: author._id, status: 'DRAFT' });
 
     const response: ApiResponse = {
       status: 200,

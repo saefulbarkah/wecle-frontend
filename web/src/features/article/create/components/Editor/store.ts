@@ -1,15 +1,23 @@
-import { Content } from '@tiptap/react';
 import { create } from 'zustand';
 
 type State = {
-  content: Content;
+  focus: {
+    title?: boolean;
+    content?: boolean;
+  };
 };
 
 type Action = {
-  setContent: (val: State['content']) => void;
+  setFocus: (val: State['focus']) => void;
 };
 
 export const useEditorStore = create<State & Action>((set) => ({
-  content: '<h3></h3><br/><p></p>',
-  setContent: (val) => set({ content: val }),
+  focus: {
+    title: true,
+    content: false,
+  },
+  setFocus: (data) =>
+    set((state) => ({
+      focus: { ...state.focus, ...data },
+    })),
 }));
