@@ -94,17 +94,25 @@ export const ContentEditor = ({
 
   const saveToDraft = async () => {
     if (!session) return;
+    let id = null;
+    if (data && !articleState.article) {
+      id = data._id;
+    }
+    if (articleState.article && !data) {
+      id = articleState.article._id;
+    }
 
     // validate title
     if (
-      articleState.article?.title?.trim() === '' ||
-      !articleState.article?.title
+      (articleState.article?.title?.trim() === '' &&
+        !articleState.article?.title) ||
+      !value
     )
       return;
 
     mutate({
       data: {
-        _id: data?._id,
+        _id: id,
         title: articleState.article.title,
         content: articleState.article.content,
         author: session.author_id,

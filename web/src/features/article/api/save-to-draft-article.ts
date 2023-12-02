@@ -53,7 +53,16 @@ export const useSaveDraft = () => {
       });
       if (!response.data) return;
       const { _id, author, content, title } = response.data;
-      router.push('?draftId=' + _id);
+      const url = `?draftId=${_id}`;
+      window.history.replaceState(
+        {
+          ...window.history.state,
+          as: url,
+          url: url,
+        },
+        '',
+        url
+      );
       article.setArticle({
         _id,
         author,
