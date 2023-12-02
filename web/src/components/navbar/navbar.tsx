@@ -7,6 +7,9 @@ import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { SearchMobile } from './menus/search-mobile';
 import { Avatar } from '../ui/avatar';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '../ui/button';
+import { Home } from 'lucide-react';
 
 export const Navbar = ({ session }: { session: SessionType }) => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
@@ -20,6 +23,17 @@ export const Navbar = ({ session }: { session: SessionType }) => {
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">WeCle</h2>
             <SearchMenu />
+            <div className="flex gap-2 items-center">
+              <Link href={'/'}>
+                <Button
+                  size={'sm'}
+                  variant={'ghost'}
+                  className="text-secondary/80 text-md hover:text-black"
+                >
+                  Home
+                </Button>
+              </Link>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <WriteMenu session={session} />
