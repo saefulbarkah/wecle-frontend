@@ -103,12 +103,10 @@ export const ContentEditor = ({
     }
 
     // validate title
-    if (
-      (articleState.article?.title?.trim() === '' &&
-        !articleState.article?.title) ||
-      !value
-    )
-      return;
+    if (!articleState.article?.title || !articleState.article.content) return;
+    if (articleState.article?.title?.trim() === '') {
+      return console.log('make sure your title not empty for saved to draft');
+    }
 
     mutate({
       data: {

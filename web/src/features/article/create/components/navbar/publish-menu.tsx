@@ -9,20 +9,31 @@ import {
 import { useUpdateArticle } from '@/features/article';
 import { useAuth } from '@/features/auth/store';
 import { useArticleState } from '@/stores/article-store';
+import { useIsMutating } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 
 export const PublishMenu = () => {
+  const router = useRouter();
+  const resetState = useArticleState((state) => state.reset);
   const token = useAuth((state) => state.token);
   const [showAlert, setShowAlert] = useState(false);
-  const { mutate } = useUpdateArticle();
   const article = useArticleState((state) => state.article);
+  const isSaving = useIsMutating({ mutationKey: ['save-draft'] });
+
+  const { mutate } = useUpdateArticle({
+    onSuccess: () => {
+      router.replace('/');
+      setTimeout(() => {
+        resetState();
+      }, 1000);
+    },
+    onSuccessAlertMsg: 'Your article has been published',
+    onMutateAlertMsg: 'Publishing your article, please wait...',
+  });
 
   const handlePublish = () => {
     if (!article._id || !article.content) return;
-    if (article.content === '') {
-      return toast.error('Make sure your content is not empty');
-    }
     mutate({
       data: {
         status: 'RELEASE',
@@ -33,18 +44,31 @@ export const PublishMenu = () => {
     });
   };
 
+  // conditional
+  const isTitleEmpty = article?.title?.trim() !== '';
+  const isContentEmpty = article.content !== null;
+  const isOnSavingToDraft = Boolean(!isSaving);
+
   return (
     <>
       <div className="relative">
         <Popover
-          open={article?.content ? false : showAlert}
+          open={
+            isTitleEmpty && isContentEmpty && isOnSavingToDraft
+              ? false
+              : showAlert
+          }
           onOpenChange={setShowAlert}
         >
           <PopoverTrigger asChild>
             <Button
               variant={'success'}
               size={'sm'}
-              className={`${article?.content ? 'opacity-100' : 'opacity-50'}`}
+              className={`${
+                isTitleEmpty && isContentEmpty && isOnSavingToDraft
+                  ? 'opacity-100'
+                  : 'opacity-50'
+              }`}
               onClick={() => handlePublish()}
             >
               Publish
