@@ -1,6 +1,7 @@
 import createArticle from './create-article.js';
 import deleteArticle from './delete-article.js';
 import draftLists from './draft-list.js';
+import findArticle from './find-article.js';
 import findDraft from './find-draft.js';
 import listArticle from './list-article.js';
 import saveToDraft from './save-to-draft.js';
@@ -14,6 +15,7 @@ const articleController = {
   saveDraft: saveToDraft,
   draftLists: draftLists,
   findDraft: findDraft,
+  findArticle: findArticle,
 };
 
 export default articleController;
