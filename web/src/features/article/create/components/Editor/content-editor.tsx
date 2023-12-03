@@ -9,6 +9,7 @@ import Focus from '@tiptap/extension-focus';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
 import Dropcursor from '@tiptap/extension-dropcursor';
+import Bold from '@tiptap/extension-bold';
 import Image from '@tiptap/extension-image';
 import { useEditor, EditorContent } from '@tiptap/react';
 import './editor.css';
@@ -44,6 +45,7 @@ export const ContentEditor = ({
       Text,
       HardBreak,
       Dropcursor,
+      Bold,
       Image.configure({
         allowBase64: true,
       }),

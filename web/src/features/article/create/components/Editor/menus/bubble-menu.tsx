@@ -14,7 +14,10 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
       className="bg-black/70 backdrop-blur-sm rounded"
     >
       <div className="flex items-center gap-2 p-1.5">
-        <Item>
+        <Item
+          onClick={() => editor.commands.toggleBold()}
+          isActive={editor.isActive('bold')}
+        >
           <BoldIcon />
         </Item>
         <Item
