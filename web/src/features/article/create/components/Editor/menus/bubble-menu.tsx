@@ -2,7 +2,7 @@
 
 import React, { HTMLAttributes } from 'react';
 import { Editor, BubbleMenu as Menu } from '@tiptap/react';
-import { BoldIcon, Type } from 'lucide-react';
+import { BoldIcon, Quote, Type } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
@@ -25,6 +25,12 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
           isActive={editor.isActive('heading', { level: 3 })}
         >
           <Type />
+        </Item>
+        <Item
+          onClick={() => editor.commands.toggleBlockquote()}
+          isActive={editor.isActive('blockquote')}
+        >
+          <Quote />
         </Item>
       </div>
     </Menu>
