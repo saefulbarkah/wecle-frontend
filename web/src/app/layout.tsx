@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Quicksand, Source_Serif_4 } from 'next/font/google';
+import { Open_Sans, Quicksand, Source_Serif_4 } from 'next/font/google';
 import './globals.css';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';
@@ -15,9 +15,14 @@ const quick = Quicksand({
   variable: '--quick-sand',
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: '--source-serif',
+// const sourceSerif = Source_Serif_4({
+//   variable: '--source-serif',
+//   subsets: ['latin'],
+// });
+
+const openSans = Open_Sans({
   subsets: ['latin'],
+  variable: '--source-serif',
 });
 
 export const metadata: Metadata = {
@@ -34,7 +39,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en">
-      <body className={`${quick.variable} ${sourceSerif.variable} font-sans`}>
+      <body className={`${quick.variable} ${openSans.variable} font-sans`}>
         <AuthProvider session={session}>
           <CreatePortal>
             <Toaster />
