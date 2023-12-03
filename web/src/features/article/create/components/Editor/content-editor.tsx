@@ -11,6 +11,7 @@ import HardBreak from '@tiptap/extension-hard-break';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Bold from '@tiptap/extension-bold';
 import Image from '@tiptap/extension-image';
+import History from '@tiptap/extension-history';
 import { useEditor, EditorContent } from '@tiptap/react';
 import './editor.css';
 import { FloatingMenu } from './menus/floating-menu';
@@ -46,6 +47,7 @@ export const ContentEditor = ({
       HardBreak,
       Dropcursor,
       Bold,
+      History,
       Image.configure({
         allowBase64: true,
       }),
