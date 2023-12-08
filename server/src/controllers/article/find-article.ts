@@ -6,11 +6,10 @@ import { NotFoundError } from '../../errors/index.js';
 const findArticle = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const slug = req.params.slug;
-    const data = await Article.findOne({ slug: slug })
-      .populate({
-        path: 'author',
-      })
-      .populate({ path: 'comments' });
+    const data = await Article.findOne({ slug: slug }).populate({
+      path: 'author',
+    });
+
     if (!data) {
       throw new NotFoundError('Article not found');
     }
