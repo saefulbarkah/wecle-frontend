@@ -55,7 +55,7 @@ app.get('/clear', async (req, res) => {
 app.use('/auth', route.auth);
 app.use('/authors', protectedRequest, route.author);
 app.use('/article', route.article);
-app.use('/comments', protectedRequest, route.comment);
+app.use('/comments', route.comment);
 
 // error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
