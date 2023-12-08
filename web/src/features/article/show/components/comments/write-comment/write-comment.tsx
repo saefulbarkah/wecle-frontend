@@ -11,12 +11,9 @@ import './write-comment.css';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useComment } from '../store/comment-store';
-import { generateCommentArticle } from '@/lib/faker';
-import { commentType } from '@/types';
 
 const WriteComment = () => {
   const [content, setContent] = useState<string>('');
-  const comment = useComment((state) => state);
   const editor = useEditor({
     extensions: [
       Text,
@@ -43,15 +40,7 @@ const WriteComment = () => {
     content: content,
   });
 
-  const handleAddComment = () => {
-    const data: commentType = {
-      ...generateCommentArticle(),
-      text: content,
-    };
-    comment.addComment(data);
-    editor?.commands.setContent('');
-    setContent('');
-  };
+  const handleAddComment = () => {};
 
   return (
     <>

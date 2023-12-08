@@ -1,12 +1,12 @@
-import { commentType } from '@/types';
+import { findCommentType } from '@/types';
 import { create } from 'zustand';
 
 type State = {
-  comments: commentType[];
+  comments: findCommentType[];
 };
 
 type Action = {
-  addComment: (value: commentType) => void;
+  addComment: (value: findCommentType) => void;
 };
 
 export const useComment = create<Action & State>((set) => ({

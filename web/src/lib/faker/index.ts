@@ -1,7 +1,6 @@
-import { commentType } from '@/types';
 import { faker } from '@faker-js/faker';
 
-export function generateCommentArticle(): commentType {
+export function generateCommentArticle(): any {
   return {
     _id: faker.string.uuid(),
     author: {

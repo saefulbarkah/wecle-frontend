@@ -53,7 +53,7 @@ export default async function Page({ params }: Props) {
     <div className="pt-[60px] mx-6 sm:max-w-2xl sm:mx-auto">
       <ShowArticle data={article} />
       <Separator />
-      <Comments session={session} />
+      <Comments session={session} article={article} />
     </div>
   );
 }

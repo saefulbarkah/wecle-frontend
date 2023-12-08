@@ -1,8 +1,18 @@
-import { authorType } from './author';
+import { ArticleType } from '.';
+import { author, authorType } from './author';
 import { TDate } from './global';
+import { User } from './user';
 
-export type commentType = TDate & {
+type article = Partial<Pick<ArticleType, '_id'>>;
+
+type user = Partial<User>;
+
+export type findCommentType = TDate & {
   _id: string;
-  author: authorType;
   text: string;
+  article: article;
+  user: Pick<user, '_id'> &
+    Pick<author, 'name' | 'avatar'> & {
+      author_id: string;
+    };
 };

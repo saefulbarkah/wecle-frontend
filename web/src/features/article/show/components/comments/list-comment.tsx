@@ -2,12 +2,12 @@
 
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { commentType } from '@/types';
+import { findCommentType } from '@/types';
 import { Dot, Heart, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
-const ListComment = ({ data }: { data?: commentType[] }) => {
+const ListComment = ({ data }: { data?: findCommentType[] }) => {
   const handleReplyComment = () => {
     console.log('reply');
   };
@@ -23,7 +23,7 @@ const ListComment = ({ data }: { data?: commentType[] }) => {
           <div className="flex gap-2">
             <Avatar>
               <Image
-                src={`${item.author.avatar}`}
+                src={`${item.user.avatar}`}
                 alt={'Testing'}
                 width={40}
                 height={40}
@@ -33,7 +33,7 @@ const ListComment = ({ data }: { data?: commentType[] }) => {
             <div className="w-full">
               <div className="outline outline-1 outline-secondary/50 rounded p-3.5 w-full">
                 <div className="flex items-center">
-                  <h4 className="font-semibold">{item.author.name}</h4>
+                  <h4 className="font-semibold">{item.user.name}</h4>
                   <Dot className="text-secondary/50" />
                   <p className="text-sm">20 november 2023</p>
                 </div>
@@ -43,7 +43,7 @@ const ListComment = ({ data }: { data?: commentType[] }) => {
               </div>
               <Button
                 variant={'ghost'}
-                className="mt-2 mb-5"
+                className="mt-2 mb-5 active:bg-secondary/10"
                 onClick={() => handleLikeComment()}
               >
                 <Heart size={18} className="mr-1" />
@@ -51,7 +51,7 @@ const ListComment = ({ data }: { data?: commentType[] }) => {
               </Button>
               <Button
                 variant={'ghost'}
-                className="mt-2 mb-5"
+                className="mt-2 mb-5 active:bg-secondary/10"
                 onClick={() => handleReplyComment()}
               >
                 <MessageCircle size={18} className="mr-1" />
