@@ -17,12 +17,6 @@ const articleSchema = new Schema({
     type: String,
     enum: ['DRAFT', 'RELEASE'],
   },
-  comments: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Comment',
-    },
-  ],
   slug: {
     type: String,
     required: true,

@@ -9,22 +9,13 @@ export default async function listArticle(
 ) {
   const { status = 'RELEASE' } = req.query as { status: 'DRAFT' | 'RELEASE' };
   try {
-    const data = await Article.find({ status: status })
-      .populate({
-        path: 'author',
-        populate: {
-          path: 'user',
-          select: 'name avatar',
-        },
-      })
-      .populate({
-        path: 'comments',
-        populate: {
-          path: 'user',
-          select: 'name avatar',
-        },
-        select: 'text user',
-      });
+    const data = await Article.find({ status: status }).populate({
+      path: 'author',
+      populate: {
+        path: 'user',
+        select: 'name avatar',
+      },
+    });
     const response: ApiResponse = {
       status: 200,
       message: 'Opration success',

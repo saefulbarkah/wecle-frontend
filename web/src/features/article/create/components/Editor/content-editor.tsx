@@ -9,10 +9,12 @@ import Focus from '@tiptap/extension-focus';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
 import Dropcursor from '@tiptap/extension-dropcursor';
+import Bold from '@tiptap/extension-bold';
 import Image from '@tiptap/extension-image';
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
+import History from '@tiptap/extension-history';
+import Blockquote from '@tiptap/extension-blockquote';
+import { useEditor, EditorContent } from '@tiptap/react';
 import './editor.css';
-import { BoldIcon } from 'lucide-react';
 import { FloatingMenu } from './menus/floating-menu';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
@@ -21,6 +23,7 @@ import { useEditorStore } from './store';
 import { useSaveDraft } from '@/features/article/api/save-to-draft-article';
 import { useAuth } from '@/features/auth/store';
 import { articleType, useArticleState } from '@/stores/article-store';
+import { BubbleMenu } from './menus/bubble-menu';
 
 export const ContentEditor = ({
   data,
@@ -44,6 +47,9 @@ export const ContentEditor = ({
       Text,
       HardBreak,
       Dropcursor,
+      Bold,
+      History,
+      Blockquote,
       Image.configure({
         allowBase64: true,
       }),
@@ -54,27 +60,22 @@ export const ContentEditor = ({
       }),
       Heading.configure({
         HTMLAttributes: {
-          class: 'font-serif',
+          class: 'font-serif font-bold',
         },
-        levels: [3, 4],
+        levels: [3],
       }),
       Focus.configure({
         mode: 'all',
         className: 'focus',
       }),
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === 'heading') {
-            return 'What’s the title?';
-          }
-          return 'Can you add some further context?';
-        },
+        placeholder: 'Can you add some further context?',
       }),
     ],
     editorProps: {
       attributes: {
         class:
-          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none mb-[5rem]',
+          'outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem]',
       },
     },
     content: '',
@@ -145,18 +146,7 @@ export const ContentEditor = ({
 
   return (
     <>
-      {editor && (
-        <>
-          <BubbleMenu editor={editor} tippyOptions={{ duration: 50 }}>
-            <div className="bg-black rounded-md p-2">
-              <button className="text-white">
-                <BoldIcon />
-              </button>
-            </div>
-          </BubbleMenu>
-        </>
-      )}
-
+      <BubbleMenu editor={editor} />
       <EditorContent editor={editor} />
       <FloatingMenu editor={editor} />
     </>

@@ -1,8 +1,6 @@
 'use client';
-import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { findArticle } from '@/services/article';
 import { ArticleType } from '@/types';
-import { Avatar } from '@radix-ui/react-avatar';
 import { useQuery } from '@tanstack/react-query';
 import { Dot } from 'lucide-react';
 import Image from 'next/image';
@@ -16,7 +14,7 @@ export const ShowArticle = ({ data }: { data: ArticleType }) => {
   });
 
   return (
-    <div className="mx-6 sm:max-w-2xl sm:mx-auto">
+    <div>
       <h3 className="font-serif text-[2rem] sm:text-[2.5rem] font-bold leading-snug">
         {article.title}
       </h3>

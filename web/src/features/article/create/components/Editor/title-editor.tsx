@@ -57,7 +57,7 @@ export const TitleEditor = ({
         HTMLAttributes: {
           class: 'font-serif',
         },
-        levels: [3],
+        levels: [2],
       }),
       Placeholder.configure({
         placeholder: 'Write title here',
@@ -66,7 +66,7 @@ export const TitleEditor = ({
     editorProps: {
       attributes: {
         class:
-          'outline-none border-none prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none pt-[2.5rem]',
+          'outline-none prose prose-sm sm:prose-base lg:prose-xl xl:prose-2xl m-5 focus:outline-none pt-[2.5rem]',
       },
     },
     autofocus: false,
