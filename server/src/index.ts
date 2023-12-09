@@ -12,29 +12,17 @@ import errorHandling from './lib/error-handling.js';
 import { Author } from './models/author.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { setupSocketServer } from './sockets/setup.js';
 
 const app = express();
 const port = 4000;
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  /* options */
-  cors: {
-    origin: process.env.ORIGIN_CORS,
-  },
-});
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_CORS }));
 app.use(cookieParser());
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
-io.on('connection', (socket) => {
-  console.log('socked connected');
-  socket.on('disconnect', function () {
-    console.log('socket disconnected');
-  });
-});
 
 app.get('/', (req, res) => {
   res.cookie('testing', 'edanken');
@@ -81,6 +69,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   }
   errorHandling(err, res);
 });
+
+// websocket
+setupSocketServer(httpServer);
 
 mongoose
   .connect(DATABASE_URL)
