@@ -16,6 +16,7 @@ import { SessionType } from '@/hooks/sessions/type';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthOverlay } from '@/features/auth/store';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 const WriteComment = ({
   article,
@@ -94,6 +95,9 @@ const WriteComment = ({
         )}
         <div className="flex w-full gap-2">
           <Avatar>
+            {session && (
+              <Image fill src={session.avatar as string} alt="testing" />
+            )}
             <AvatarFallback>US</AvatarFallback>
           </Avatar>
           <div className="flex-1">
