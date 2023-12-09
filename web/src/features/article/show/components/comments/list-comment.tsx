@@ -2,6 +2,7 @@
 
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { timeAgo } from '@/lib/time';
 import { findCommentType } from '@/types';
 import { Dot, Heart, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
@@ -35,7 +36,7 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
                 <div className="flex items-center">
                   <h4 className="font-semibold">{item.user.name}</h4>
                   <Dot className="text-secondary/50" />
-                  <p className="text-sm">20 november 2023</p>
+                  <p className="text-sm">{timeAgo(item.updatedAt as Date)}</p>
                 </div>
                 <div className="mt-3">
                   <p className="font-serif">{item.text}</p>

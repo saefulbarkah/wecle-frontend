@@ -27,48 +27,50 @@ export default async function findComment(
     //     populate: 'author',
     //   });
 
-    const comment = await comments.aggregate([
-      {
-        $match: { article: new mongoose.Types.ObjectId(articleId) },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user',
-          foreignField: '_id',
-          as: 'userDetails',
+    const comment = await comments
+      .aggregate([
+        {
+          $match: { article: new mongoose.Types.ObjectId(articleId) },
         },
-      },
-      {
-        $unwind: '$userDetails',
-      },
-      {
-        $lookup: {
-          from: 'authors',
-          localField: 'userDetails.author',
-          foreignField: '_id',
-          as: 'authorDetails',
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          article: 1,
-          user: {
-            _id: '$userDetails._id',
-            author_id: { $arrayElemAt: ['$authorDetails._id', 0] },
-            name: { $arrayElemAt: ['$authorDetails.name', 0] },
-            avatar: { $arrayElemAt: ['$authorDetails.avatar', 0] },
-            // Add other fields from 'authorDetails' if needed
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'userDetails',
           },
-          text: 1,
-          createdAt: 1,
-          updatedAt: 1,
-          __v: 1,
-          // Add other fields you want to include from the comments collection
         },
-      },
-    ]);
+        {
+          $unwind: '$userDetails',
+        },
+        {
+          $lookup: {
+            from: 'authors',
+            localField: 'userDetails.author',
+            foreignField: '_id',
+            as: 'authorDetails',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            article: 1,
+            user: {
+              _id: '$userDetails._id',
+              author_id: { $arrayElemAt: ['$authorDetails._id', 0] },
+              name: { $arrayElemAt: ['$authorDetails.name', 0] },
+              avatar: { $arrayElemAt: ['$authorDetails.avatar', 0] },
+              // Add other fields from 'authorDetails' if needed
+            },
+            text: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            __v: 1,
+            // Add other fields you want to include from the comments collection
+          },
+        },
+      ])
+      .sort({ updatedAt: -1 });
 
     const response: ApiResponse = {
       status: 200,
