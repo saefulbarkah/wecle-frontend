@@ -18,7 +18,7 @@ export const Comments = ({
   return (
     <div className="my-10">
       <h2 className="text-2xl font-bold">Top Comments {comment?.length} </h2>
-      <WriteComment />
+      <WriteComment article={article} session={session} />
       <ListComment data={comment} />
     </div>
   );

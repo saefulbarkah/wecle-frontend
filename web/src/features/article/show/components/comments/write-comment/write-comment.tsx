@@ -10,9 +10,18 @@ import Placeholder from '@tiptap/extension-placeholder';
 import './write-comment.css';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { useComment } from '../store/comment-store';
+import { useCreateComment } from '@/features/article/api/create-new-comment';
+import { ArticleType } from '@/types';
+import { SessionType } from '@/hooks/sessions/type';
+import { useQueryClient } from '@tanstack/react-query';
 
-const WriteComment = () => {
+const WriteComment = ({
+  article,
+  session,
+}: {
+  article: ArticleType;
+  session: SessionType;
+}) => {
   const [content, setContent] = useState<string>('');
   const editor = useEditor({
     extensions: [
@@ -40,7 +49,25 @@ const WriteComment = () => {
     content: content,
   });
 
-  const handleAddComment = () => {};
+  const query = useQueryClient();
+
+  const { mutateAsync, isPending } = useCreateComment({
+    onSuccess: () => {
+      editor?.commands.setContent('');
+      query.invalidateQueries({ queryKey: ['comment-article'] });
+    },
+  });
+
+  const handleAddComment = async () => {
+    await mutateAsync({
+      articleId: article._id,
+      userId: session?.id as string,
+      text: content,
+      token: session?.token as string,
+    });
+  };
+
+  const isNoContent = content === '' ? true : false;
 
   return (
     <>
@@ -53,9 +80,10 @@ const WriteComment = () => {
             <EditorContent editor={editor} />
             <div className="mt-2">
               <Button
-                disabled={content === '' ? true : false}
+                disabled={isNoContent || isPending}
                 className="disabled:pointer-events-auto disabled:cursor-not-allowed"
                 onClick={() => handleAddComment()}
+                isLoading={isPending}
               >
                 Submit
               </Button>
