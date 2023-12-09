@@ -14,6 +14,8 @@ import { useCreateComment } from '@/features/article/api/create-new-comment';
 import { ArticleType } from '@/types';
 import { SessionType } from '@/hooks/sessions/type';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuthOverlay } from '@/features/auth/store';
+import toast from 'react-hot-toast';
 
 const WriteComment = ({
   article,
@@ -58,7 +60,13 @@ const WriteComment = ({
     },
   });
 
+  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
+
   const handleAddComment = async () => {
+    if (!session) {
+      setOpenAuth(true);
+      return;
+    }
     await mutateAsync({
       articleId: article._id,
       userId: session?.id as string,
@@ -71,7 +79,19 @@ const WriteComment = ({
 
   return (
     <>
-      <div className="mt-8">
+      <div className="mt-8 relative">
+        {session ? null : (
+          <div
+            className="absolute inset-0 bg-white/10 cursor-pointer w-full h-full z-50"
+            onClick={() => {
+              if (!session) {
+                toast('You need login first');
+                setOpenAuth(true);
+                return;
+              }
+            }}
+          />
+        )}
         <div className="flex w-full gap-2">
           <Avatar>
             <AvatarFallback>US</AvatarFallback>
