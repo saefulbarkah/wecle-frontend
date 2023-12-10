@@ -10,23 +10,9 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import errorHandling from './lib/error-handling.js';
 import { Author } from './models/author.js';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 
 const app = express();
 const port = 4000;
-
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  /* options */
-});
-
-io.on('connection', (socket) => {
-  console.log('socked connected');
-  socket.on('disconnect', function () {
-    console.log('socket disconnected');
-  });
-});
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_CORS }));
 app.use(cookieParser());
@@ -82,7 +68,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 mongoose
   .connect(DATABASE_URL)
   .then(() => {
-    httpServer.listen(port, () => {
+    app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
   })
