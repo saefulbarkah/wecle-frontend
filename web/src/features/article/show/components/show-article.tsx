@@ -1,5 +1,5 @@
 'use client';
-import { findArticle } from '@/services/article';
+import { articleServices } from '@/services/article';
 import { ArticleType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { Dot } from 'lucide-react';
@@ -9,7 +9,7 @@ import React from 'react';
 export const ShowArticle = ({ data }: { data: ArticleType }) => {
   const { data: article } = useQuery({
     queryKey: ['article', data.slug],
-    queryFn: () => findArticle(data.slug),
+    queryFn: () => articleServices.findArticle(data.slug),
     initialData: data,
   });
 
