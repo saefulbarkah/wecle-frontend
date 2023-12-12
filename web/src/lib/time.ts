@@ -1,4 +1,5 @@
-export function timeAgo(timestamp: Date): string {
+export function timeAgo(timestamp?: Date): string | undefined {
+  if (!timestamp) return;
   const currentDate = new Date();
   const targetDate = new Date(timestamp);
 

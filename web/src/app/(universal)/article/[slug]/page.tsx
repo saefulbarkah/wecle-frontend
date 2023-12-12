@@ -2,7 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { Comments, ShowArticle } from '@/features/article/show';
 import { getServerSession } from '@/hooks/sessions/server';
 import { keywords } from '@/lib/meta-data';
-import { findArticle } from '@/services/article';
+import { articleServices } from '@/services/article';
 import { ApiResponse, ArticleType } from '@/types';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function getArticle(slug: string) {
   try {
-    const data = await findArticle(slug);
+    const data = await articleServices.findArticle(slug);
     return data;
   } catch (error) {
     return undefined;
