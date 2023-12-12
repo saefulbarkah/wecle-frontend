@@ -2,6 +2,6 @@
   "watch": ["src"],
   "ignore": ["node_modules"],
   "execMap": {
-    "ts": "ts-node"
+    "ts": "node --no-warnings=ExperimentalWarning --loader ts-node/esm"
   }
 }
