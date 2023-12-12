@@ -10,9 +10,14 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import errorHandling from './lib/error-handling.js';
 import { Author } from './models/author.js';
+import { createServer } from 'http';
+import { createSocketIo } from './sockets/socket.js';
 
 const app = express();
 const port = 4000;
+const httpServer = createServer(app);
+// initialize socket io
+createSocketIo(httpServer);
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_CORS }));
 app.use(cookieParser());
@@ -56,6 +61,7 @@ app.use('/auth', route.auth);
 app.use('/authors', protectedRequest, route.author);
 app.use('/article', route.article);
 app.use('/comments', route.comment);
+app.use('/notifications', route.notification);
 
 // error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -68,7 +74,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 mongoose
   .connect(DATABASE_URL)
   .then(() => {
-    app.listen(port, () => {
+    httpServer.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
   })
