@@ -30,29 +30,36 @@ export const useNotification = () => {
   }, [queryData.data]);
 
   useEffect(() => {
-    socket.on('recieve-notification', (data: Notification) => {
-      queryClient.setQueryData(['notification'], (oldData: Notification[]) => {
-        return [
-          {
-            ...data,
-          },
-          ...oldData,
-        ];
+    if (socket?.connected) {
+      socket.on('recieve-notification', (data: Notification) => {
+        queryClient.setQueryData(
+          ['notification'],
+          (oldData: Notification[]) => {
+            return [
+              {
+                ...data,
+              },
+              ...oldData,
+            ];
+          }
+        );
       });
-    });
-    return () => {
-      socket.off('recieve-notification');
-    };
+      return () => {
+        socket?.off('recieve-notification');
+      };
+    }
   }, [socket]);
 
   // assign user socket
   useEffect(() => {
-    if (auth) {
-      socket.emit('new-user', auth.id);
+    if (socket?.connected) {
+      if (auth) {
+        socket.emit('new-user', auth.id);
+      }
+      return () => {
+        socket?.off('new-user');
+      };
     }
-    return () => {
-      socket.off('new-user');
-    };
   }, [socket, auth]);
 
   return { ...queryData, auth, unreadCount };

@@ -59,13 +59,15 @@ const WriteComment = ({
     onSuccess: () => {
       editor?.commands.setContent('');
       query.invalidateQueries({ queryKey: ['comment-article'] });
-      socket.emit('send-notification', {
-        sender: session?.id,
-        receiver: article.author.user,
-        message: `commented on your article`,
-        targetUrl:
-          process.env.NEXT_PUBLIC_BASE_URL + '/article/' + article.slug,
-      });
+      if (socket?.connected) {
+        socket.emit('send-notification', {
+          sender: session?.id,
+          receiver: article.author.user,
+          message: `commented on your article`,
+          targetUrl:
+            process.env.NEXT_PUBLIC_BASE_URL + '/article/' + article.slug,
+        });
+      }
     },
   });
 
