@@ -2,19 +2,40 @@
 
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { useLikeCommentMutation } from '@/features/article/api/like-comment';
+import { useAuth } from '@/features/auth/store';
 import { timeAgo } from '@/lib/time';
 import { findCommentType } from '@/types';
 import { Dot, Heart, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { LikeComment } from './like-comment';
+import { useDislikeCommentMutation } from '@/features/article/api/dislike-comment';
 
 const ListComment = ({ data }: { data?: findCommentType[] }) => {
+  const auth = useAuth((state) => state.session);
+
+  const { mutate: likeComment } = useLikeCommentMutation();
+  const { mutate: dislikeComment } = useDislikeCommentMutation();
   const handleReplyComment = () => {
     console.log('reply');
   };
 
-  const handleLikeComment = () => {
-    console.log('like!');
+  const handleLikeComment = (id: string, likes: findCommentType['likes']) => {
+    if (!auth) return;
+    const isLiked = likes.some((item) => item._id === auth.id);
+    if (!isLiked) {
+      return likeComment({
+        id: id,
+        userId: auth.id,
+        token: auth.token,
+      });
+    }
+    return dislikeComment({
+      id: id,
+      userId: auth.id,
+      token: auth.token,
+    });
   };
 
   return (
@@ -42,14 +63,13 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
                   <p className="font-serif">{item.text}</p>
                 </div>
               </div>
-              <Button
-                variant={'ghost'}
-                className="mt-2 mb-5 active:bg-secondary/10"
-                onClick={() => handleLikeComment()}
-              >
-                <Heart size={18} className="mr-1" />
-                <span className="text-sm">Like</span>
-              </Button>
+
+              <LikeComment
+                onClick={() => handleLikeComment(item._id, item.likes)}
+                likes={item.likes}
+                userId={auth?.id as string}
+              />
+
               <Button
                 variant={'ghost'}
                 className="mt-2 mb-5 active:bg-secondary/10"

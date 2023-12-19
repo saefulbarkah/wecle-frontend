@@ -3,6 +3,6 @@ export type SessionType = {
   name?: string;
   email?: string;
   avatar?: string;
-  token?: string | null;
+  token: string;
   author_id?: string;
 } | null;

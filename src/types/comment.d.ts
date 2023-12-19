@@ -15,4 +15,5 @@ export type findCommentType = TDate & {
     Pick<author, 'name' | 'avatar'> & {
       author_id: string;
     };
+  likes: Pick<user, '_id'>[];
 };

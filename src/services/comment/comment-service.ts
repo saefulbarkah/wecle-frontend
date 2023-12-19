@@ -2,41 +2,76 @@ import api from '@/api';
 import { ApiResponse, findCommentType } from '@/types';
 import { AxiosResponse } from 'axios';
 
-export const findCommentByArticleId = async ({
-  articleId,
-}: {
-  articleId: string;
-}): Promise<findCommentType[]> => {
-  const response = await api.get<ApiResponse<findCommentType[]>>(
-    `/comments/article/` + articleId
-  );
-  return response.data.data;
-};
-
 export type createCommentType = {
   userId: string;
   articleId: string;
   text: string;
 };
 
+export type likeCommentType = {
+  id: string;
+  userId: string;
+};
+
 type createResponse = AxiosResponse<ApiResponse>;
-export async function createNewCommentArticle({
-  articleId,
-  text,
-  userId,
-  token,
-}: createCommentType & { token: string }): Promise<createResponse> {
-  return api.post<any, createResponse, createCommentType>(
-    '/comments',
-    {
-      articleId,
-      text,
-      userId,
-    },
-    {
-      headers: {
-        Authorization: 'Bearer ' + token,
+
+export class CommentServices {
+  static async findCommentByArticleId(articleId: string) {
+    const response = await api.get<ApiResponse<findCommentType[]>>(
+      `/comments/article/` + articleId
+    );
+    return response.data.data;
+  }
+
+  static async createNewCommentArticle(
+    data: createCommentType,
+    token: string
+  ): Promise<createResponse> {
+    const { articleId, text, userId } = data;
+    return api.post<any, createResponse, createCommentType>(
+      '/comments',
+      {
+        articleId,
+        text,
+        userId,
       },
-    }
-  );
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+  }
+
+  static async likeComment(data: likeCommentType, token: string) {
+    const { id, userId } = data;
+    return api.post<any, createResponse, likeCommentType>(
+      '/comments/like',
+      {
+        id,
+        userId,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+  }
+
+  static async dislikeComment(data: likeCommentType, token: string) {
+    const { id, userId } = data;
+    return api.post<any, createResponse, likeCommentType>(
+      '/comments/dislike',
+      {
+        id,
+        userId,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+  }
 }
