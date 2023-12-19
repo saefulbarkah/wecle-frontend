@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar } from '@/components/ui/avatar';
-import { limitText } from '@/lib/utils';
+import { htmlToText, limitText } from '@/lib/utils';
 import { ArticleType } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -39,7 +39,10 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                   </h2>
                   <div className="hidden mt-5 lg:flex flex-col gap-3">
                     <p className="line-clamp-3 text-md font-serif">
-                      {limitText({ limit: 301, text: item.content })}
+                      {limitText({
+                        limit: 301,
+                        text: htmlToText(item.content),
+                      })}
                     </p>
                   </div>
                 </Link>
