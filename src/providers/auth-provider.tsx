@@ -23,7 +23,7 @@ function AuthProvider({ children, session = null }: authProps) {
       token: session.token,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [session]);
 
   return children;
 }

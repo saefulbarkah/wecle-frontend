@@ -14,18 +14,13 @@ import { useCreateComment } from '@/features/article/api/create-new-comment';
 import { ArticleType } from '@/types';
 import { SessionType } from '@/hooks/sessions/type';
 import { useQueryClient } from '@tanstack/react-query';
-import { useAuthOverlay } from '@/features/auth/store';
+import { useAuth, useAuthOverlay } from '@/features/auth/store';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { socket } from '@/socket/socket';
 
-const WriteComment = ({
-  article,
-  session,
-}: {
-  article: ArticleType;
-  session: SessionType;
-}) => {
+const WriteComment = ({ article }: { article: ArticleType }) => {
+  const session = useAuth((state) => state.session);
   const [content, setContent] = useState<string>('');
   const editor = useEditor({
     extensions: [

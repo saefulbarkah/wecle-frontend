@@ -1,6 +1,5 @@
 import { Separator } from '@/components/ui/separator';
 import { Comments, ShowArticle } from '@/features/article/show';
-import { getServerSession } from '@/hooks/sessions/server';
 import { keywords } from '@/lib/meta-data';
 import { articleServices } from '@/services/article';
 import { ApiResponse, ArticleType } from '@/types';
@@ -46,14 +45,13 @@ async function getArticle(slug: string) {
 
 export default async function Page({ params }: Props) {
   const article = await getArticle(params.slug);
-  const session = await getServerSession();
   if (!article) return redirect('/');
 
   return (
     <div className="pt-[60px] mx-6 sm:max-w-2xl sm:mx-auto">
       <ShowArticle data={article} />
       <Separator />
-      <Comments session={session} article={article} />
+      <Comments article={article} />
     </div>
   );
 }

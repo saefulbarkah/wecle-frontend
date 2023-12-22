@@ -1,18 +1,17 @@
 'use client';
 
 import React from 'react';
-import { useAuthOverlay } from '@/features/auth/store';
-import { SessionType } from '@/hooks/sessions/type';
+import { useAuth, useAuthOverlay } from '@/features/auth/store';
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
 import { SearchMobile } from './menus/search-mobile';
 import { Avatar } from '../ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Home } from 'lucide-react';
 
-export const Navbar = ({ session }: { session: SessionType }) => {
+export const Navbar = () => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
+  const session = useAuth((state) => state.session);
 
   return (
     <>
