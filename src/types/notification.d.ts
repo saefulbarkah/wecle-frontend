@@ -13,4 +13,5 @@ export type Notification = TDate & {
   message: string;
   targetUrl: string;
   readAt: date | null;
+  type: 'comment' | 'follow';
 };

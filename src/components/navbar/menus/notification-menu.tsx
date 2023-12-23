@@ -18,6 +18,7 @@ import {
 } from '@/hooks/use-notification';
 import { timeAgo } from '@/lib/time';
 import Link from 'next/link';
+import { Notification } from '@/types/notification';
 
 export const NotificationMenu = () => {
   const { data, auth, unreadCount } = useNotification();
@@ -39,6 +40,22 @@ export const NotificationMenu = () => {
       userId: auth.id as string,
       token: auth.token as string,
     });
+  };
+
+  const getNotificationRoute = (
+    value: Notification['type'],
+    target: string
+  ) => {
+    switch (value) {
+      case 'comment':
+        return '/article/' + target;
+
+      case 'follow':
+        return '/author/' + target;
+
+      default:
+        return '/';
+    }
   };
 
   return (
@@ -83,7 +100,7 @@ export const NotificationMenu = () => {
                         ? 'bg-white hover:bg-primary/5'
                         : 'bg-primary/5'
                     }`}
-                    href={item.targetUrl}
+                    href={getNotificationRoute(item.type, item.targetUrl)}
                     target="_blank"
                     onClick={() =>
                       handleReadNotification(item._id, item.receiver._id)
