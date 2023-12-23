@@ -18,41 +18,30 @@ import { useAuth, useAuthOverlay } from '@/features/auth/store';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { socket } from '@/socket/socket';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const formSchema = z.object({
+  comment: z.string({ required_error: 'Form is required' }),
+});
+
+type formSchema = z.infer<typeof formSchema>;
 
 const WriteComment = ({ article }: { article: ArticleType }) => {
   const session = useAuth((state) => state.session);
-  const [content, setContent] = useState<string>('');
-  const editor = useEditor({
-    extensions: [
-      Text,
-      Paragraph,
-      Document,
-      Link,
-      Placeholder.configure({
-        placeholder: 'Add to the discussion',
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class:
-          'outline-none border-none ring-1 ring-secondary/80 focus:ring-primary focus:ring-2 rounded-md min-h-32  w-full p-3 prose prose-base overflow-y-auto max-h-44',
-      },
-    },
-    onUpdate: ({ editor }) => {
-      const htmlJSON = editor.getJSON();
-      if (!htmlJSON) return;
-      const value = htmlJSON.content?.[0].content?.[0].text || '';
-      if (!value) return setContent('');
-      setContent(editor.getText());
-    },
-    content: content,
-  });
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+    setValue,
+    setError,
+  } = useForm<formSchema>({ resolver: zodResolver(formSchema) });
 
   const query = useQueryClient();
 
   const { mutateAsync, isPending } = useCreateComment({
     onSuccess: () => {
-      editor?.commands.setContent('');
       query.invalidateQueries({ queryKey: ['comment-article'] });
       if (socket?.connected) {
         socket.emit('send-notification', {
@@ -68,20 +57,26 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
 
   const setOpenAuth = useAuthOverlay((state) => state.setOpen);
 
-  const handleAddComment = async () => {
+  const handleAddComment = async (data: formSchema) => {
     if (!session) {
       setOpenAuth(true);
       return;
     }
+    if (data.comment.trim() === '') {
+      return setError('comment', {
+        type: 'required',
+        message: '*Field must be not empty',
+      });
+    }
+
     await mutateAsync({
       articleId: article._id,
       userId: session?.id as string,
-      text: content,
+      text: data.comment,
       token: session?.token as string,
     });
+    setValue('comment', '');
   };
-
-  const isNoContent = content === '' ? true : false;
 
   return (
     <>
@@ -106,17 +101,30 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
             <AvatarFallback>US</AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <EditorContent editor={editor} />
-            <div className="mt-2">
-              <Button
-                disabled={isNoContent || isPending}
-                className="disabled:pointer-events-auto disabled:cursor-not-allowed"
-                onClick={() => handleAddComment()}
-                isLoading={isPending}
-              >
-                Submit
-              </Button>
-            </div>
+            <form onSubmit={handleSubmit(handleAddComment)}>
+              <textarea
+                className={`w-full appearance-none border-none outline-none ring-1 ring-secondary rounded p-3 focus:ring-primary focus:ring-2 ${
+                  errors.comment && 'ring-danger'
+                }`}
+                placeholder="Add your comment here"
+                rows={2}
+                {...register('comment', { required: true })}
+              />
+              {errors.comment && (
+                <p className="text-md font-semibold text-danger">
+                  {errors.comment.message}
+                </p>
+              )}
+              <div className="mt-2">
+                <Button
+                  className="disabled:pointer-events-auto disabled:cursor-not-allowed"
+                  isLoading={isPending}
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
