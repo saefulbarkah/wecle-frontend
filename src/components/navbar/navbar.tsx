@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAuth, useAuthOverlay } from '@/features/auth/store';
-import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from './menus';
-import { SearchMobile } from './menus/search-mobile';
-import { Avatar } from '../ui/avatar';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '../ui/button';
+import React from "react";
+import { useAuth, useAuthOverlay } from "@/features/auth/store";
+import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from "./menus";
+import { SearchMobile } from "./menus/search-mobile";
+import { Avatar } from "../ui/avatar";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 export const Navbar = () => {
   const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
@@ -16,18 +16,18 @@ export const Navbar = () => {
   return (
     <>
       <nav
-        className={`transition sticky z-40 top-0 left-0 right-0 border border-b bg-white`}
+        className={`sticky left-0 right-0 top-0 z-40 border border-b bg-white transition`}
       >
-        <div className="h-[60px] flex items-center px-10 justify-between">
+        <div className="flex h-[60px] items-center justify-between px-10">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">WeCle</h2>
             <SearchMenu />
-            <div className="flex gap-2 items-center">
-              <Link href={'/'}>
+            <div className="flex items-center gap-2">
+              <Link href={"/"}>
                 <Button
-                  size={'sm'}
-                  variant={'ghost'}
-                  className="text-secondary/80 text-md hover:text-black"
+                  size={"sm"}
+                  variant={"ghost"}
+                  className="text-md text-secondary/80 hover:text-black"
                 >
                   Home
                 </Button>
@@ -46,7 +46,7 @@ export const Navbar = () => {
                   <Image
                     fill
                     src={
-                      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
+                      "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
                     }
                     priority
                     alt="placeholder"
