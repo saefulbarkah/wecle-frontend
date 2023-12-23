@@ -1,5 +1,4 @@
 'use client';
-import { SessionType } from '@/hooks/sessions/type';
 import React from 'react';
 import WriteComment from './comments/write-comment/write-comment';
 import ListComment from './comments/list-comment';

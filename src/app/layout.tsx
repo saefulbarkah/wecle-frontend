@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Open_Sans, Quicksand, Source_Serif_4 } from 'next/font/google';
+import { Open_Sans, Quicksand } from 'next/font/google';
 import './globals.css';
 import { AuthOverlay } from '@/features/auth';
 import QueryProvider from '@/providers/query-provider';

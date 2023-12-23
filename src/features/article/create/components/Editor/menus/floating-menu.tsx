@@ -4,7 +4,6 @@ import { Editor, FloatingMenu as Menu } from '@tiptap/react';
 import { ImagePlus, LucidePlus } from 'lucide-react';
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { fromZodError } from 'zod-validation-error';
 import { ZodError, z } from 'zod';
 import toast from 'react-hot-toast';
 

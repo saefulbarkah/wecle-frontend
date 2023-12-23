@@ -5,7 +5,6 @@ import { articleType, useArticleState } from '@/stores/article-store';
 import { ApiResponse } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
@@ -35,7 +34,6 @@ const onLogout = 'onlogout';
 
 export const useSaveDraft = () => {
   const query = useQueryClient();
-  const router = useRouter();
   const article = useArticleState((state) => state);
 
   return useMutation<

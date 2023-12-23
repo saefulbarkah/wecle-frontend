@@ -6,9 +6,9 @@ import { useLikeCommentMutation } from '@/features/article/api/like-comment';
 import { useAuth } from '@/features/auth/store';
 import { timeAgo } from '@/lib/time';
 import { findCommentType } from '@/types';
-import { Dot, Heart, MessageCircle } from 'lucide-react';
+import { Dot, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { LikeComment } from './like-comment';
 import { useDislikeCommentMutation } from '@/features/article/api/dislike-comment';
 

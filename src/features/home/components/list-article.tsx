@@ -1,7 +1,7 @@
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LucidePlus } from 'lucide-react';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { ForYou } from './for-you';
 import { TabsContentProps } from '@radix-ui/react-tabs';
 import { cn } from '@/lib/utils';

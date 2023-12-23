@@ -1,18 +1,10 @@
 'use client';
 
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import Link from '@tiptap/extension-link';
-import { EditorContent, useEditor } from '@tiptap/react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import Placeholder from '@tiptap/extension-placeholder';
 import './write-comment.css';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 import { useCreateComment } from '@/features/article/api/create-new-comment';
 import { ArticleType } from '@/types';
-import { SessionType } from '@/hooks/sessions/type';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth, useAuthOverlay } from '@/features/auth/store';
 import toast from 'react-hot-toast';
@@ -103,8 +95,10 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
           <div className="flex-1">
             <form onSubmit={handleSubmit(handleAddComment)}>
               <textarea
-                className={`w-full appearance-none border-none outline-none ring-1 ring-secondary rounded p-3 focus:ring-primary focus:ring-2 ${
-                  errors.comment && 'ring-danger'
+                className={`w-full appearance-none border-none outline-none ring-1  rounded p-3 focus:ring-2 ${
+                  errors.comment
+                    ? 'ring-danger'
+                    : 'ring-secondary focus:ring-primary'
                 }`}
                 placeholder="Add your comment here"
                 rows={2}
