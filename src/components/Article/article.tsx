@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Avatar } from '@/components/ui/avatar';
-import { htmlToText, limitText } from '@/lib/utils';
-import { ArticleType } from '@/types';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import { Avatar } from "@/components/ui/avatar";
+import { htmlToText, limitText } from "@/lib/utils";
+import { ArticleType } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 interface articleProps extends React.HTMLAttributes<HTMLDivElement> {
   data?: ArticleType[];
@@ -16,13 +16,13 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
     return (
       <>
         {data?.map((item, i) => (
-          <article className="w-full h-full" key={i}>
+          <article className="h-full w-full" key={i}>
             <div className="px-5 lg:px-10">
               <Link
                 className="flex items-center gap-2"
-                href={'/author/' + item.author._id}
+                href={"/author/" + item.author._id}
               >
-                <Avatar className="w-[30px] h-[30px]">
+                <Avatar className="h-[30px] w-[30px]">
                   <Image
                     alt={`avatar`}
                     src={`${item.author.avatar}`}
@@ -30,15 +30,15 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                     unoptimized
                   />
                 </Avatar>
-                <p className="font-semibold text-sm">{item.author.name}</p>
+                <p className="text-sm font-semibold">{item.author.name}</p>
               </Link>
-              <div className="flex items-center gap-2 mt-5">
-                <Link href={`/article/${item.slug}`} className="w-full mr-10">
-                  <h2 className="text-lg font-bold line-clamp-2">
+              <div className="mt-5 flex items-center gap-2">
+                <Link href={`/article/${item.slug}`} className="mr-10 w-full">
+                  <h2 className="line-clamp-2 text-lg font-bold">
                     {item.title}
                   </h2>
-                  <div className="hidden mt-5 lg:flex flex-col gap-3">
-                    <p className="line-clamp-3 text-md font-serif">
+                  <div className="mt-5 hidden flex-col gap-3 lg:flex">
+                    <p className="text-md line-clamp-3 font-serif">
                       {limitText({
                         limit: 301,
                         text: htmlToText(item.content),
@@ -47,25 +47,25 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                   </div>
                 </Link>
                 <Image
-                  src={'https://picsum.photos/1280/720'}
+                  src={"https://picsum.photos/1280/720"}
                   alt="testing"
                   sizes="100vw"
                   width={0}
                   height={0}
                   priority
-                  className="w-[80px] h-[56px] lg:h-[112px] lg:w-[112px] object-cover border"
+                  className="h-[56px] w-[80px] border object-cover lg:h-[112px] lg:w-[112px]"
                 />
               </div>
             </div>
             <div className="py-10">
-              <div className="bg-secondary/10 w-full h-[1px]"></div>
+              <div className="h-[1px] w-full bg-secondary/10"></div>
             </div>
           </article>
         ))}
       </>
     );
-  }
+  },
 );
-Article.displayName = 'Article';
+Article.displayName = "Article";
 
 export default Article;

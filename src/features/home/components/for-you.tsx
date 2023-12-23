@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useListArticle } from '../api/article-list';
-import Article from './article';
-import { LoadingArticle } from './loading-article';
+import React from "react";
+import { useListArticle } from "../api/article-list";
+import Article from "../../../components/Article/article";
+import { LoadingArticle } from "@/components/Article";
 
 export const ForYou = () => {
   const { data, isLoading } = useListArticle();

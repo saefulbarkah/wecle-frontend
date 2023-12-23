@@ -1,24 +1,14 @@
-export type ArticleType = {
+import { TDate } from "./global";
+
+export type ArticleType = TDate & {
   _id: string;
   title: string;
-  author: {
+  author: TDate & {
     _id: string;
     name: string;
     avatar: string;
-    user: {
-      _id: string;
-    };
+    user: string;
   };
   content: string;
-  comments: {
-    _id: string;
-    user: {
-      _id: string;
-      name: string;
-      avatar: string;
-    };
-    text: string;
-  }[];
   slug: string;
-  date: Date;
 };
