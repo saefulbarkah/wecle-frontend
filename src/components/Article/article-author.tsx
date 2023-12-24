@@ -20,7 +20,7 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
             <div>
               <div className="flex items-center gap-2">
                 <Link
-                  href={`/article/${item.slug}`}
+                  href={`/article/${encodeURIComponent(item.slug)}`}
                   className="mr-10 flex w-full flex-col gap-2"
                 >
                   <time
