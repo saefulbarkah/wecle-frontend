@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar } from "@/components/ui/avatar";
 import { timeAgo } from "@/lib/time";
 import { htmlToText, limitText } from "@/lib/utils";
 import { ArticleType } from "@/types";
