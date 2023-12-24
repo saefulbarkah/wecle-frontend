@@ -1,15 +1,66 @@
 "use client";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useAuthOverlay } from "@/features/auth/store";
+import { useFollow } from "@/hooks/use-follow";
+import { AuthorService } from "@/services/author/author-service";
 import { author } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export const AuthorInfo = ({ data }: { data: author }) => {
-  const handleFollowing = () => {
-    alert("Following user");
-  };
+const FollowComp = ({
+  isFollowing,
+  isPending,
+  onFollowClick,
+  disabled = false,
+}: {
+  isPending?: boolean;
+  isFollowing?: boolean;
+  onFollowClick: () => void;
+  disabled?: boolean;
+}) => {
+  return (
+    <>
+      {isPending ? (
+        <Button className="rounded-full" variant={"outline"}>
+          Following
+        </Button>
+      ) : (
+        <>
+          {isFollowing ? (
+            <Button className="rounded-full" variant={"outline"}>
+              Following
+            </Button>
+          ) : (
+            <Button
+              className="rounded-full"
+              variant={"success"}
+              onClick={onFollowClick}
+              disabled={disabled}
+            >
+              Follow
+            </Button>
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
+export const AuthorInfo = ({ author }: { author: author }) => {
+  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
+  const { data } = useQuery({
+    queryKey: ["author-info"],
+    queryFn: () => AuthorService.find(author._id),
+    initialData: author,
+  });
+
+  const { onFollowing, session, isPending, isFollowing } = useFollow({
+    data,
+  });
+
   return (
     <div className="w-80 border-l pt-14">
       <div className="sticky top-[0px] pl-7 pr-5">
@@ -25,13 +76,15 @@ export const AuthorInfo = ({ data }: { data: author }) => {
             <p className="text-sm leading-relaxed">{data.about}</p>
           </div>
           <div className="mt-5">
-            <Button
-              className="rounded-full"
-              variant={"success"}
-              onClick={() => handleFollowing()}
-            >
-              Follow
-            </Button>
+            <FollowComp
+              isPending={isPending}
+              isFollowing={isFollowing}
+              disabled={session?.author_id === data._id}
+              onFollowClick={() => {
+                if (!session) return setOpenAuth(true);
+                onFollowing(session?.author_id as string, data._id);
+              }}
+            />
           </div>
           <div className="mt-10">
             <h3 className="font-bold">Following</h3>

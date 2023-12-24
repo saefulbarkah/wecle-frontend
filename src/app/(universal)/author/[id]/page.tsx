@@ -32,7 +32,7 @@ export default async function AuthorPage({
           </TabUnderline.Tabs>
         </div>
       </div>
-      <AuthorInfo data={author} />
+      <AuthorInfo author={author} />
     </div>
   );
 }

@@ -1,16 +1,32 @@
+import api from "@/api";
 import { ApiResponse, author } from "@/types";
 
 export class AuthorService {
+  private static base_path = "/authors";
+
   // find author
   static async find(id: string): Promise<author> {
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_BASE_URL_API + "/authors/" + id,
-      );
-      const data: ApiResponse<author> = await response.json();
-      return data.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get<ApiResponse<author>>(
+      process.env.NEXT_PUBLIC_BASE_URL_API + this.base_path + "/" + id,
+    );
+    return response.data.data;
+  }
+
+  // follow
+  static async follow(authorId: string, targetAuthor: string, token: string) {
+    if (authorId === targetAuthor)
+      throw new Error("Cannot follow the same author");
+    return api.post(
+      this.base_path + "/follow",
+      {
+        author: authorId,
+        targetAuthor,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      },
+    );
   }
 }
