@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/ui/avatar";
+import { timeAgo } from "@/lib/time";
 import { htmlToText, limitText } from "@/lib/utils";
 import { ArticleType } from "@/types";
 import Image from "next/image";
@@ -18,26 +19,22 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
         {data?.map((item, i) => (
           <article className="h-full w-full" key={i}>
             <div>
-              <Link
-                className="flex items-center gap-2"
-                href={"/author/" + item.author._id}
-              >
-                <Avatar className="h-[30px] w-[30px]">
-                  <Image
-                    alt={`avatar`}
-                    src={`${item.author.avatar}`}
-                    fill
-                    unoptimized
-                  />
-                </Avatar>
-                <p className="text-sm font-semibold">{item.author.name}</p>
-              </Link>
-              <div className="mt-5 flex items-center gap-2">
-                <Link href={`/article/${item.slug}`} className="mr-10 w-full">
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/article/${item.slug}`}
+                  className="mr-10 flex w-full flex-col gap-2"
+                >
+                  <time
+                    dateTime={timeAgo(item.createdAt)}
+                    aria-label="Date article created"
+                    className="mb-3"
+                  >
+                    {timeAgo(item.createdAt)}
+                  </time>
                   <h2 className="line-clamp-2 text-lg font-bold">
                     {item.title}
                   </h2>
-                  <div className="mt-5 hidden flex-col gap-3 lg:flex">
+                  <div className="hidden flex-col gap-3 lg:flex">
                     <p className="text-md line-clamp-3 font-serif">
                       {limitText({
                         limit: 301,
