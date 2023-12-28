@@ -28,7 +28,7 @@ const useFollowing = () => {
       const errorMessage = res.response?.data.message as string;
       toast.error(errorMessage);
     },
-    onSettled: async () => {
+    onMutate: async () => {
       const data = queryClient.getQueryData<author>(["author-info"]);
 
       queryClient.setQueryData(["author-info"], (oldData: author): author => {
@@ -73,7 +73,7 @@ const useUnFollowAPI = () => {
       const errorMessage = res.response?.data.message as string;
       toast.error(errorMessage);
     },
-    onSettled: async (res) => {
+    onMutate: (res) => {
       const data = queryClient.getQueryData<author>(["author-info"]);
       const newDataFollower: follow[] | undefined = data?.followers.filter(
         (item) => item.author._id !== session?.author_id,
