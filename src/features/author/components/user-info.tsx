@@ -127,16 +127,21 @@ export const AuthorInfo = ({ author }: { author: author }) => {
                 <React.Fragment key={i}>
                   {i < 4 && (
                     <div className="flex justify-between">
-                      <Link href={"/adad"} className="flex items-center gap-2">
+                      <Link
+                        href={"/author/" + item.author._id}
+                        className="flex items-center gap-2"
+                      >
                         <Avatar className="h-6 w-6 border">
                           <Image
-                            src={"https://ui-avatars.com/api/?name=John+Doe"}
+                            src={item.author.avatar}
                             width={200}
                             height={200}
-                            alt="jgondoe"
+                            alt={`Avatar ${item.author.name}`}
                           />
                         </Avatar>
-                        <p className="text-sm hover:underline">saeful barkah</p>
+                        <p className="text-sm hover:underline">
+                          {item.author.name}
+                        </p>
                       </Link>
                     </div>
                   )}
