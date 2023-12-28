@@ -3,7 +3,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthOverlay } from "@/features/auth/store";
-import { useFollow } from "@/hooks/use-follow";
+import { useFollow, useUnFollow } from "@/hooks/use-follow";
 import { AuthorService } from "@/services/author/author-service";
 import { author } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -16,10 +16,15 @@ const FollowComp = ({
   isPending,
   onFollowClick,
   disabled = false,
+  onUnFollowClick,
 }: {
-  isPending?: boolean;
+  isPending?: {
+    following: boolean;
+    unFollowing: boolean;
+  };
   isFollowing?: boolean;
   onFollowClick: () => void;
+  onUnFollowClick: () => void;
   disabled?: boolean;
 }) => {
   const [isRender, setIsRender] = useState(false);
@@ -28,37 +33,42 @@ const FollowComp = ({
     return () => {
       setIsRender(true);
     };
-  }, [isFollowing]);
+  }, []);
+
+  const unfollowButton = () => {
+    return (
+      <Button
+        className="rounded-full"
+        variant={"outline"}
+        onClick={onUnFollowClick}
+      >
+        Unfollow
+      </Button>
+    );
+  };
+
+  const followButton = () => {
+    return (
+      <Button
+        className="rounded-full"
+        variant={"success"}
+        onClick={onFollowClick}
+        disabled={disabled}
+      >
+        Follow
+      </Button>
+    );
+  };
 
   if (!isRender)
     return <Skeleton className="h-10 w-20 rounded-full px-4 py-2" />;
-
-  return (
-    <>
-      {isPending ? (
-        <Button className="rounded-full" variant={"outline"}>
-          Following
-        </Button>
-      ) : (
-        <>
-          {isFollowing ? (
-            <Button className="rounded-full" variant={"outline"}>
-              Following
-            </Button>
-          ) : (
-            <Button
-              className="rounded-full"
-              variant={"success"}
-              onClick={onFollowClick}
-              disabled={disabled}
-            >
-              Follow
-            </Button>
-          )}
-        </>
-      )}
-    </>
-  );
+  if (isPending?.following) {
+    return unfollowButton();
+  }
+  if (isPending?.unFollowing) {
+    return followButton();
+  }
+  return <>{isFollowing ? unfollowButton() : followButton()}</>;
 };
 
 export const AuthorInfo = ({ author }: { author: author }) => {
@@ -69,9 +79,14 @@ export const AuthorInfo = ({ author }: { author: author }) => {
     initialData: author,
   });
 
-  const { onFollowing, session, isPending, isFollowing } = useFollow({
-    data,
-  });
+  const {
+    onFollowing,
+    session,
+    isPending: followPending,
+    isFollowing,
+  } = useFollow();
+
+  const { onUnFollow, isPending: unfollowingPending } = useUnFollow();
 
   return (
     <div className="w-80 border-l pt-14">
@@ -90,11 +105,17 @@ export const AuthorInfo = ({ author }: { author: author }) => {
           <div className="mt-5">
             {session?.author_id !== data._id && (
               <FollowComp
-                isPending={isPending}
+                isPending={{
+                  following: followPending,
+                  unFollowing: unfollowingPending,
+                }}
                 isFollowing={isFollowing}
                 onFollowClick={() => {
                   if (!session) return setOpenAuth(true);
                   onFollowing(session?.author_id as string, data._id);
+                }}
+                onUnFollowClick={() => {
+                  onUnFollow(session?.author_id as string, data._id);
                 }}
               />
             )}
