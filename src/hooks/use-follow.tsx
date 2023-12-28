@@ -52,7 +52,7 @@ export const useFollow = ({ data }: { data?: author } = {}) => {
       (item) => item.author._id === session.author_id,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, [session, data]);
 
   return { onFollowing, session, isFollowing, ...props };
 };
