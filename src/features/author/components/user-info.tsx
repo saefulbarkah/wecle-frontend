@@ -30,9 +30,7 @@ const FollowComp = ({
   const [isRender, setIsRender] = useState(false);
 
   useEffect(() => {
-    return () => {
-      setIsRender(true);
-    };
+    setIsRender(true);
   }, []);
 
   const unfollowButton = () => {
