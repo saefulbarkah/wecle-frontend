@@ -1,6 +1,7 @@
 "use client";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthOverlay } from "@/features/auth/store";
 import { useFollow } from "@/hooks/use-follow";
 import { AuthorService } from "@/services/author/author-service";
@@ -8,7 +9,7 @@ import { author } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const FollowComp = ({
   isFollowing,
@@ -21,6 +22,17 @@ const FollowComp = ({
   onFollowClick: () => void;
   disabled?: boolean;
 }) => {
+  const [isRender, setIsRender] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setIsRender(true);
+    };
+  }, [isFollowing]);
+
+  if (!isRender)
+    return <Skeleton className="h-10 w-20 rounded-full px-4 py-2" />;
+
   return (
     <>
       {isPending ? (
@@ -76,15 +88,16 @@ export const AuthorInfo = ({ author }: { author: author }) => {
             <p className="text-sm leading-relaxed">{data.about}</p>
           </div>
           <div className="mt-5">
-            <FollowComp
-              isPending={isPending}
-              isFollowing={isFollowing}
-              disabled={session?.author_id === data._id}
-              onFollowClick={() => {
-                if (!session) return setOpenAuth(true);
-                onFollowing(session?.author_id as string, data._id);
-              }}
-            />
+            {session?.author_id !== data._id && (
+              <FollowComp
+                isPending={isPending}
+                isFollowing={isFollowing}
+                onFollowClick={() => {
+                  if (!session) return setOpenAuth(true);
+                  onFollowing(session?.author_id as string, data._id);
+                }}
+              />
+            )}
           </div>
           <div className="mt-10">
             <h3 className="font-bold">Following</h3>
