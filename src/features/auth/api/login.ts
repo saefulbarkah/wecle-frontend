@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import api from '@/api';
-import { loginType } from '@/schemas/login-schema';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useRouter } from 'next/navigation';
-import nproggres from 'nprogress';
-import { useAuth, useAuthOverlay } from '../store';
-import toast from 'react-hot-toast';
-import { ApiResponse } from '@/types';
+import api from "@/api";
+import { loginType } from "@/schemas/login-schema";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/navigation";
+import nproggres from "nprogress";
+import { useAuth, useAuthOverlay } from "../store";
+import toast from "react-hot-toast";
+import { ApiResponse } from "@/types";
 
 const login = async (data: loginType) => {
-  return api.post('/auth/login', data);
+  return api.post("/auth/login", data);
 };
 
 const useLogin = () => {
@@ -24,7 +24,7 @@ const useLogin = () => {
     AxiosError<ApiResponse>,
     loginType
   >({
-    mutationKey: ['login'],
+    mutationKey: ["login"],
     mutationFn: login,
     onSuccess: async (res) => {
       const response = res.data;
@@ -33,6 +33,8 @@ const useLogin = () => {
       router.refresh();
       toast.success(response.message);
       setToken(response.data.token);
+      const logout = new BroadcastChannel("logout");
+      logout.postMessage({ action: "login" });
     },
     onMutate: () => {
       nproggres.start();

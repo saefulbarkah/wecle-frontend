@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/features/auth/store';
-import { SessionType } from '@/hooks/sessions/type';
-import React, { useEffect } from 'react';
+import { useAuth } from "@/features/auth/store";
+import { SessionType } from "@/hooks/sessions/type";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 type authProps = React.PropsWithChildren & {
   session: SessionType;
@@ -10,6 +11,23 @@ type authProps = React.PropsWithChildren & {
 function AuthProvider({ children, session = null }: authProps) {
   const setToken = useAuth((state) => state.setToken);
   const setSession = useAuth((state) => state.setSession);
+  const router = useRouter();
+
+  useEffect(() => {
+    const bc = new BroadcastChannel("logout");
+    bc.onmessage = (event) => {
+      if (event.data.action === "logout") {
+        setToken(null);
+        setSession(null);
+      }
+      if (event.data.action === "login") {
+        router.refresh();
+      }
+    };
+    return () => {
+      bc.close();
+    };
+  });
 
   useEffect(() => {
     if (!session) return;
