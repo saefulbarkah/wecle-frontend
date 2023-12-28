@@ -29,4 +29,21 @@ export class AuthorService {
       },
     );
   }
+
+  // unfollow
+  static async unFollow(authorId: string, targetAuthor: string, token: string) {
+    if (authorId === targetAuthor) throw new Error("Action is not permitted");
+    return api.post(
+      this.base_path + "/unfollow",
+      {
+        author: authorId,
+        targetAuthor,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      },
+    );
+  }
 }
