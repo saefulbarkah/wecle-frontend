@@ -34,7 +34,7 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
                     {item.title}
                   </h2>
                   <div className="hidden flex-col gap-3 lg:flex">
-                    <p className="text-md line-clamp-3 font-serif">
+                    <p className="text-md line-clamp-3 break-all font-serif">
                       {limitText({
                         limit: 301,
                         text: htmlToText(item.content),

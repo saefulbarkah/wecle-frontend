@@ -32,32 +32,32 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 </Avatar>
                 <p className="text-sm font-semibold">{item.author.name}</p>
               </Link>
-              <div className="mt-5 flex items-center gap-2">
+              <div className="mt-5">
                 <Link
                   href={`/article/${encodeURIComponent(item.slug)}`}
-                  className="mr-10 w-full"
+                  className="flex w-full items-center justify-between gap-2 lg:block"
                 >
                   <h2 className="line-clamp-2 text-lg font-bold">
                     {item.title}
                   </h2>
-                  <div className="mt-5 hidden flex-col gap-3 lg:flex">
-                    <p className="text-md line-clamp-3 font-serif">
+                  <div className="mt-5 flex justify-between gap-5">
+                    <p className="text-md line-clamp-3 hidden break-all font-serif lg:block">
                       {limitText({
                         limit: 301,
                         text: htmlToText(item.content),
                       })}
                     </p>
+                    <Image
+                      src={"https://picsum.photos/1280/720"}
+                      alt="testing"
+                      sizes="100vw"
+                      width={0}
+                      height={0}
+                      priority
+                      className="h-[56px] w-[80px] border object-cover lg:h-[112px] lg:w-[112px]"
+                    />
                   </div>
                 </Link>
-                <Image
-                  src={"https://picsum.photos/1280/720"}
-                  alt="testing"
-                  sizes="100vw"
-                  width={0}
-                  height={0}
-                  priority
-                  className="h-[56px] w-[80px] border object-cover lg:h-[112px] lg:w-[112px]"
-                />
               </div>
             </div>
             <div className="py-10">
