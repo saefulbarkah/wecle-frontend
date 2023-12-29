@@ -1,21 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useAuth } from '@/features/auth/store';
-import NotificationService from '@/services/notification/notification-service';
-import { socket } from '@/socket/socket';
-import { ApiResponse } from '@/types';
-import { Notification } from '@/types/notification';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useEffect, useMemo } from 'react';
+import { useAuth } from "@/features/auth/store";
+import NotificationService from "@/services/notification/notification-service";
+import { socket } from "@/socket/socket";
+import { ApiResponse } from "@/types";
+import { Notification } from "@/types/notification";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import { useEffect, useMemo } from "react";
 
 export const useNotification = () => {
   const auth = useAuth((state) => state.session);
   const queryData = useQuery({
-    queryKey: ['notification'],
+    queryKey: ["notification", auth?.id],
     queryFn: () =>
       NotificationService.findByUserId(
         auth?.id as string,
-        auth?.token as string
+        auth?.token as string,
       ),
     enabled: auth ? true : false,
   });
@@ -31,9 +31,9 @@ export const useNotification = () => {
 
   useEffect(() => {
     if (socket?.connected) {
-      socket.on('recieve-notification', (data: Notification) => {
+      socket.on("recieve-notification", (data: Notification) => {
         queryClient.setQueryData(
-          ['notification'],
+          ["notification"],
           (oldData: Notification[]) => {
             return [
               {
@@ -41,11 +41,11 @@ export const useNotification = () => {
               },
               ...oldData,
             ];
-          }
+          },
         );
       });
       return () => {
-        socket?.off('recieve-notification');
+        socket?.off("recieve-notification");
       };
     }
   }, [socket]);
@@ -54,10 +54,10 @@ export const useNotification = () => {
   useEffect(() => {
     if (socket?.connected) {
       if (auth) {
-        socket.emit('new-user', auth.id);
+        socket.emit("new-user", auth.id);
       }
       return () => {
-        socket?.off('new-user');
+        socket?.off("new-user");
       };
     }
   }, [socket, auth]);
@@ -72,11 +72,11 @@ export const useReadOneNotification = () => {
     AxiosError<any>,
     { id: string; userId: string; token: string }
   >({
-    mutationKey: ['read-one'],
+    mutationKey: ["read-one"],
     mutationFn: ({ id, userId, token }) =>
       NotificationService.readOne(id, userId, token),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['notification'] });
+      await queryClient.invalidateQueries({ queryKey: ["notification"] });
     },
   });
 };
@@ -88,11 +88,11 @@ export const useReadAllNotification = () => {
     AxiosError<any>,
     { userId: string; token: string }
   >({
-    mutationKey: ['read-all'],
+    mutationKey: ["read-all"],
     mutationFn: ({ userId, token }) =>
       NotificationService.readAll(userId, token),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['notification'] });
+      await queryClient.invalidateQueries({ queryKey: ["notification"] });
     },
   });
 };
