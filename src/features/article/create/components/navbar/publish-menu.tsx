@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { useUpdateArticle } from '@/features/article';
-import { useAuth } from '@/features/auth/store';
-import { useArticleState } from '@/stores/article-store';
-import { useIsMutating } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+} from "@/components/ui/popover";
+import { useUpdateArticle } from "@/features/article";
+import { useAuth } from "@/features/auth/store";
+import { useArticleState } from "@/stores/article-store";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useEditorStore } from "../Editor/store";
 
 export const PublishMenu = () => {
   const router = useRouter();
@@ -19,35 +19,36 @@ export const PublishMenu = () => {
   const token = useAuth((state) => state.token);
   const [showAlert, setShowAlert] = useState(false);
   const article = useArticleState((state) => state.article);
-  const isSaving = useIsMutating({ mutationKey: ['save-draft'] });
+  const status = useEditorStore((state) => state.status);
 
   const { mutate } = useUpdateArticle({
     onSuccess: () => {
-      router.replace('/');
+      router.replace("/");
       setTimeout(() => {
         resetState();
       }, 1000);
     },
-    onSuccessAlertMsg: 'Your article has been published',
-    onMutateAlertMsg: 'Publishing your article, please wait...',
+    onSuccessAlertMsg: "Your article has been published",
+    onMutateAlertMsg: "Publishing your article, please wait...",
   });
+
+  // conditional
+  const isTitleEmpty = article?.title?.trim() !== "";
+  const isContentEmpty = article.content !== null;
+  const isOnSavingToDraft = status !== "writing";
 
   const handlePublish = () => {
     if (!article._id || !article.content) return;
+    if (!isOnSavingToDraft) return;
     mutate({
       data: {
-        status: 'RELEASE',
+        status: "RELEASE",
         author: article.author as string,
       },
       id: article._id as string,
       token: token as string,
     });
   };
-
-  // conditional
-  const isTitleEmpty = article?.title?.trim() !== '';
-  const isContentEmpty = article.content !== null;
-  const isOnSavingToDraft = Boolean(!isSaving);
 
   return (
     <>
@@ -62,12 +63,12 @@ export const PublishMenu = () => {
         >
           <PopoverTrigger asChild>
             <Button
-              variant={'success'}
-              size={'sm'}
+              variant={"success"}
+              size={"sm"}
               className={`${
                 isTitleEmpty && isContentEmpty && isOnSavingToDraft
-                  ? 'opacity-100'
-                  : 'opacity-50'
+                  ? "opacity-100"
+                  : "opacity-50"
               }`}
               onClick={() => handlePublish()}
             >
@@ -75,7 +76,7 @@ export const PublishMenu = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="relative translate-y-4 rounded-lg shadow-sm">
-            <i className="absolute pointer-events-none cursor-none top-0 inset-x-0 translate-x-[80%] sm:translate-x-[75%] md:translate-x-[75%] lg:translate-x-[48%] -translate-y-3">
+            <i className="pointer-events-none absolute inset-x-0 top-0 -translate-y-3 translate-x-[80%] cursor-none sm:translate-x-[75%] md:translate-x-[75%] lg:translate-x-[48%]">
               <svg xmlns="http://www.w3.org/2000/svg">
                 {/* Main Triangle */}
                 <polygon
@@ -100,7 +101,7 @@ export const PublishMenu = () => {
                 />
               </svg>
             </i>
-            <p className="text-center text-danger font-semibold">
+            <p className="text-center font-semibold text-danger">
               You are disallowed to publish when content is empty
             </p>
           </PopoverContent>

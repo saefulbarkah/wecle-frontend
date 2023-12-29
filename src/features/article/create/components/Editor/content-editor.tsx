@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-'use client';
+"use client";
 
-import Paragraph from '@tiptap/extension-paragraph';
-import Document from '@tiptap/extension-document';
-import Text from '@tiptap/extension-text';
-import Heading from '@tiptap/extension-heading';
-import Focus from '@tiptap/extension-focus';
-import Placeholder from '@tiptap/extension-placeholder';
-import HardBreak from '@tiptap/extension-hard-break';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import Bold from '@tiptap/extension-bold';
-import Image from '@tiptap/extension-image';
-import History from '@tiptap/extension-history';
-import Blockquote from '@tiptap/extension-blockquote';
-import { useEditor, EditorContent } from '@tiptap/react';
-import './editor.css';
-import { FloatingMenu } from './menus/floating-menu';
-import { useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import { useTitleState } from './title-editor';
-import { useEditorStore } from './store';
-import { useSaveDraft } from '@/features/article/api/save-to-draft-article';
-import { useAuth } from '@/features/auth/store';
-import { articleType, useArticleState } from '@/stores/article-store';
-import { BubbleMenu } from './menus/bubble-menu';
+import Paragraph from "@tiptap/extension-paragraph";
+import Document from "@tiptap/extension-document";
+import Text from "@tiptap/extension-text";
+import Heading from "@tiptap/extension-heading";
+import Focus from "@tiptap/extension-focus";
+import Placeholder from "@tiptap/extension-placeholder";
+import HardBreak from "@tiptap/extension-hard-break";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import Bold from "@tiptap/extension-bold";
+import Image from "@tiptap/extension-image";
+import History from "@tiptap/extension-history";
+import Blockquote from "@tiptap/extension-blockquote";
+import { useEditor, EditorContent } from "@tiptap/react";
+import "./editor.css";
+import { FloatingMenu } from "./menus/floating-menu";
+import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
+import { useTitleState } from "./title-editor";
+import { useEditorStore } from "./store";
+import { useSaveDraft } from "@/features/article/api/save-to-draft-article";
+import { useAuth } from "@/features/auth/store";
+import { articleType, useArticleState } from "@/stores/article-store";
+import { BubbleMenu } from "./menus/bubble-menu";
 
 export const ContentEditor = ({
   data,
@@ -34,7 +34,7 @@ export const ContentEditor = ({
 }) => {
   const session = useAuth((state) => state.session);
   const editorState = useEditorStore((state) => state);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [value] = useDebounce(content, 1000);
   const { mutate } = useSaveDraft();
   const titleState = useTitleState((state) => state.title);
@@ -55,40 +55,42 @@ export const ContentEditor = ({
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: 'font-serif',
+          class: "font-serif",
         },
       }),
       Heading.configure({
         HTMLAttributes: {
-          class: 'font-serif font-bold',
+          class: "font-serif font-bold",
         },
         levels: [3],
       }),
       Focus.configure({
-        mode: 'all',
-        className: 'focus',
+        mode: "all",
+        className: "focus",
       }),
       Placeholder.configure({
-        placeholder: 'Can you add some further context?',
+        placeholder: "Can you add some further context?",
       }),
     ],
     editorProps: {
       attributes: {
         class:
-          'outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem]',
+          "outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem]",
       },
     },
-    content: '',
+    content: "",
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
       const isEmpty = editor.isEmpty;
       if (isEmpty) {
-        setContent('');
-        articleState.setArticle({ content: '' });
+        setContent("");
+        articleState.setArticle({ content: "" });
+        editorState.setStatus(null);
         return;
       }
       setContent(content);
       articleState.setArticle({ content: content });
+      editorState.setStatus("writing");
     },
   });
 
@@ -104,8 +106,8 @@ export const ContentEditor = ({
 
     // validate title
     if (!articleState.article?.title || !articleState.article.content) return;
-    if (articleState.article?.title?.trim() === '') {
-      return console.log('make sure your title not empty for saved to draft');
+    if (articleState.article?.title?.trim() === "") {
+      return console.log("make sure your title not empty for saved to draft");
     }
 
     mutate({
@@ -126,7 +128,7 @@ export const ContentEditor = ({
   };
 
   useEffect(() => {
-    if (editorState.focus.content) {
+    if (editorState.focus?.content) {
       editor?.commands.focus();
     }
   }, [editorState.focus.content]);
