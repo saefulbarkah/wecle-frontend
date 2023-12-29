@@ -28,32 +28,38 @@ const useFollowing = () => {
       const errorMessage = res.response?.data.message as string;
       toast.error(errorMessage);
     },
-    onMutate: async () => {
-      const data = queryClient.getQueryData<author>(["author-info"]);
+    onMutate: async (res) => {
+      const data = queryClient.getQueryData<author>([
+        "author-info",
+        res.targetAuthor,
+      ]);
 
-      queryClient.setQueryData(["author-info"], (oldData: author): author => {
-        let results = oldData;
-        if (data) {
-          results = {
-            ...oldData,
-            followers: [
-              ...data?.followers,
-              {
-                _id: "",
-                author: {
-                  _id: session?.author_id as string,
-                  avatar: session?.avatar as string,
-                  name: session?.name as string,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
+      queryClient.setQueryData(
+        ["author-info", res.targetAuthor],
+        (oldData: author): author => {
+          let results = oldData;
+          if (data) {
+            results = {
+              ...oldData,
+              followers: [
+                ...data?.followers,
+                {
+                  _id: "",
+                  author: {
+                    _id: session?.author_id as string,
+                    avatar: session?.avatar as string,
+                    name: session?.name as string,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  },
                 },
-              },
-            ],
-          };
-        }
-        toast;
-        return results;
-      });
+              ],
+            };
+          }
+          toast;
+          return results;
+        },
+      );
     },
   });
 };
@@ -74,29 +80,36 @@ const useUnFollowAPI = () => {
       toast.error(errorMessage);
     },
     onMutate: (res) => {
-      const data = queryClient.getQueryData<author>(["author-info"]);
+      const data = queryClient.getQueryData<author>([
+        "author-info",
+        res.targetAuthor,
+      ]);
       const newDataFollower: follow[] | undefined = data?.followers.filter(
         (item) => item.author._id !== session?.author_id,
       );
 
-      queryClient.setQueryData(["author-info"], (oldData: author): author => {
-        let results = oldData;
-        if (newDataFollower) {
-          results = {
-            ...oldData,
-            followers: newDataFollower,
-          };
-        }
-        return results;
-      });
+      queryClient.setQueryData(
+        ["author-info", res.targetAuthor],
+        (oldData: author): author => {
+          let results = oldData;
+          if (newDataFollower) {
+            results = {
+              ...oldData,
+              followers: newDataFollower,
+            };
+          }
+          return results;
+        },
+      );
     },
   });
 };
 
-export const useFollow = () => {
+export const useFollow = (data: author) => {
   const queryClient = useQueryClient();
   const dataAuthor: author | undefined = queryClient.getQueryData([
     "author-info",
+    data._id,
   ]);
   const { mutateAsync: followRequest, ...followProps } = useFollowing();
   const session = useAuth((state) => state.session);
@@ -114,6 +127,7 @@ export const useFollow = () => {
 
   const isFollowing = useMemo(() => {
     if (!session) return;
+    console.log("execute me");
     return dataAuthor?.followers.some(
       (item) => item.author._id === session.author_id,
     );

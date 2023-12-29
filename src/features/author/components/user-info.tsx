@@ -49,7 +49,7 @@ const FollowComp = ({
   const followButton = () => {
     return (
       <Button
-        className="rounded-full"
+        className="rounded-full "
         variant={"success"}
         onClick={onFollowClick}
         disabled={disabled}
@@ -77,7 +77,7 @@ const FollowComp = ({
 export const AuthorInfo = ({ author }: { author: author }) => {
   const setOpenAuth = useAuthOverlay((state) => state.setOpen);
   const { data } = useQuery({
-    queryKey: ["author-info"],
+    queryKey: ["author-info", author._id],
     queryFn: () => AuthorService.find(author._id),
     initialData: author,
   });
@@ -87,25 +87,34 @@ export const AuthorInfo = ({ author }: { author: author }) => {
     session,
     isPending: followPending,
     isFollowing,
-  } = useFollow();
+  } = useFollow(author);
 
   const { onUnFollow, isPending: unfollowingPending } = useUnFollow();
 
   return (
-    <div className="w-80 border-l pt-14">
-      <div className="sticky top-[0px] pl-7 pr-5">
-        <div>
-          <Avatar className="h-20 w-20 border">
-            <Image src={data.avatar} width={200} height={200} alt="jgondoe" />
-          </Avatar>
-          <div className="mt-5 flex flex-col">
-            <p className="text-base font-bold">{data.name}</p>
-            <p className="text-base">{data.followers.length} Followers</p>
+    <div className="pt-10 md:w-52 md:border-l md:pt-14 lg:w-80">
+      <div className="static top-[0px] md:sticky md:pl-7 md:pr-5">
+        <div className="md:min-h-[calc(100vh-120px)]">
+          <div className="flex items-center gap-5 md:flex-col md:items-start md:gap-0">
+            <Avatar className="h-14 w-14 md:h-20 md:w-20">
+              <Image
+                src={data.avatar}
+                fill
+                alt={data.name}
+                className="object-cover"
+              />
+            </Avatar>
+            <div className="flex flex-col md:mt-5">
+              <p className="text-2xl font-bold md:text-base">{data.name}</p>
+              <p className="text-base font-semibold text-secondary">
+                {data.followers.length} Followers
+              </p>
+            </div>
           </div>
-          <div className="mt-2">
+          <div className="mt-2 hidden md:block">
             <p className="text-sm leading-relaxed">{data.about}</p>
           </div>
-          <div className="mt-5">
+          <div className="mt-10 md:mt-5">
             {session?.author_id !== data._id && (
               <FollowComp
                 isPending={{
@@ -123,7 +132,7 @@ export const AuthorInfo = ({ author }: { author: author }) => {
               />
             )}
           </div>
-          <div className="mt-10">
+          <div className="mt-10 hidden md:block">
             <h3 className="font-bold">Following</h3>
             <div className="mt-5 flex flex-col gap-2">
               {data.followings.map((item, i) => (
