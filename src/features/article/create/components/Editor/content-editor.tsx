@@ -90,7 +90,11 @@ export const ContentEditor = ({
       }
       setContent(content);
       articleState.setArticle({ content: content });
-      editorState.setStatus("writing");
+
+      if (title.trim() !== "") {
+        console.log("writting");
+        editorState.setStatus("writing");
+      }
     },
   });
 
