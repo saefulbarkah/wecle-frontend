@@ -6,15 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { useIsMutating } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 
-const ContentEditor = dynamic(
-  () => import("./Editor/content-editor").then((mod) => mod.ContentEditor),
-  {
-    ssr: false,
-  },
-);
-
-const TitleEditor = dynamic(
-  () => import("./Editor/title-editor").then((mod) => mod.TitleEditor),
+const EditorArticle = dynamic(
+  () => import("./Editor/Editor").then((data) => data.Editor),
   {
     ssr: false,
   },
@@ -42,8 +35,10 @@ export const CreateArticle = () => {
               <div className="absolute inset-0 z-50 mt-[60px] cursor-not-allowed backdrop-blur-sm"></div>
             </>
           )}
-          <TitleEditor data={article} editable={Boolean(!isPublishing)} />
-          <ContentEditor data={article} editable={Boolean(!isPublishing)} />
+          <EditorArticle
+            article={article}
+            isPublishing={Boolean(isPublishing)}
+          />
         </div>
       </div>
     </>

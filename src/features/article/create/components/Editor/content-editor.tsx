@@ -25,7 +25,7 @@ import { articleType, useArticleState } from "@/stores/article-store";
 import { BubbleMenu } from "./menus/bubble-menu";
 import { useAuth } from "@/stores/auth-store";
 
-export const ContentEditor = ({
+const ContentEditor = ({
   data,
   editable,
 }: {
@@ -158,3 +158,5 @@ export const ContentEditor = ({
     </>
   );
 };
+
+export default ContentEditor;

@@ -26,7 +26,7 @@ const OnlyHeadingDocument = Document.extend({
   content: "heading block*",
 });
 
-export const TitleEditor = ({
+const TitleEditor = ({
   data,
   editable,
 }: {
@@ -108,3 +108,5 @@ export const TitleEditor = ({
 
   return <EditorContent editor={editor} />;
 };
+
+export default TitleEditor;
