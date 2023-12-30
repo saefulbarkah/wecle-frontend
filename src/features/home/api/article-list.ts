@@ -1,11 +1,11 @@
 'use client';
 
-import api from '@/api';
+import API from '@/api';
 import { ArticleType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 async function getArticle(): Promise<ArticleType[]> {
-  const response = await api.get('/article/lists');
+  const response = await API.axios.get('/article/lists');
   return response.data.data;
 }
 

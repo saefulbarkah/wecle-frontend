@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import api from '@/api';
-import { articleType } from '@/stores/article-store';
-import { ApiResponse } from '@/types';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
-import toast from 'react-hot-toast';
+import API from "@/api";
+import { articleType } from "@/stores/article-store";
+import { ApiResponse } from "@/types";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 
-type post = Partial<Pick<articleType, 'content' | 'title'>> & {
+type post = Partial<Pick<articleType, "content" | "title">> & {
   author: string;
-  status?: 'RELEASE' | 'DRAFT';
+  status?: "RELEASE" | "DRAFT";
 };
 
 type response = AxiosResponse<ApiResponse<Partial<post>>>;
@@ -21,7 +21,7 @@ type requestMutation = {
 };
 
 const post = ({ data, id, token }: requestMutation) => {
-  return api.put<post, response, post>(
+  return API.axios.put<post, response, post>(
     `/article/update/${id}`,
     {
       content: data.content,
@@ -31,9 +31,9 @@ const post = ({ data, id, token }: requestMutation) => {
     },
     {
       headers: {
-        Authorization: 'bearer ' + token,
+        Authorization: "bearer " + token,
       },
-    }
+    },
   );
 };
 
@@ -44,10 +44,10 @@ type overrideOptions = {
 };
 
 export const useUpdateArticle = (options: overrideOptions = {}) => {
-  const alertID = 'onPublish';
+  const alertID = "onPublish";
 
   return useMutation<response, AxiosError<ApiResponse>, requestMutation>({
-    mutationKey: ['update-article'],
+    mutationKey: ["update-article"],
     mutationFn: ({ data, id, token }) => post({ data, id, token: token }),
     onSuccess: (res) => {
       // alert on success
@@ -67,7 +67,7 @@ export const useUpdateArticle = (options: overrideOptions = {}) => {
       if (options.onMutateAlertMsg) {
         toast.loading(options.onMutateAlertMsg, { id: alertID });
       } else {
-        toast.loading('Updating your article....', { id: alertID });
+        toast.loading("Updating your article....", { id: alertID });
       }
     },
     onError: (res) => {

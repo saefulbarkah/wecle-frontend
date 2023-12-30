@@ -1,4 +1,4 @@
-import api from "@/api";
+import API from "@/api";
 import { ApiResponse, author } from "@/types";
 
 export class AuthorService {
@@ -6,7 +6,7 @@ export class AuthorService {
 
   // find author
   static async find(id: string): Promise<author> {
-    const response = await api.get<ApiResponse<author>>(
+    const response = await API.axios.get<ApiResponse<author>>(
       process.env.NEXT_PUBLIC_BASE_URL_API + this.base_path + "/" + id,
     );
     return response.data.data;
@@ -16,7 +16,7 @@ export class AuthorService {
   static async follow(authorId: string, targetAuthor: string, token: string) {
     if (authorId === targetAuthor)
       throw new Error("Cannot follow the same author");
-    return api.post(
+    return API.axios.post(
       this.base_path + "/follow",
       {
         author: authorId,
@@ -33,7 +33,7 @@ export class AuthorService {
   // unfollow
   static async unFollow(authorId: string, targetAuthor: string, token: string) {
     if (authorId === targetAuthor) throw new Error("Action is not permitted");
-    return api.post(
+    return API.axios.post(
       this.base_path + "/unfollow",
       {
         author: authorId,

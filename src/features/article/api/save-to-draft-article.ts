@@ -1,11 +1,11 @@
 "use client";
 
-import api from "@/api";
 import { articleType, useArticleState } from "@/stores/article-store";
 import { ApiResponse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEditorStore } from "../create/components/Editor/store";
+import API from "@/api";
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
 
@@ -14,7 +14,7 @@ type post = Pick<articleType, "content" | "title" | "author"> & {
 };
 
 const saveToDraft = (data: Partial<articleType>, token: string) => {
-  return api.post<any, response, post>(
+  return API.axios.post<any, response, post>(
     "/article/save/draft",
     {
       id: data._id,

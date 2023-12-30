@@ -1,14 +1,14 @@
 "use client";
 
-import api from "@/api";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import nproggres from "nprogress";
 import toast from "react-hot-toast";
 import { useAuth } from "../store";
+import API from "@/api";
 
 const logout = async () => {
-  return api.post("/auth/logout");
+  return API.proxy.post("/auth/logout");
 };
 
 export const useLogout = () => {

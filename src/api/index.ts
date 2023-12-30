@@ -1,11 +1,9 @@
-import axios from 'axios';
+import { api as axios } from "./axios";
+import { proxy } from "./proxy";
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'Application/json',
-  },
-});
+const API = {
+  proxy: proxy,
+  axios: axios,
+};
 
-export default api;
+export default API;

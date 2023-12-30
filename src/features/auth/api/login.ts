@@ -1,6 +1,5 @@
 "use client";
 
-import api from "@/api";
 import { loginType } from "@/schemas/login-schema";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
@@ -9,9 +8,10 @@ import nproggres from "nprogress";
 import { useAuth, useAuthOverlay } from "../store";
 import toast from "react-hot-toast";
 import { ApiResponse } from "@/types";
+import API from "@/api";
 
 const login = async (data: loginType) => {
-  return api.post("/auth/login", data);
+  return API.proxy.post("/auth/login", data);
 };
 
 const useLogin = () => {

@@ -1,6 +1,6 @@
-import api from '@/api';
-import { ApiResponse, findCommentType } from '@/types';
-import { AxiosResponse } from 'axios';
+import API from "@/api";
+import { ApiResponse, findCommentType } from "@/types";
+import { AxiosResponse } from "axios";
 
 export type createCommentType = {
   userId: string;
@@ -17,19 +17,19 @@ type createResponse = AxiosResponse<ApiResponse>;
 
 export class CommentServices {
   static async findCommentByArticleId(articleId: string) {
-    const response = await api.get<ApiResponse<findCommentType[]>>(
-      `/comments/article/` + articleId
+    const response = await API.axios.get<ApiResponse<findCommentType[]>>(
+      `/comments/article/` + articleId,
     );
     return response.data.data;
   }
 
   static async createNewCommentArticle(
     data: createCommentType,
-    token: string
+    token: string,
   ): Promise<createResponse> {
     const { articleId, text, userId } = data;
-    return api.post<any, createResponse, createCommentType>(
-      '/comments',
+    return API.axios.post<any, createResponse, createCommentType>(
+      "/comments",
       {
         articleId,
         text,
@@ -37,41 +37,41 @@ export class CommentServices {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
-      }
+      },
     );
   }
 
   static async likeComment(data: likeCommentType, token: string) {
     const { id, userId } = data;
-    return api.post<any, createResponse, likeCommentType>(
-      '/comments/like',
+    return API.axios.post<any, createResponse, likeCommentType>(
+      "/comments/like",
       {
         id,
         userId,
       },
       {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
-      }
+      },
     );
   }
 
   static async dislikeComment(data: likeCommentType, token: string) {
     const { id, userId } = data;
-    return api.post<any, createResponse, likeCommentType>(
-      '/comments/dislike',
+    return API.axios.post<any, createResponse, likeCommentType>(
+      "/comments/dislike",
       {
         id,
         userId,
       },
       {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
-      }
+      },
     );
   }
 }
