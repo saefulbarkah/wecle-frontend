@@ -6,10 +6,14 @@ export class AuthorService {
 
   // find author
   static async find(id: string): Promise<author> {
-    const response = await API.axios.get<ApiResponse<author>>(
-      process.env.NEXT_PUBLIC_BASE_URL_API + this.base_path + "/" + id,
-    );
-    return response.data.data;
+    try {
+      const response = await API.axios.get<ApiResponse<author>>(
+        this.base_path + "/" + id,
+      );
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   // follow
