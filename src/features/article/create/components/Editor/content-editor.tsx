@@ -21,9 +21,9 @@ import { useDebounce } from "use-debounce";
 import { useTitleState } from "./title-editor";
 import { useEditorStore } from "./store";
 import { useSaveDraft } from "@/features/article/api/save-to-draft-article";
-import { useAuth } from "@/features/auth/store";
 import { articleType, useArticleState } from "@/stores/article-store";
 import { BubbleMenu } from "./menus/bubble-menu";
+import { useAuth } from "@/stores/auth-store";
 
 export const ContentEditor = ({
   data,

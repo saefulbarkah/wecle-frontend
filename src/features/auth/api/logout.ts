@@ -4,8 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import nproggres from "nprogress";
 import toast from "react-hot-toast";
-import { useAuth } from "../store";
 import API from "@/api";
+import { useAuth } from "@/stores/auth-store";
 
 const logout = async () => {
   return API.proxy.post("/auth/logout");

@@ -7,11 +7,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUpdateArticle } from "@/features/article";
-import { useAuth } from "@/features/auth/store";
 import { useArticleState } from "@/stores/article-store";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useEditorStore } from "../Editor/store";
+import { useAuth } from "@/stores/auth-store";
 
 export const PublishMenu = () => {
   const router = useRouter();

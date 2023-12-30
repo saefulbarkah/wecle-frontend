@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useAuth } from "@/features/auth/store";
 import NotificationService from "@/services/notification/notification-service";
 import { socket } from "@/socket/socket";
+import { useAuth } from "@/stores/auth-store";
 import { ApiResponse } from "@/types";
 import { Notification } from "@/types/notification";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

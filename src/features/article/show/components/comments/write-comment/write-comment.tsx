@@ -1,21 +1,22 @@
-'use client';
+"use client";
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import './write-comment.css';
-import { Button } from '@/components/ui/button';
-import { useCreateComment } from '@/features/article/api/create-new-comment';
-import { ArticleType } from '@/types';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuth, useAuthOverlay } from '@/features/auth/store';
-import toast from 'react-hot-toast';
-import Image from 'next/image';
-import { socket } from '@/socket/socket';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import "./write-comment.css";
+import { Button } from "@/components/ui/button";
+import { useCreateComment } from "@/features/article/api/create-new-comment";
+import { ArticleType } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import Image from "next/image";
+import { socket } from "@/socket/socket";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/stores/auth-store";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  comment: z.string({ required_error: 'Form is required' }),
+  comment: z.string({ required_error: "Form is required" }),
 });
 
 type formSchema = z.infer<typeof formSchema>;
@@ -34,30 +35,30 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
 
   const { mutateAsync, isPending } = useCreateComment({
     onSuccess: () => {
-      query.invalidateQueries({ queryKey: ['comment-article'] });
+      query.invalidateQueries({ queryKey: ["comment-article"] });
       if (socket?.connected) {
-        socket.emit('send-notification', {
+        socket.emit("send-notification", {
           sender: session?.id,
           receiver: article.author.user,
           message: `commented on your article`,
           targetUrl:
-            process.env.NEXT_PUBLIC_BASE_URL + '/article/' + article.slug,
+            process.env.NEXT_PUBLIC_BASE_URL + "/article/" + article.slug,
         });
       }
     },
   });
 
-  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
+  const router = useRouter();
 
   const handleAddComment = async (data: formSchema) => {
     if (!session) {
-      setOpenAuth(true);
+      router.push("/auth/login");
       return;
     }
-    if (data.comment.trim() === '') {
-      return setError('comment', {
-        type: 'required',
-        message: '*Field must be not empty',
+    if (data.comment.trim() === "") {
+      return setError("comment", {
+        type: "required",
+        message: "*Field must be not empty",
       });
     }
 
@@ -67,19 +68,19 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
       text: data.comment,
       token: session?.token as string,
     });
-    setValue('comment', '');
+    setValue("comment", "");
   };
 
   return (
     <>
-      <div className="mt-8 relative">
+      <div className="relative mt-8">
         {session ? null : (
           <div
-            className="absolute inset-0 bg-white/10 cursor-pointer w-full h-full z-50"
+            className="absolute inset-0 z-50 h-full w-full cursor-pointer bg-white/10"
             onClick={() => {
               if (!session) {
-                toast('You need login first');
-                setOpenAuth(true);
+                toast("You need login first");
+                router.push("/auth/login");
                 return;
               }
             }}
@@ -95,14 +96,14 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
           <div className="flex-1">
             <form onSubmit={handleSubmit(handleAddComment)}>
               <textarea
-                className={`w-full appearance-none border-none outline-none ring-1  rounded p-3 focus:ring-2 ${
+                className={`w-full appearance-none rounded border-none p-3  outline-none ring-1 focus:ring-2 ${
                   errors.comment
-                    ? 'ring-danger'
-                    : 'ring-secondary focus:ring-primary'
+                    ? "ring-danger"
+                    : "ring-secondary focus:ring-primary"
                 }`}
                 placeholder="Add your comment here"
                 rows={2}
-                {...register('comment', { required: true })}
+                {...register("comment", { required: true })}
               />
               {errors.comment && (
                 <p className="text-md font-semibold text-danger">

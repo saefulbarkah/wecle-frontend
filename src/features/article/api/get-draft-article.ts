@@ -1,8 +1,8 @@
 "use client";
 
 import API from "@/api";
-import { useAuth } from "@/features/auth/store";
 import { articleType } from "@/stores/article-store";
+import { useAuth } from "@/stores/auth-store";
 import { ApiResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";

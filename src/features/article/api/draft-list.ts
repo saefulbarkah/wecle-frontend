@@ -1,6 +1,6 @@
 "use client";
 import API from "@/api";
-import { useAuth } from "@/features/auth/store";
+import { useAuth } from "@/stores/auth-store";
 import { ApiResponse, ArticleType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 

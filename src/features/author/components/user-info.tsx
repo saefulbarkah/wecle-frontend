@@ -2,7 +2,7 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuthOverlay } from "@/features/auth/store";
+
 import { useFollow, useUnFollow } from "@/hooks/use-follow";
 import { AuthorService } from "@/services/author/author-service";
 import { author } from "@/types";
@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 const FollowComp = ({
@@ -75,7 +76,7 @@ const FollowComp = ({
 };
 
 export const AuthorInfo = ({ author }: { author: author }) => {
-  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
+  const router = useRouter();
   const { data } = useQuery({
     queryKey: ["author-info", author._id],
     queryFn: () => AuthorService.find(author._id),
@@ -123,7 +124,7 @@ export const AuthorInfo = ({ author }: { author: author }) => {
                 }}
                 isFollowing={isFollowing}
                 onFollowClick={() => {
-                  if (!session) return setOpenAuth(true);
+                  if (!session) return router.push("/auth/login");
                   onFollowing(session?.author_id as string, data._id);
                 }}
                 onUnFollowClick={() => {

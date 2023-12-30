@@ -2,10 +2,10 @@
 import React from "react";
 import { PublishMenu } from "./publish-menu";
 import { NotificationMenu, UserMenu } from "@/components/navbar/menus";
-import { useAuth } from "@/features/auth/store";
 import { DraftMenu } from "./draft-menu";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { useEditorStore } from "../Editor/store";
+import { useAuth } from "@/stores/auth-store";
 
 export const NavbarArticle = () => {
   const session = useAuth((state) => state.session);

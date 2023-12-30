@@ -1,5 +1,5 @@
-import { SessionType } from '@/hooks/sessions/type';
-import { create } from 'zustand';
+import { SessionType } from "@/hooks/sessions/type";
+import { create } from "zustand";
 
 interface State {
   token: string | null;
@@ -7,8 +7,8 @@ interface State {
 }
 
 interface Action {
-  setToken: (val: State['token']) => void;
-  setSession: (val: State['session']) => void;
+  setToken: (val: State["token"]) => void;
+  setSession: (val: State["session"]) => void;
 }
 
 export const useAuth = create<State & Action>((set) => ({

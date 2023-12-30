@@ -1,6 +1,6 @@
 "use client";
-import { useAuth } from "@/features/auth/store";
 import { AuthorService } from "@/services/author/author-service";
+import { useAuth } from "@/stores/auth-store";
 import { ApiResponse, author, follow } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";

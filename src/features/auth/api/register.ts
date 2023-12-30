@@ -3,11 +3,11 @@ import { ApiResponse } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import { useMenuAuth } from "../store";
 import API from "@/api";
+import { useRouter } from "next/navigation";
 
 export const useRegister = () => {
-  const setAuthMenu = useMenuAuth((state) => state.setMenu);
+  const router = useRouter();
   return useMutation<
     AxiosResponse<ApiResponse>,
     AxiosError<ApiResponse>,
@@ -17,7 +17,7 @@ export const useRegister = () => {
     mutationFn: (data) => API.proxy.post("/auth/register", data),
     onSuccess: (res) => {
       toast.success(res.data.message);
-      setAuthMenu("LOGIN");
+      router.push("/auth/login");
       setTimeout(() => {
         toast("Now you can login");
       }, 500);

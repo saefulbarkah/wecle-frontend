@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { useLikeCommentMutation } from '@/features/article/api/like-comment';
-import { useAuth } from '@/features/auth/store';
-import { timeAgo } from '@/lib/time';
-import { findCommentType } from '@/types';
-import { Dot, MessageCircle } from 'lucide-react';
-import Image from 'next/image';
-import React from 'react';
-import { LikeComment } from './like-comment';
-import { useDislikeCommentMutation } from '@/features/article/api/dislike-comment';
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useLikeCommentMutation } from "@/features/article/api/like-comment";
+import { timeAgo } from "@/lib/time";
+import { findCommentType } from "@/types";
+import { Dot, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import React from "react";
+import { LikeComment } from "./like-comment";
+import { useDislikeCommentMutation } from "@/features/article/api/dislike-comment";
+import { useAuth } from "@/stores/auth-store";
 
 const ListComment = ({ data }: { data?: findCommentType[] }) => {
   const auth = useAuth((state) => state.session);
@@ -18,10 +18,10 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
   const { mutate: likeComment } = useLikeCommentMutation();
   const { mutate: dislikeComment } = useDislikeCommentMutation();
   const handleReplyComment = () => {
-    console.log('reply');
+    console.log("reply");
   };
 
-  const handleLikeComment = (id: string, likes: findCommentType['likes']) => {
+  const handleLikeComment = (id: string, likes: findCommentType["likes"]) => {
     if (!auth) return;
     const isLiked = likes.some((item) => item._id === auth.id);
     if (!isLiked) {
@@ -46,14 +46,14 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
             <Avatar>
               <Image
                 src={`${item.user.avatar}`}
-                alt={'Testing'}
+                alt={"Testing"}
                 width={40}
                 height={40}
                 unoptimized
               />
             </Avatar>
             <div className="w-full">
-              <div className="outline outline-1 outline-secondary/50 rounded p-3.5 w-full">
+              <div className="w-full rounded p-3.5 outline outline-1 outline-secondary/50">
                 <div className="flex items-center">
                   <h4 className="font-semibold">{item.user.name}</h4>
                   <Dot className="text-secondary/50" />
@@ -71,8 +71,8 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
               />
 
               <Button
-                variant={'ghost'}
-                className="mt-2 mb-5 active:bg-secondary/10"
+                variant={"ghost"}
+                className="mb-5 mt-2 active:bg-secondary/10"
                 onClick={() => handleReplyComment()}
               >
                 <MessageCircle size={18} className="mr-1" />

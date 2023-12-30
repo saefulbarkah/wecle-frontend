@@ -1,7 +1,7 @@
 "use client";
 
-import { useAuth } from "@/features/auth/store";
 import { SessionType } from "@/hooks/sessions/type";
+import { useAuth } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 

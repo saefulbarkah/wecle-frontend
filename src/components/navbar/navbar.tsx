@@ -1,16 +1,15 @@
 "use client";
 
 import React from "react";
-import { useAuth, useAuthOverlay } from "@/features/auth/store";
 import { NotificationMenu, SearchMenu, UserMenu, WriteMenu } from "./menus";
 import { SearchMobile } from "./menus/search-mobile";
 import { Avatar } from "../ui/avatar";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useAuth } from "@/stores/auth-store";
 
 export const Navbar = () => {
-  const setOverlayAuth = useAuthOverlay((state) => state.setOpen);
   const session = useAuth((state) => state.session);
 
   return (
@@ -41,7 +40,7 @@ export const Navbar = () => {
             {session ? (
               <UserMenu session={session} />
             ) : (
-              <button onClick={() => setOverlayAuth(true)}>
+              <Link href={"/auth/login"}>
                 <Avatar>
                   <Image
                     fill
@@ -53,7 +52,7 @@ export const Navbar = () => {
                     unoptimized
                   />
                 </Avatar>
-              </button>
+              </Link>
             )}
           </div>
         </div>
