@@ -6,33 +6,32 @@ import { SessionType } from "@/hooks/sessions/type";
 import Link from "next/link";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { useAuthOverlay } from "@/features/auth/store/auth-overlay-store";
 
 const classVariant = cva([
   "hidden lg:flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2",
 ]);
 
-const NavigateCreateArticle = () => {
+const NavigateCreateArticle = ({ session }: { session: SessionType }) => {
+  const setAuthOverlay = useAuthOverlay((state) => state.setOpen);
+  const Comp = session ? Link : "button";
   return (
-    <Link href={"/article/new"} className={cn(classVariant())}>
+    <Comp
+      href={"/article/new"}
+      className={cn(classVariant())}
+      onClick={(e) => {
+        if (!session) {
+          e.preventDefault();
+          return setAuthOverlay(true);
+        }
+      }}
+    >
       <PenSquare className="h-6 w-6" />
       <span className="text-sm font-semibold">Write</span>
-    </Link>
-  );
-};
-
-const TriggerLogin = ({ session }: { session: SessionType }) => {
-  return (
-    <Link className={cn(classVariant())} href={"/auth/login"}>
-      <PenSquare className="h-6 w-6" />
-      <span className="text-sm font-semibold">Write</span>
-    </Link>
+    </Comp>
   );
 };
 
 export const WriteMenu = ({ session }: { session: SessionType }) => {
-  return session ? (
-    <NavigateCreateArticle />
-  ) : (
-    <TriggerLogin session={session} />
-  );
+  return <NavigateCreateArticle session={session} />;
 };

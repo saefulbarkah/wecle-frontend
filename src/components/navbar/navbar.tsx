@@ -8,9 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useAuth } from "@/stores/auth-store";
+import { useAuthOverlay } from "@/features/auth/store/auth-overlay-store";
 
 export const Navbar = () => {
   const session = useAuth((state) => state.session);
+  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
 
   return (
     <>
@@ -40,7 +42,7 @@ export const Navbar = () => {
             {session ? (
               <UserMenu session={session} />
             ) : (
-              <Link href={"/auth/login"}>
+              <button onClick={() => setOpenAuth(true)}>
                 <Avatar>
                   <Image
                     fill
@@ -52,7 +54,7 @@ export const Navbar = () => {
                     unoptimized
                   />
                 </Avatar>
-              </Link>
+              </button>
             )}
           </div>
         </div>

@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         source: "/api/auth/register",
-        destination: process.env.NEXT_PUBLIC_API_URL + "/auth/logout",
+        destination: process.env.NEXT_PUBLIC_API_URL + "/auth/register",
       },
     ];
   },

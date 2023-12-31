@@ -3,13 +3,16 @@ import React from "react";
 import { PublishMenu } from "./publish-menu";
 import { NotificationMenu, UserMenu } from "@/components/navbar/menus";
 import { DraftMenu } from "./draft-menu";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Home, Loader2 } from "lucide-react";
 import { useEditorStore } from "../Editor/store";
 import { useAuth } from "@/stores/auth-store";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export const NavbarArticle = () => {
   const session = useAuth((state) => state.session);
   const editorState = useEditorStore((state) => state);
+  const router = useRouter();
   return (
     <div className="sticky inset-x-0 top-0 z-50 w-full bg-white">
       <div className="container flex h-[60px] items-center justify-between">
@@ -34,6 +37,14 @@ export const NavbarArticle = () => {
           )}
         </div>
         <div className="flex items-center space-x-3">
+          <Button
+            size={"sm"}
+            variant={"default"}
+            onClick={() => router.push("/")}
+          >
+            <Home className="mr-2 h-4 w-4" />
+            <span>Home</span>
+          </Button>
           <DraftMenu />
           <PublishMenu />
           {/* <OptionMenu /> */}

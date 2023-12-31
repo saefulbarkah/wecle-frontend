@@ -4,10 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import API from "@/api";
-import { useRouter } from "next/navigation";
+import { useRegisterStore } from "../components/Register";
+import { useAuthOverlay } from "../store/auth-overlay-store";
 
 export const useRegister = () => {
-  const router = useRouter();
+  const register = useRegisterStore((state) => state.setForm);
+  const overlay = useAuthOverlay((state) => state);
   return useMutation<
     AxiosResponse<ApiResponse>,
     AxiosError<ApiResponse>,
@@ -15,9 +17,10 @@ export const useRegister = () => {
   >({
     mutationKey: ["register"],
     mutationFn: (data) => API.proxy.post("/auth/register", data),
-    onSuccess: (res) => {
+    onSuccess: (res, data) => {
+      register({ email: data.email });
       toast.success(res.data.message);
-      router.push("/auth/login");
+      overlay.setMenu("LOGIN");
       setTimeout(() => {
         toast("Now you can login");
       }, 500);

@@ -3,23 +3,26 @@
 import { loginType } from "@/schemas/login-schema";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useRouter } from "next/navigation";
 import nproggres from "nprogress";
 import toast from "react-hot-toast";
 import { ApiResponse } from "@/types";
 import API from "@/api";
 import { useAuth } from "@/stores/auth-store";
+import { useAuthOverlay } from "../store/auth-overlay-store";
+import { useRegisterStore } from "../components/Register";
+import { SessionType } from "@/hooks/sessions/type";
 
 const login = async (data: loginType) => {
   return API.proxy.post("/auth/login", data);
 };
 
 const useLogin = () => {
-  const setToken = useAuth((state) => state.setToken);
-  const router = useRouter();
+  const setOpenAuth = useAuthOverlay((state) => state.setOpen);
+  const auth = useAuth((state) => state);
+  const registerState = useRegisterStore((state) => state);
 
   return useMutation<
-    AxiosResponse<ApiResponse<{ token: string }>>,
+    AxiosResponse<ApiResponse<NonNullable<SessionType>>>,
     AxiosError<ApiResponse>,
     loginType
   >({
@@ -27,12 +30,15 @@ const useLogin = () => {
     mutationFn: login,
     onSuccess: async (res) => {
       const response = res.data;
-      nproggres.done();
       toast.success(response.message);
-      setToken(response.data.token);
+      auth.setToken(response.data.token);
+      auth.setSession(response.data);
       const login = new BroadcastChannel("logout");
       login.postMessage({ action: "login" });
-      router.replace("/");
+      setOpenAuth(false);
+      registerState.setForm({
+        email: null,
+      });
     },
     onMutate: () => {
       nproggres.start();
@@ -43,6 +49,8 @@ const useLogin = () => {
       if (statusCode === 400 || statusCode === 404) {
         toast.error(msg);
       }
+    },
+    onSettled: () => {
       nproggres.done();
     },
   });

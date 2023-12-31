@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, loginType } from "@/schemas/login-schema";
 import useLogin from "../api/login";
-import Link from "next/link";
+import SwitchMenu from "./switch-menu";
+import { useRegisterStore } from "./Register";
 
-export const Login = () => {
+const Login = () => {
+  const registerState = useRegisterStore((state) => state);
   const {
     register,
     formState: { errors },
@@ -23,17 +25,14 @@ export const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center border px-10">
-      <h2 className="mb-10 text-2xl font-semibold">Sign In</h2>
-      <form
-        className="w-full max-w-full sm:max-w-md sm:px-16 md:max-w-md lg:max-w-lg"
-        onSubmit={handleSubmit(onLogin)}
-      >
+    <div>
+      <h2 className="mb-10 text-center text-2xl font-semibold">Sign In</h2>
+      <form onSubmit={handleSubmit(onLogin)}>
         <div className="flex flex-col gap-10">
           <Input.Text
-            autoComplete="off"
             error={errors.email}
             placeholder="Email"
+            defaultValue={registerState.form.email || ""}
             {...register("email")}
           />
           <Input.Password
@@ -42,19 +41,18 @@ export const Login = () => {
             {...register("password")}
           />
           <Button type="submit" isLoading={isPending}>
-            Submit
+            Login
           </Button>
         </div>
       </form>
-      <p className="mt-5 text-sm">
-        <span>Dont have account ? </span>
-        <Link
-          href={"/auth/register"}
-          className="font-semibold text-primary hover:underline"
-        >
+      <div className="mt-5 flex items-center text-sm">
+        <p>Dont have account ? </p>
+        <SwitchMenu switchTo="REGISTER" className="ml-1">
           Create new account
-        </Link>
-      </p>
+        </SwitchMenu>
+      </div>
     </div>
   );
 };
+
+export default Login;

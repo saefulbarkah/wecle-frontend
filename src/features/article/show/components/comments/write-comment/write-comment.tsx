@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
+import { useAuthOverlay } from "@/features/auth/store/auth-overlay-store";
 
 const formSchema = z.object({
   comment: z.string({ required_error: "Form is required" }),
@@ -23,6 +24,7 @@ type formSchema = z.infer<typeof formSchema>;
 
 const WriteComment = ({ article }: { article: ArticleType }) => {
   const session = useAuth((state) => state.session);
+  const authOverlay = useAuthOverlay((state) => state);
   const {
     handleSubmit,
     formState: { errors },
@@ -75,12 +77,12 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
     <>
       <div className="relative mt-8">
         {session ? null : (
-          <div
+          <button
             className="absolute inset-0 z-50 h-full w-full cursor-pointer bg-white/10"
             onClick={() => {
               if (!session) {
                 toast("You need login first");
-                router.push("/auth/login");
+                authOverlay.setOpen(true);
                 return;
               }
             }}

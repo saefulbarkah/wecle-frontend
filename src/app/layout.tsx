@@ -8,6 +8,7 @@ import { description, keywords, title } from "@/lib/meta-data";
 import { getServerSession } from "@/hooks/sessions/server";
 import AuthProvider from "@/providers/auth-provider";
 import { CreatePortal } from "@/components/create-portal";
+import { AuthOverlay } from "@/features/auth";
 
 const quick = Quicksand({
   subsets: ["latin"],
@@ -44,7 +45,10 @@ export default async function RootLayout({
             <Toaster />
           </CreatePortal>
           <NextTopLoader />
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <AuthOverlay />
+            {children}
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>

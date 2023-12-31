@@ -5,7 +5,29 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, registerType } from "@/schemas/register-schema";
 import { useRegister } from "../api/register";
-import Link from "next/link";
+import SwitchMenu from "./switch-menu";
+import { create } from "zustand";
+
+type State = {
+  form: {
+    email: string | null;
+  };
+};
+type Action = {
+  setForm: (val: State["form"]) => void;
+};
+
+export const useRegisterStore = create<State & Action>((set) => ({
+  form: {
+    email: null,
+  },
+  setForm: (val) =>
+    set({
+      form: {
+        email: val.email,
+      },
+    }),
+}));
 
 export const Register = () => {
   const {
@@ -21,12 +43,9 @@ export const Register = () => {
     reset();
   };
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center">
-      <h2 className="mb-10 text-2xl font-semibold">Sign Up</h2>
-      <form
-        className="w-full max-w-full sm:max-w-md sm:px-16 md:max-w-md lg:max-w-lg"
-        onSubmit={handleSubmit(onRegister)}
-      >
+    <div>
+      <h2 className="mb-10 text-center text-2xl font-semibold">Sign Up</h2>
+      <form onSubmit={handleSubmit(onRegister)}>
         <div className="flex flex-col gap-10">
           <Input.Text
             placeholder="Name"
@@ -44,19 +63,16 @@ export const Register = () => {
             error={errors.password}
           />
           <Button type="submit" isLoading={isPending}>
-            Submit
+            Register
           </Button>
         </div>
       </form>
-      <p className="mt-2 text-sm">
-        <span>Already have account ? </span>
-        <Link
-          href={"/auth/login"}
-          className="font-semibold text-primary hover:underline"
-        >
-          Login
-        </Link>
-      </p>
+      <div className="mt-5 flex items-center text-sm">
+        <p>Already have account ? </p>
+        <SwitchMenu switchTo="LOGIN" className="ml-1">
+          Sign in
+        </SwitchMenu>
+      </div>
     </div>
   );
 };

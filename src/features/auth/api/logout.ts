@@ -21,12 +21,12 @@ export const useLogout = () => {
     mutationFn: logout,
     onSuccess: () => {
       nproggres.done();
-      router.refresh();
       toast.success("logout success", { id: onLogout, duration: 1000 });
       auth.setSession(null);
       auth.setToken(null);
       const logout = new BroadcastChannel("logout");
       logout.postMessage({ action: "logout" });
+      router.refresh();
     },
     onMutate: () => {
       toast.loading("logout...", { id: onLogout });
