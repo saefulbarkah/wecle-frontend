@@ -9,6 +9,7 @@ import { getServerSession } from "@/hooks/sessions/server";
 import AuthProvider from "@/providers/auth-provider";
 import { CreatePortal } from "@/components/create-portal";
 import { AuthOverlay } from "@/features/auth";
+import Script from "next/script";
 
 const quick = Quicksand({
   subsets: ["latin"],
@@ -50,6 +51,16 @@ export default async function RootLayout({
             {children}
           </QueryProvider>
         </AuthProvider>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-97BGHVCZ7P" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          
+            gtag('config', 'G-97BGHVCZ7P');
+            `}
+        </Script>
       </body>
     </html>
   );
