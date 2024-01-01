@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,12 +9,13 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDraftLists } from "@/features/article/api/draft-list";
+import { cn } from "@/lib/utils";
 import { ArticleType } from "@/types";
 import { LucideArchive, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
-export const DraftMenu = () => {
+export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
   const router = useRouter();
   const query = useSearchParams().get("draftId");
   const [open, setOpen] = useState(false);
@@ -44,9 +45,13 @@ export const DraftMenu = () => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size={"sm"} variant={"dark"}>
-            <LucideArchive className="mr-2 h-4 w-4" />
-            <span>Draft</span>
+          <Button
+            size={buttonProps?.size || "sm"}
+            variant={"dark"}
+            className={cn("w-full", buttonProps?.className)}
+          >
+            <LucideArchive className="lg:mr-2 lg:h-4 lg:w-4" />
+            <span className="hidden lg:block">Draft</span>
           </Button>
         </DialogTrigger>
         <DialogOverlay className="z-50 bg-black/20" />

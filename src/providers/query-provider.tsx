@@ -1,9 +1,9 @@
 // app/providers.jsx
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import React from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import React from "react";
 
 export default function QueryProvider({ children }: React.PropsWithChildren) {
   const [queryClient] = React.useState(
@@ -14,12 +14,12 @@ export default function QueryProvider({ children }: React.PropsWithChildren) {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   );
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       {children}
     </QueryClientProvider>
   );

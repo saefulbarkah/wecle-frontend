@@ -57,22 +57,24 @@ const UploadThumbnail = () => {
 
   return (
     <div className="mt-5">
-      <Button
-        size={"sm"}
-        variant={"default"}
-        onClick={() => {
-          if (isOpen) return setOpen(false);
-          setOpen(true);
-        }}
-      >
-        {isOpen ? (
-          <span>Hide cover</span>
-        ) : images.src ? (
-          <span>Open cover</span>
-        ) : (
-          <span>Upload cover ?</span>
-        )}
-      </Button>
+      <div className="flex justify-center lg:justify-start">
+        <Button
+          size={"sm"}
+          variant={"default"}
+          onClick={() => {
+            if (isOpen) return setOpen(false);
+            setOpen(true);
+          }}
+        >
+          {isOpen ? (
+            <span>Hide cover</span>
+          ) : images.src ? (
+            <span>Open cover</span>
+          ) : (
+            <span>Upload cover ?</span>
+          )}
+        </Button>
+      </div>
 
       {isOpen && (
         <div
@@ -89,7 +91,7 @@ const UploadThumbnail = () => {
                 className={`absolute inset-0 flex items-center justify-center`}
               >
                 <p
-                  className={`transition-[color] motion-reduce:transition-none ${
+                  className={`text-sm transition-[color] motion-reduce:transition-none md:text-base ${
                     isDragActive ? "text-primary" : "text-black"
                   }`}
                 >
@@ -110,13 +112,14 @@ const UploadThumbnail = () => {
               </div>
             )}
 
-            <div className="flex gap-2">
+            <div className="ml-5 flex flex-col gap-2 lg:flex-row">
               {images.src && (
                 <>
                   <Button
                     onClick={() => inputRef.current?.click()}
-                    variant={"outline"}
+                    variant={"dark"}
                     size={"sm"}
+                    className="order-last lg:order-first"
                   >
                     <p>Change</p>
                   </Button>

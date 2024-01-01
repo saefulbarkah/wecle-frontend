@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -12,8 +12,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/stores/auth-store";
 import { usePublishArticle } from "@/features/article/api/publish-article";
+import { cn } from "@/lib/utils";
+import { UploadIcon } from "lucide-react";
 
-export const PublishMenu = () => {
+type Tbutton = ButtonProps & {
+  withIcon?: boolean;
+};
+
+export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
   const router = useRouter();
   const resetState = useArticleState((state) => state.reset);
   const token = useAuth((state) => state.token);
@@ -63,10 +69,7 @@ export const PublishMenu = () => {
     if (article) {
       const isTitleEmpty = article.title;
       const isContentEmpty = article.content;
-
-      console.log(isTitleEmpty, isContentEmpty);
       if (!isTitleEmpty || !isContentEmpty) return setDisabled(true);
-      console.log("hit me ?");
       setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,14 +85,18 @@ export const PublishMenu = () => {
           <PopoverTrigger asChild>
             <Button
               variant={"success"}
-              size={"sm"}
-              className={`${isDisabled ? "opacity-50" : "opacity-100"}`}
+              size={buttonProps?.size || "sm"}
+              className={cn(
+                `${isDisabled ? "opacity-50" : "opacity-100"} w-full`,
+                buttonProps!.className as string,
+              )}
               onClick={() => handlePublish()}
             >
-              Publish
+              {buttonProps?.withIcon && <UploadIcon />}
+              <span className="hidden lg:block">Publish</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="relative translate-y-4 rounded-lg shadow-sm">
+          <PopoverContent className="relative hidden translate-y-4 rounded-lg shadow-sm lg:block">
             <i className="pointer-events-none absolute inset-x-0 top-0 -translate-y-3 translate-x-[80%] cursor-none sm:translate-x-[75%] md:translate-x-[75%] lg:translate-x-[48%]">
               <svg xmlns="http://www.w3.org/2000/svg">
                 {/* Main Triangle */}
