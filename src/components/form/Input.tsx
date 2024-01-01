@@ -36,7 +36,7 @@ const Text = React.forwardRef<HTMLInputElement, inputProps>(
       <div className={`relative ${error ? "my-2" : ""}`}>
         <input
           className={cn(
-            `peer w-full border-b border-black/50 placeholder-transparent outline-none transition placeholder:pointer-events-none placeholder:select-none focus:border-primary ${
+            `peer w-full border-b border-black/50 font-semibold placeholder-transparent outline-none transition placeholder:pointer-events-none placeholder:select-none focus:border-primary motion-reduce:transition-none ${
               error ? "border-b-danger" : ""
             }`,
             className,
@@ -45,7 +45,7 @@ const Text = React.forwardRef<HTMLInputElement, inputProps>(
           placeholder={placeholder}
           {...props}
         />
-        <label className="pointer-events-none absolute left-0 -translate-y-4 transform-gpu select-none text-[13px] transition-none duration-150 peer-placeholder-shown:-translate-y-2 peer-placeholder-shown:text-sm peer-focus:-translate-y-4 peer-focus:text-[13px] md:transition-all">
+        <label className="pointer-events-none absolute left-0 -translate-y-[1.1rem] text-sm transition-[transform] !duration-150 peer-placeholder-shown:-translate-y-1 peer-focus:-translate-y-[1.1rem] peer-focus:font-normal peer-focus:text-black motion-reduce:transition-none">
           {placeholder}
         </label>
         {error && (
