@@ -73,9 +73,9 @@ const ContentEditor = ({
       const content = editor.getHTML();
       const isEmpty = editor.isEmpty;
       if (isEmpty || content.trim() === "") {
-        articleState.setArticle({ title: null });
+        articleState.setArticle({ content: null });
       } else {
-        articleState.setArticle({ title: content });
+        articleState.setArticle({ content: content });
       }
     },
   });
