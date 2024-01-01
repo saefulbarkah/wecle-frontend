@@ -4,8 +4,8 @@ import { articleType, useArticleState } from "@/stores/article-store";
 import { ApiResponse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEditorStore } from "../create/components/Editor/store";
 import API from "@/api";
+import toast from "react-hot-toast";
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
 
@@ -33,7 +33,7 @@ const saveToDraft = (data: Partial<articleType>, token: string) => {
 export const useSaveDraft = () => {
   const query = useQueryClient();
   const article = useArticleState((state) => state);
-  const editorState = useEditorStore((state) => state);
+  const isSavingID = "saving-draft";
 
   return useMutation<
     response,
@@ -44,10 +44,12 @@ export const useSaveDraft = () => {
     mutationFn: ({ data, token }) => saveToDraft(data, token),
     onSuccess: async (res) => {
       query.invalidateQueries({ queryKey: ["draft"] });
+      toast.success(res.data.message, {
+        id: isSavingID,
+      });
       const response = res.data;
-      editorState.setStatus("success");
       if (!response.data) return;
-      const { _id, author, content, title } = response.data;
+      const { _id, author, content, title, cover } = response.data;
       const url = `?draftId=${_id}`;
       window.history.replaceState(
         {
@@ -63,6 +65,16 @@ export const useSaveDraft = () => {
         author,
         content,
         title,
+        cover,
+      });
+    },
+    onError: (res) => {
+      const response = res.response?.data;
+      return toast.error(response?.message as string);
+    },
+    onMutate: () => {
+      toast.loading("Saving draft....", {
+        id: isSavingID,
       });
     },
   });

@@ -16,14 +16,10 @@ import Blockquote from "@tiptap/extension-blockquote";
 import { useEditor, EditorContent } from "@tiptap/react";
 import "./editor.css";
 import { FloatingMenu } from "./menus/floating-menu";
-import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
-import { useTitleState } from "./title-editor";
+import { useEffect } from "react";
 import { useEditorStore } from "./store";
-import { useSaveDraft } from "@/features/article/api/save-to-draft-article";
 import { articleType, useArticleState } from "@/stores/article-store";
 import { BubbleMenu } from "./menus/bubble-menu";
-import { useAuth } from "@/stores/auth-store";
 
 const ContentEditor = ({
   data,
@@ -32,13 +28,7 @@ const ContentEditor = ({
   data?: articleType | null;
   editable: boolean;
 }) => {
-  const session = useAuth((state) => state.session);
   const editorState = useEditorStore((state) => state);
-  const [content, setContent] = useState("");
-  const [value] = useDebounce(content, 1000);
-  const { mutate } = useSaveDraft();
-  const titleState = useTitleState((state) => state.title);
-  const [title] = useDebounce(titleState, 1000);
   const articleState = useArticleState((state) => state);
 
   const editor = useEditor({
@@ -82,53 +72,21 @@ const ContentEditor = ({
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
       const isEmpty = editor.isEmpty;
-      if (isEmpty) {
-        setContent("");
-        articleState.setArticle({ content: "" });
-        editorState.setStatus(null);
-        return;
-      }
-      setContent(content);
-      articleState.setArticle({ content: content });
-
-      if (title.trim() !== "") {
-        console.log("writting");
-        editorState.setStatus("writing");
+      if (isEmpty || content.trim() === "") {
+        articleState.setArticle({ title: null });
+      } else {
+        articleState.setArticle({ title: content });
       }
     },
   });
 
-  const saveToDraft = async () => {
-    if (!session) return;
-    let id = null;
-    if (data) {
-      id = data._id;
-    }
-    if (articleState.article) {
-      id = articleState.article._id;
-    }
-
-    // validate title
-    if (!articleState.article?.title || !articleState.article.content) return;
-    if (articleState.article?.title?.trim() === "") {
-      return console.log("make sure your title not empty for saved to draft");
-    }
-
-    mutate({
-      data: {
-        _id: id,
-        title: articleState.article.title,
-        content: articleState.article.content,
-        author: session.author_id,
-      },
-      token: session.token as string,
-    });
-  };
-
   const bindingDraft = () => {
-    if (!data) return;
+    if (!data) {
+      editor?.commands.setContent(articleState.article.content as string);
+      return;
+    }
     editor?.commands.setContent(data.content as string);
-    articleState.setArticle(data);
+    // articleState.setArticle(data);
   };
 
   useEffect(() => {
@@ -137,14 +95,10 @@ const ContentEditor = ({
     }
   }, [editorState.focus.content]);
 
-  useEffect(() => {
-    saveToDraft();
-  }, [value, title]);
-
   // binding draft
   useEffect(() => {
     bindingDraft();
-  }, [data]);
+  }, [data, editor]);
 
   useEffect(() => {
     editor?.setEditable(editable);

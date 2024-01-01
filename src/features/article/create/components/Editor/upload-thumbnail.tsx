@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { FileRejection, useDropzone } from "react-dropzone";
+import { useArticleState } from "@/stores/article-store";
 
 type Timage = {
   src?: string | null;
@@ -10,6 +11,7 @@ type Timage = {
 };
 
 const UploadThumbnail = () => {
+  const setArticle = useArticleState((state) => state.setArticle);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [images, setImages] = useState<Timage>({});
 
@@ -36,10 +38,12 @@ const UploadThumbnail = () => {
             src: base64Data,
             name: file.name,
           });
+          setArticle({ cover: base64Data });
         };
         reader.readAsDataURL(file);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
@@ -71,20 +75,26 @@ const UploadThumbnail = () => {
       </Button>
 
       {isOpen && (
-        <div className="mt-5 h-[150px] w-full border border-dashed">
+        <div
+          className={`mt-5 h-[150px] w-full border border-dashed transition-[border-color,transform] motion-reduce:transition-none ${
+            isDragActive ? "border-1 border-primary" : "border-black"
+          }`}
+        >
           <div className="relative flex h-full items-center justify-center gap-2">
             <input {...getInputProps()} ref={inputRef} />
 
             {!images.src && (
               <div
                 {...getRootProps()}
-                className="absolute inset-0 flex items-center justify-center"
+                className={`absolute inset-0 flex items-center justify-center`}
               >
-                {isDragActive ? (
-                  <p>Drop the files here ...</p>
-                ) : (
-                  <p>Drag drop an image here, or click to select an image</p>
-                )}
+                <p
+                  className={`transition-[color] motion-reduce:transition-none ${
+                    isDragActive ? "text-primary" : "text-black"
+                  }`}
+                >
+                  Drag drop an image here, or click to select an image
+                </p>
               </div>
             )}
 

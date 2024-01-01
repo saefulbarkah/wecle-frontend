@@ -5,6 +5,8 @@ import { useFindDraft } from "../../api/get-draft-article";
 import { useSearchParams } from "next/navigation";
 import { useIsMutating } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
+import { useAuth } from "@/stores/auth-store";
+import { useArticleState } from "@/stores/article-store";
 
 const EditorArticle = dynamic(
   () => import("./Editor/Editor").then((data) => data.Editor),
@@ -14,17 +16,37 @@ const EditorArticle = dynamic(
 );
 
 export const CreateArticle = () => {
+  const session = useAuth((state) => state.session);
+  const articleState = useArticleState((state) => state);
   const isPublishing = useIsMutating({ mutationKey: ["create-article"] });
-  const query = useSearchParams();
-  const [paramId, setParamId] = useState<string | null>(null);
+  const [id, setID] = useState<string | null>(null);
+  const draftID = useSearchParams().get("draftId") || null;
   const { data: article, isLoading } = useFindDraft({
-    id: paramId,
+    id: id,
   });
-  const draftId = query.get("draftId");
 
   useEffect(() => {
-    setParamId(draftId);
-  }, [draftId]);
+    if (!article) {
+      articleState.setArticle({ author: session?.author_id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, article]);
+
+  useEffect(() => {
+    const bindstate = () => {
+      if (article) {
+        articleState.setArticle(article);
+      }
+    };
+    bindstate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article]);
+
+  useEffect(() => {
+    if (draftID) {
+      setID(draftID);
+    }
+  }, [draftID]);
 
   return (
     <>

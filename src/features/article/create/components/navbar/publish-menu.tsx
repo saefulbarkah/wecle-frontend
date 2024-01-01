@@ -9,9 +9,9 @@ import {
 import { useUpdateArticle } from "@/features/article";
 import { useArticleState } from "@/stores/article-store";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useEditorStore } from "../Editor/store";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/stores/auth-store";
+import { usePublishArticle } from "@/features/article/api/publish-article";
 
 export const PublishMenu = () => {
   const router = useRouter();
@@ -19,9 +19,9 @@ export const PublishMenu = () => {
   const token = useAuth((state) => state.token);
   const [showAlert, setShowAlert] = useState(false);
   const article = useArticleState((state) => state.article);
-  const status = useEditorStore((state) => state.status);
+  const [isDisabled, setDisabled] = useState(true);
 
-  const { mutate } = useUpdateArticle({
+  const { mutate: UpdateArticle } = useUpdateArticle({
     onSuccess: () => {
       router.replace("/");
       setTimeout(() => {
@@ -32,15 +32,23 @@ export const PublishMenu = () => {
     onMutateAlertMsg: "Publishing your article, please wait...",
   });
 
-  // conditional
-  const isTitleEmpty = article?.title?.trim() !== "";
-  const isContentEmpty = article.content !== null;
-  const isOnSavingToDraft = status !== "writing";
+  const { mutateAsync: publishArticle } = usePublishArticle();
 
   const handlePublish = () => {
-    if (!article._id || !article.content) return;
-    if (!isOnSavingToDraft) return;
-    mutate({
+    if (isDisabled) return;
+    if (!article._id) {
+      return publishArticle({
+        data: {
+          author: article.author,
+          content: article.content,
+          cover: article.cover,
+          title: article.title,
+          status: "RELEASE",
+        },
+        token: token as string,
+      });
+    }
+    UpdateArticle({
       data: {
         status: "RELEASE",
         author: article.author as string,
@@ -50,26 +58,32 @@ export const PublishMenu = () => {
     });
   };
 
+  useEffect(() => {
+    // conditional
+    if (article) {
+      const isTitleEmpty = article.title;
+      const isContentEmpty = article.content;
+
+      console.log(isTitleEmpty, isContentEmpty);
+      if (!isTitleEmpty || !isContentEmpty) return setDisabled(true);
+      console.log("hit me ?");
+      setDisabled(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article]);
+
   return (
     <>
       <div className="relative">
         <Popover
-          open={
-            isTitleEmpty && isContentEmpty && isOnSavingToDraft
-              ? false
-              : showAlert
-          }
+          open={isDisabled ? showAlert : false}
           onOpenChange={setShowAlert}
         >
           <PopoverTrigger asChild>
             <Button
               variant={"success"}
               size={"sm"}
-              className={`${
-                isTitleEmpty && isContentEmpty && isOnSavingToDraft
-                  ? "opacity-100"
-                  : "opacity-50"
-              }`}
+              className={`${isDisabled ? "opacity-50" : "opacity-100"}`}
               onClick={() => handlePublish()}
             >
               Publish

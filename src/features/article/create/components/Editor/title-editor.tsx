@@ -34,7 +34,6 @@ const TitleEditor = ({
   editable: boolean;
 }) => {
   const editorState = useEditorStore((state) => state);
-  const state = useTitleState((state) => state);
   const articleState = useArticleState((state) => state);
 
   const disableEnter = Extension.create({
@@ -73,18 +72,12 @@ const TitleEditor = ({
     onUpdate: ({ editor }) => {
       const getJSON = editor.getJSON();
       if (!getJSON.content) return;
-      const title = getJSON.content?.[0].content?.[0].text || "";
+      const title = getJSON.content?.[0].content?.[0].text || null || "";
       const isEmpty = editor.isEmpty;
-      if (isEmpty) {
-        editorState.setStatus(null);
-        state.setTitle("");
-        articleState.setArticle({ title: "" });
-        return;
-      }
-      state.setTitle(title);
-      articleState.setArticle({ title: title });
-      if (data?.content) {
-        editorState.setStatus("writing");
+      if (isEmpty || title.trim() === "") {
+        articleState.setArticle({ title: null });
+      } else {
+        articleState.setArticle({ title: title });
       }
     },
     onFocus: () => {
@@ -92,15 +85,18 @@ const TitleEditor = ({
     },
   });
 
-  const rebindingTitle = () => {
-    if (!data) return;
-    editor?.commands.setContent(data.title as string);
-    articleState.setArticle({ title: data.title });
-  };
-
   useEffect(() => {
-    rebindingTitle();
-  }, [data]);
+    const bindTitle = () => {
+      if (!data) {
+        return editor?.commands.setContent(
+          articleState.article.title as string,
+        );
+      }
+      editor?.commands.setContent(data.title as string);
+    };
+
+    bindTitle();
+  }, [data, editor]);
 
   useEffect(() => {
     editor?.setEditable(editable);
