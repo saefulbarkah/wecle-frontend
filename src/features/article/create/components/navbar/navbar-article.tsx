@@ -76,7 +76,7 @@ export const NavbarArticle = () => {
             variant={"outline"}
             className="border-primary"
             onClick={() => handleSaveToDraft()}
-            disabled={disableSaveToDraft}
+            disabled={disableSaveToDraft || onSavingToDraft}
             isLoading={onSavingToDraft}
           >
             {!onSavingToDraft && <Save className="mr-2 h-4 w-4" />}
