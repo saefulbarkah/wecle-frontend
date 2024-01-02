@@ -44,7 +44,7 @@ type overrideOptions = {
 };
 
 export const useUpdateArticle = (options: overrideOptions = {}) => {
-  const alertID = "onPublish";
+  const idLoading = "publishing-article";
 
   return useMutation<response, AxiosError<ApiResponse>, requestMutation>({
     mutationKey: ["update-article"],
@@ -52,9 +52,9 @@ export const useUpdateArticle = (options: overrideOptions = {}) => {
     onSuccess: (res) => {
       // alert on success
       if (options.onSuccessAlertMsg) {
-        toast.success(options.onSuccessAlertMsg, { id: alertID });
+        toast.success(options.onSuccessAlertMsg, { id: idLoading });
       } else {
-        toast.success(res.data.message, { id: alertID });
+        toast.success(res.data.message, { id: idLoading });
       }
 
       // extends function on success
@@ -65,15 +65,15 @@ export const useUpdateArticle = (options: overrideOptions = {}) => {
     onMutate: () => {
       // alert on mutation
       if (options.onMutateAlertMsg) {
-        toast.loading(options.onMutateAlertMsg, { id: alertID });
+        toast.loading(options.onMutateAlertMsg, { id: idLoading });
       } else {
-        toast.loading("Updating your article....", { id: alertID });
+        toast.loading("Updating your article....", { id: idLoading });
       }
     },
     onError: (res) => {
       const data = res.response?.data;
       if (data?.status === 400) {
-        return toast.error(data.message, { id: alertID });
+        return toast.error(data.message, { id: idLoading });
       }
     },
   });

@@ -6,16 +6,21 @@ export type articleType = {
   title?: string | null;
   author?: string | null;
   status?: "DRAFT" | "RELEASE";
-  cover?: string | null;
+  cover?: {
+    type: "BASE64" | "URL" | null;
+    src: string | null;
+  };
 };
 
 type State = {
   article: articleType;
+  draftId?: string | null;
 };
 
 type Action = {
   setArticle: (article: articleType | null) => void;
   reset: () => void;
+  setDraftId: (val: string) => void;
 };
 
 export const useArticleState = create<State & Action>((set) => ({
@@ -24,15 +29,19 @@ export const useArticleState = create<State & Action>((set) => ({
     author: null,
     title: null,
     content: null,
-    cover: null,
+    cover: {
+      type: null,
+      src: null,
+    },
     status: "DRAFT",
   },
+  draftId: null,
 
   setArticle: (data) =>
     set((state) => ({
       article: { ...state.article, ...data },
     })),
-
+  setDraftId: (val) => set({ draftId: val }),
   reset: () =>
     set({
       article: {
@@ -40,7 +49,10 @@ export const useArticleState = create<State & Action>((set) => ({
         author: null,
         title: null,
         content: null,
-        cover: null,
+        cover: {
+          type: null,
+          src: null,
+        },
         status: "DRAFT",
       },
     }),

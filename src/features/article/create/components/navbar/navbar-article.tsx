@@ -3,17 +3,9 @@ import React, { useEffect, useState } from "react";
 import { PublishMenu } from "./publish-menu";
 import { NotificationMenu, UserMenu } from "@/components/navbar/menus";
 import { DraftMenu } from "./draft-menu";
-import {
-  CheckCircle2,
-  ChevronLeft,
-  ChevronUp,
-  Loader2,
-  Save,
-} from "lucide-react";
-import { useEditorStore } from "../Editor/store";
+import { ChevronLeft, ChevronUp, Save } from "lucide-react";
 import { useAuth } from "@/stores/auth-store";
 import { Button, ButtonProps } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useSaveDraft } from "@/features/article/api/save-to-draft-article";
 import { useArticleState } from "@/stores/article-store";
 import toast from "react-hot-toast";
@@ -23,14 +15,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useImbbUpload } from "@/features/article/api/upload-image";
+import Link from "next/link";
 
 const NavigateBack = () => {
-  const router = useRouter();
+  const reset = useArticleState((state) => state.reset);
+
   return (
-    <Button size={"sm"} variant={"ghost"} onClick={() => router.push("/")}>
-      <ChevronLeft className="mr-1 h-4 w-4" />
-      <span>Back</span>
-    </Button>
+    <Link href="/" onClick={() => reset()}>
+      <Button size={"sm"} variant={"ghost"}>
+        <ChevronLeft className="mr-1 h-4 w-4" />
+        <span>Back</span>
+      </Button>
+    </Link>
   );
 };
 
@@ -59,21 +56,50 @@ const SaveDraft = ({
 };
 
 export const NavbarArticle = () => {
+  const isSavingID = "saving-draft";
+
   const [menuMobile, setMenuMobile] = useState(false);
   const session = useAuth((state) => state.session);
-  const editorState = useEditorStore((state) => state);
-  const { mutateAsync: saveToDraft, isPending: onSavingToDraft } =
-    useSaveDraft();
+  const { mutateAsync: saveToDraft, isPending: onSavingToDraft } = useSaveDraft(
+    {
+      onSuccess: (res) => {
+        toast.success(res.data.message, {
+          id: isSavingID,
+        });
+      },
+      onMutate: () => {
+        toast.loading("Saving draft....", {
+          id: isSavingID,
+        });
+      },
+    },
+  );
   const article = useArticleState((state) => state.article);
   const [disableSaveToDraft, setDisableSaveToDraft] = useState<boolean>(true);
+  const { mutateAsync: uploadImage } = useImbbUpload({
+    onMutate: () => {
+      toast.loading("Saving draft....", {
+        id: isSavingID,
+      });
+    },
+  });
 
-  const handleSaveToDraft = () => {
+  const handleSaveToDraft = async () => {
     if (!article || !article.title || !article.content) {
       return toast.error("Make sure your content or isnt empty");
     }
     if (!session) {
       setDisableSaveToDraft(true);
       return toast.error("Unauthorized");
+    }
+    let cover: string | null | undefined = null;
+    if (article.cover?.type === "BASE64") {
+      const response = await uploadImage({
+        image: article.cover.src as string,
+      });
+      cover = response.data.data.url;
+    } else if (article.cover?.type === "URL") {
+      cover = article.cover.src;
     }
 
     saveToDraft({
@@ -82,7 +108,7 @@ export const NavbarArticle = () => {
         author: article.author as string,
         content: article.content,
         title: article.title,
-        cover: article.cover,
+        cover: cover,
       },
       token: session.token,
     });
@@ -102,25 +128,7 @@ export const NavbarArticle = () => {
           <p className="hidden truncate font-serif text-sm lg:block">
             Draft in {session?.name}
           </p>
-          <div className="hidden lg:block">
-            <NavigateBack />
-          </div>
-          {editorState.status && (
-            <>
-              {editorState.status === "writing" && (
-                <div className="flex items-center gap-1">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <p>Saving....</p>
-                </div>
-              )}
-              {editorState.status === "success" && (
-                <div className="flex items-center gap-1">
-                  <CheckCircle2 className="h-6 w-6 fill-primary text-white" />
-                  <p className="text-sm">Saved</p>
-                </div>
-              )}
-            </>
-          )}
+          <NavigateBack />
         </div>
         <div className="flex items-center space-x-3">
           <div className="hidden items-center space-x-3 lg:flex">

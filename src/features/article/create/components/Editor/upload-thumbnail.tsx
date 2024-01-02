@@ -3,14 +3,16 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FileRejection, useDropzone } from "react-dropzone";
-import { articleType, useArticleState } from "@/stores/article-store";
+import { useArticleState } from "@/stores/article-store";
+import { ArticleTypeResponse } from "@/types";
 
 type Timage = {
+  type?: "URL" | "BASE64";
   src?: string | null;
   name?: string | null;
 };
 
-const UploadThumbnail = ({ data }: { data?: articleType }) => {
+const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
   const setArticle = useArticleState((state) => state.setArticle);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [images, setImages] = useState<Timage>({});
@@ -33,14 +35,20 @@ const UploadThumbnail = ({ data }: { data?: articleType }) => {
         const file = acceptedFiles[0];
         const reader = new FileReader();
         reader.onload = () => {
-          const base64Data = reader.result as string;
+          const result = reader.result as string;
+          const base64String = btoa(result);
           setImages({
-            src: base64Data,
+            src: base64String,
             name: file.name,
           });
-          setArticle({ cover: base64Data });
+          setArticle({
+            cover: {
+              type: "BASE64",
+              src: base64String,
+            },
+          });
         };
-        reader.readAsDataURL(file);
+        reader.readAsBinaryString(file);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,11 +65,13 @@ const UploadThumbnail = ({ data }: { data?: articleType }) => {
   useEffect(() => {
     if (data) {
       setImages({
+        type: "URL",
         src: data.cover,
       });
       setOpen(true);
     }
   }, [data]);
+
   return (
     <div className="mt-5">
       <div className="flex justify-center lg:justify-start">
@@ -110,10 +120,13 @@ const UploadThumbnail = ({ data }: { data?: articleType }) => {
             {images.src && (
               <div className="relative h-[150px] w-[200px]">
                 <Image
-                  src={images.src}
+                  src={
+                    images.type === "URL"
+                      ? images.src
+                      : "data:image/png;base64," + images.src
+                  }
                   alt={images.name as string}
                   fill
-                  quality={50}
                   className="w-[150px] object-scale-down"
                 />
               </div>

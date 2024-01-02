@@ -14,12 +14,16 @@ import { useAuth } from "@/stores/auth-store";
 import { usePublishArticle } from "@/features/article/api/publish-article";
 import { cn } from "@/lib/utils";
 import { UploadIcon } from "lucide-react";
+import { useImbbUpload } from "@/features/article/api/upload-image";
+import toast from "react-hot-toast";
 
 type Tbutton = ButtonProps & {
   withIcon?: boolean;
 };
 
 export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
+  const idOnPublishing = "publishing-article";
+
   const router = useRouter();
   const resetState = useArticleState((state) => state.reset);
   const token = useAuth((state) => state.token);
@@ -38,17 +42,42 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
     onMutateAlertMsg: "Publishing your article, please wait...",
   });
 
-  const { mutateAsync: publishArticle } = usePublishArticle();
+  const { mutateAsync: publishArticle } = usePublishArticle({
+    onSuccess: () => {
+      toast.success("Your article has been published", { id: idOnPublishing });
+    },
+    onMutate: () => {
+      toast.loading("Publishing your article, please wait...", {
+        id: idOnPublishing,
+      });
+    },
+  });
+  const { mutateAsync: uploadCover } = useImbbUpload({
+    onMutate: () => {
+      toast.loading("Publishing your article, please wait...", {
+        id: idOnPublishing,
+      });
+    },
+  });
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (isDisabled) return;
-    console.log(article);
+    let cover: string | null = null;
+    if (article.cover?.type === "BASE64") {
+      const response = await uploadCover({
+        image: article.cover.src as string,
+      });
+      cover = response.data.data.url;
+    } else if (article.cover?.type === "URL") {
+      cover = article.cover.src;
+    }
+
     if (!article._id) {
       return publishArticle({
         data: {
           author: article.author,
           content: article.content,
-          cover: article.cover,
+          cover: cover,
           title: article.title,
           status: "RELEASE",
         },

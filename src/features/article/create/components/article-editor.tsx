@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -39,7 +40,16 @@ export const CreateArticle = () => {
   useEffect(() => {
     const bindstate = () => {
       if (article) {
-        articleState.setArticle(article);
+        articleState.setArticle({
+          _id: article._id,
+          author: article.author,
+          content: article.content,
+          title: article.title,
+          cover: {
+            type: "URL",
+            src: article.cover as string,
+          },
+        });
       }
     };
     bindstate();

@@ -51,14 +51,15 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                     </div>
                   </div>
                   {item.cover && (
-                    <Image
-                      src={item.cover}
-                      alt="testing"
-                      width={0}
-                      height={0}
-                      quality={90}
-                      className="ml-5 aspect-square h-[100px] w-[150px] object-cover lg:h-[134px] lg:w-[200px]"
-                    />
+                    <div className="relative ml-5 h-[100px] w-[150px] lg:h-[134px] lg:w-[200px]">
+                      <Image
+                        src={item.cover}
+                        alt="testing"
+                        fill
+                        quality={100}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
                   )}
                 </Link>
               </div>

@@ -4,8 +4,10 @@ import { ApiResponse, ArticleType } from "@/types";
 
 export type TArticleRequestCreate = Pick<
   articleType,
-  "author" | "cover" | "content" | "title" | "status"
-> & {};
+  "author" | "content" | "title" | "status"
+> & {
+  cover: string | null;
+};
 
 export class articleServices {
   static async findArticle(slug: string): Promise<ArticleType> {

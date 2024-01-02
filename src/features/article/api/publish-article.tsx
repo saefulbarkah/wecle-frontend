@@ -4,11 +4,14 @@ import { ApiResponse } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
-export const usePublishArticle = () => {
+type Toptions = {
+  onSuccess?: () => void;
+  onMutate?: () => void;
+};
+
+export const usePublishArticle = (options?: Toptions) => {
   const router = useRouter();
-  const idLoading = "publishing-article";
   return useMutation<
     AxiosResponse<ApiResponse>,
     AxiosError<ApiResponse>,
@@ -17,16 +20,15 @@ export const usePublishArticle = () => {
     mutationKey: ["publish-article"],
     mutationFn: ({ data, token }) => articleServices.create({ ...data }, token),
     onSuccess: () => {
-      toast.success("Your article has been published", { id: idLoading });
+      if (options?.onSuccess) {
+        options.onSuccess();
+      }
       router.replace("/");
     },
-    onError: (e, data) => {
-      console.log(data);
-    },
     onMutate: () => {
-      toast.loading("Publishing your article, please wait...", {
-        id: idLoading,
-      });
+      if (options?.onMutate) {
+        options.onMutate();
+      }
     },
   });
 };

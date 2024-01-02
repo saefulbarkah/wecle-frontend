@@ -18,14 +18,15 @@ import "./editor.css";
 import { FloatingMenu } from "./menus/floating-menu";
 import { useEffect } from "react";
 import { useEditorStore } from "./store";
-import { articleType, useArticleState } from "@/stores/article-store";
+import { useArticleState } from "@/stores/article-store";
 import { BubbleMenu } from "./menus/bubble-menu";
+import { ArticleTypeResponse } from "@/types";
 
 const ContentEditor = ({
   data,
   editable,
 }: {
-  data?: articleType | null;
+  data?: ArticleTypeResponse;
   editable: boolean;
 }) => {
   const editorState = useEditorStore((state) => state);

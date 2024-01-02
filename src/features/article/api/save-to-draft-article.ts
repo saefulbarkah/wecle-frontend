@@ -9,7 +9,8 @@ import toast from "react-hot-toast";
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
 
-type post = Pick<articleType, "content" | "title" | "author" | "cover"> & {
+type post = Pick<articleType, "content" | "title" | "author"> & {
+  cover?: string | null;
   id?: string | undefined;
 };
 
@@ -32,14 +33,18 @@ const saveToDraft = (data: Partial<post>, token: string) => {
 };
 
 type request = Required<Pick<articleType, "content" | "title" | "author">> & {
-  cover?: articleType["cover"];
+  cover?: string | null;
   id?: string;
 };
 
-export const useSaveDraft = () => {
+type Toptions = {
+  onSuccess?: (res: response) => void;
+  onMutate?: () => void;
+};
+
+export const useSaveDraft = (options?: Toptions) => {
   const query = useQueryClient();
   const article = useArticleState((state) => state);
-  const isSavingID = "saving-draft";
 
   return useMutation<
     response,
@@ -49,10 +54,10 @@ export const useSaveDraft = () => {
     mutationKey: ["save-draft"],
     mutationFn: ({ data, token }) => saveToDraft(data, token),
     onSuccess: async (res, data) => {
-      query.invalidateQueries({ queryKey: ["draft"] });
-      toast.success(res.data.message, {
-        id: isSavingID,
-      });
+      await query.invalidateQueries({ queryKey: ["draft"] });
+      if (options?.onSuccess) {
+        options.onSuccess(res);
+      }
       const response = res.data;
       if (!response.data) return;
       const { _id, author, content, title, cover } = response.data;
@@ -79,9 +84,9 @@ export const useSaveDraft = () => {
       return toast.error(response?.message as string);
     },
     onMutate: () => {
-      toast.loading("Saving draft....", {
-        id: isSavingID,
-      });
+      if (options?.onMutate) {
+        options.onMutate();
+      }
     },
   });
 };

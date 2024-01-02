@@ -1,11 +1,11 @@
 import React from "react";
 import TitleEditor from "./title-editor";
 import ContentEditor from "./content-editor";
-import { articleType } from "@/stores/article-store";
 import UploadThumbnail from "./upload-thumbnail";
+import { ArticleTypeResponse } from "@/types";
 
 type TEditor = {
-  article?: articleType;
+  article?: ArticleTypeResponse;
   isPublishing: Boolean;
 };
 

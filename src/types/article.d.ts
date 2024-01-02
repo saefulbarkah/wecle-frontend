@@ -13,3 +13,11 @@ export type ArticleType = TDate & {
   content: string;
   slug: string;
 };
+export type ArticleTypeResponse = TDate & {
+  _id: string;
+  title: string;
+  author: string;
+  cover: string;
+  content: string;
+  slug: string;
+};

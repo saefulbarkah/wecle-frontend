@@ -8,7 +8,8 @@ import { EditorContent, Extension, useEditor } from "@tiptap/react";
 import React, { useEffect } from "react";
 import { useEditorStore } from "./store";
 import { create } from "zustand";
-import { articleType, useArticleState } from "@/stores/article-store";
+import { useArticleState } from "@/stores/article-store";
+import { ArticleTypeResponse } from "@/types";
 
 type State = {
   title: string;
@@ -30,7 +31,7 @@ const TitleEditor = ({
   data,
   editable,
 }: {
-  data?: articleType;
+  data?: ArticleTypeResponse;
   editable: boolean;
 }) => {
   const editorState = useEditorStore((state) => state);
