@@ -12,7 +12,7 @@ type TEditor = {
 export const Editor = ({ article, isPublishing }: TEditor) => {
   return (
     <>
-      <UploadThumbnail />
+      <UploadThumbnail data={article} />
       <TitleEditor data={article} editable={!isPublishing} />
       <ContentEditor data={article} editable={!isPublishing} />
     </>

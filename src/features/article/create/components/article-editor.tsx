@@ -21,7 +21,11 @@ export const CreateArticle = () => {
   const isPublishing = useIsMutating({ mutationKey: ["create-article"] });
   const [id, setID] = useState<string | null>(null);
   const draftID = useSearchParams().get("draftId") || null;
-  const { data: article, isLoading } = useFindDraft({
+  const {
+    data: article,
+    isLoading,
+    isError,
+  } = useFindDraft({
     id: id,
   });
 
@@ -47,6 +51,12 @@ export const CreateArticle = () => {
       setID(draftID);
     }
   }, [draftID]);
+
+  useEffect(() => {
+    if (isError) {
+      window.history.pushState("", "", "/article/new");
+    }
+  }, [draftID, isError]);
 
   return (
     <>

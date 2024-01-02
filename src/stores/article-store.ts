@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 export type articleType = {
   _id?: string | null;
@@ -19,9 +18,23 @@ type Action = {
   reset: () => void;
 };
 
-export const useArticleState = create(
-  persist<State & Action>(
-    (set) => ({
+export const useArticleState = create<State & Action>((set) => ({
+  article: {
+    _id: null,
+    author: null,
+    title: null,
+    content: null,
+    cover: null,
+    status: "DRAFT",
+  },
+
+  setArticle: (data) =>
+    set((state) => ({
+      article: { ...state.article, ...data },
+    })),
+
+  reset: () =>
+    set({
       article: {
         _id: null,
         author: null,
@@ -30,26 +43,5 @@ export const useArticleState = create(
         cover: null,
         status: "DRAFT",
       },
-
-      setArticle: (data) =>
-        set((state) => ({
-          article: { ...state.article, ...data },
-        })),
-
-      reset: () =>
-        set({
-          article: {
-            _id: null,
-            author: null,
-            title: null,
-            content: null,
-            cover: null,
-            status: "DRAFT",
-          },
-        }),
     }),
-    {
-      name: "article-store",
-    },
-  ),
-);
+}));

@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 
-type post = Partial<Pick<articleType, "content" | "title">> & {
+type post = Partial<Pick<articleType, "content" | "title" | "cover">> & {
   author: string;
   status?: "RELEASE" | "DRAFT";
 };

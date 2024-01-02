@@ -9,18 +9,19 @@ import toast from "react-hot-toast";
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
 
-type post = Pick<articleType, "content" | "title" | "author"> & {
-  id: string | null | undefined;
+type post = Pick<articleType, "content" | "title" | "author" | "cover"> & {
+  id?: string | undefined;
 };
 
-const saveToDraft = (data: Partial<articleType>, token: string) => {
+const saveToDraft = (data: Partial<post>, token: string) => {
   return API.axios.post<any, response, post>(
     "/article/save/draft",
     {
-      id: data._id,
+      id: data.id,
       title: data.title,
       content: data.content,
       author: data.author,
+      cover: data.cover,
     },
     {
       headers: {
@@ -28,6 +29,11 @@ const saveToDraft = (data: Partial<articleType>, token: string) => {
       },
     },
   );
+};
+
+type request = Required<Pick<articleType, "content" | "title" | "author">> & {
+  cover?: articleType["cover"];
+  id?: string;
 };
 
 export const useSaveDraft = () => {
@@ -38,11 +44,11 @@ export const useSaveDraft = () => {
   return useMutation<
     response,
     AxiosError<ApiResponse>,
-    { data: Partial<articleType>; token: string }
+    { data: request; token: string }
   >({
     mutationKey: ["save-draft"],
     mutationFn: ({ data, token }) => saveToDraft(data, token),
-    onSuccess: async (res) => {
+    onSuccess: async (res, data) => {
       query.invalidateQueries({ queryKey: ["draft"] });
       toast.success(res.data.message, {
         id: isSavingID,

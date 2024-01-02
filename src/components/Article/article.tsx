@@ -35,28 +35,31 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
               <div className="mt-5">
                 <Link
                   href={`/article/${encodeURIComponent(item.slug)}`}
-                  className="flex w-full items-center justify-between gap-2 lg:block"
+                  className="flex w-full justify-between gap-2"
                 >
-                  <h2 className="line-clamp-2 text-lg font-bold">
-                    {item.title}
-                  </h2>
-                  <div className="mt-5 flex justify-between gap-5">
-                    <p className="text-md line-clamp-3 hidden break-all font-serif lg:block">
-                      {limitText({
-                        limit: 301,
-                        text: htmlToText(item.content),
-                      })}
-                    </p>
+                  <div className="flex-1">
+                    <h2 className="line-clamp-2 break-all text-[20px] font-bold">
+                      {item.title}
+                    </h2>
+                    <div className="mt-2 hidden justify-between gap-5 lg:flex">
+                      <p className="text-md line-clamp-3 break-all font-serif">
+                        {limitText({
+                          limit: 301,
+                          text: htmlToText(item.content),
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  {item.cover && (
                     <Image
-                      src={"https://picsum.photos/1280/720"}
+                      src={item.cover}
                       alt="testing"
-                      sizes="100vw"
                       width={0}
                       height={0}
-                      priority
-                      className="h-[56px] w-[80px] border object-cover lg:h-[112px] lg:w-[112px]"
+                      quality={90}
+                      className="ml-5 aspect-square h-[100px] w-[150px] object-cover lg:h-[134px] lg:w-[200px]"
                     />
-                  </div>
+                  )}
                 </Link>
               </div>
             </div>

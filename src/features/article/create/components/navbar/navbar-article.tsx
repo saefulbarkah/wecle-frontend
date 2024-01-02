@@ -76,7 +76,16 @@ export const NavbarArticle = () => {
       return toast.error("Unauthorized");
     }
 
-    saveToDraft({ data: { ...article }, token: session.token });
+    saveToDraft({
+      data: {
+        id: article._id || undefined,
+        author: article.author as string,
+        content: article.content,
+        title: article.title,
+        cover: article.cover,
+      },
+      token: session.token,
+    });
   };
 
   useEffect(() => {

@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FileRejection, useDropzone } from "react-dropzone";
-import { useArticleState } from "@/stores/article-store";
+import { articleType, useArticleState } from "@/stores/article-store";
 
 type Timage = {
   src?: string | null;
   name?: string | null;
 };
 
-const UploadThumbnail = () => {
+const UploadThumbnail = ({ data }: { data?: articleType }) => {
   const setArticle = useArticleState((state) => state.setArticle);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [images, setImages] = useState<Timage>({});
@@ -49,12 +49,19 @@ const UploadThumbnail = () => {
   const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [".png", ".jpeg"],
+      "image/*": [".png", ".jpeg", ".webp"],
     },
     maxFiles: 1,
     maxSize: 5242880,
   });
-
+  useEffect(() => {
+    if (data) {
+      setImages({
+        src: data.cover,
+      });
+      setOpen(true);
+    }
+  }, [data]);
   return (
     <div className="mt-5">
       <div className="flex justify-center lg:justify-start">

@@ -9,6 +9,7 @@ export type ArticleType = TDate & {
     avatar: string;
     user: string;
   };
+  cover: string;
   content: string;
   slug: string;
 };

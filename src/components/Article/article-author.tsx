@@ -18,22 +18,24 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
         {data?.map((item, i) => (
           <article className="h-full w-full" key={i}>
             <div>
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/article/${encodeURIComponent(item.slug)}`}
-                  className="mr-10 flex w-full flex-col gap-2"
+              <div className="mb-2">
+                <time
+                  dateTime={timeAgo(item.createdAt)}
+                  aria-label="Date article created"
+                  className="text-sm"
                 >
-                  <time
-                    dateTime={timeAgo(item.createdAt)}
-                    aria-label="Date article created"
-                    className="mb-3"
-                  >
-                    {timeAgo(item.createdAt)}
-                  </time>
-                  <h2 className="line-clamp-2 text-lg font-bold">
+                  {timeAgo(item.createdAt)}
+                </time>
+              </div>
+              <Link
+                href={`/article/${encodeURIComponent(item.slug)}`}
+                className="flex w-full justify-between gap-2"
+              >
+                <div className="flex-1">
+                  <h2 className="line-clamp-2 break-all text-[20px] font-bold">
                     {item.title}
                   </h2>
-                  <div className="hidden flex-col gap-3 lg:flex">
+                  <div className="hidden justify-between gap-5 lg:mt-1 lg:flex">
                     <p className="text-md line-clamp-3 break-all font-serif">
                       {limitText({
                         limit: 301,
@@ -41,17 +43,18 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
                       })}
                     </p>
                   </div>
-                </Link>
-                <Image
-                  src={"https://picsum.photos/1280/720"}
-                  alt="testing"
-                  sizes="100vw"
-                  width={0}
-                  height={0}
-                  priority
-                  className="h-[56px] w-[80px] border object-cover lg:h-[112px] lg:w-[112px]"
-                />
-              </div>
+                </div>
+                {item.cover && (
+                  <Image
+                    src={item.cover}
+                    alt="testing"
+                    width={0}
+                    height={0}
+                    quality={90}
+                    className="ml-5 aspect-square h-[100px] w-[150px] object-cover lg:h-[134px] lg:w-[200px]"
+                  />
+                )}
+              </Link>
             </div>
             <div className="py-10">
               <div className="h-[1px] w-full bg-secondary/10"></div>

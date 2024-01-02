@@ -20,7 +20,7 @@ export default async function AuthorPage({
         </h2>
         <div className="md:mt-5">
           <TabUnderline.Tabs defaultValue="home">
-            <TabUnderline.Lists className="sticky top-[60px] flex h-full w-full items-center">
+            <TabUnderline.Lists className="sticky top-[60px] z-50 flex h-full w-full items-center">
               <TabUnderline.Item className="pt-5" value="home" label="home" />
               <TabUnderline.Item className="pt-5" value="about" label="about" />
             </TabUnderline.Lists>

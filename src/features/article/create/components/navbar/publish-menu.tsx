@@ -42,6 +42,7 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
 
   const handlePublish = () => {
     if (isDisabled) return;
+    console.log(article);
     if (!article._id) {
       return publishArticle({
         data: {
@@ -56,8 +57,11 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
     }
     UpdateArticle({
       data: {
-        status: "RELEASE",
         author: article.author as string,
+        content: article.content,
+        title: article.title,
+        cover: article.cover,
+        status: "RELEASE",
       },
       id: article._id as string,
       token: token as string,
