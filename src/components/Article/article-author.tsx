@@ -46,7 +46,7 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
                 </div>
                 {item.cover && (
                   <Image
-                    src={item.cover}
+                  src={item.cover.src}
                     alt="testing"
                     width={0}
                     height={0}

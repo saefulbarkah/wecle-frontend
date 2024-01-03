@@ -4,9 +4,9 @@ import { ApiResponse, ArticleType } from "@/types";
 
 export type TArticleRequestCreate = Pick<
   articleType,
-  "author" | "content" | "title" | "status"
+  "author" | "content" | "title" | "status" | "cover"
 > & {
-  cover: string | null;
+  id?: string | null;
 };
 
 export class articleServices {

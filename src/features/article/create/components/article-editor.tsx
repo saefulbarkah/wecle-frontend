@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useIsMutating } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useAuth } from "@/stores/auth-store";
-import { useArticleState } from "@/stores/article-store";
+import { articleType, useArticleState } from "@/stores/article-store";
 
 const EditorArticle = dynamic(
   () => import("./Editor/Editor").then((data) => data.Editor),
@@ -26,6 +26,7 @@ export const CreateArticle = () => {
     data: article,
     isLoading,
     isError,
+    isRefetching,
   } = useFindDraft({
     id: id,
   });
@@ -40,21 +41,22 @@ export const CreateArticle = () => {
   useEffect(() => {
     const bindstate = () => {
       if (article) {
+        let cover: articleType["cover"] = null;
+        if (article.cover) {
+          cover = article.cover;
+        }
         articleState.setArticle({
           _id: article._id,
           author: article.author,
           content: article.content,
           title: article.title,
-          cover: {
-            type: "URL",
-            src: article.cover as string,
-          },
+          cover: cover,
         });
       }
     };
     bindstate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [article]);
+  }, [article, isRefetching]);
 
   useEffect(() => {
     if (draftID) {

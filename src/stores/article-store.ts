@@ -7,9 +7,10 @@ export type articleType = {
   author?: string | null;
   status?: "DRAFT" | "RELEASE";
   cover?: {
-    type: "BASE64" | "URL" | null;
+    name: string | null;
     src: string | null;
-  };
+    type?: "BASE64" | "URL" | null;
+  } | null;
 };
 
 type State = {
@@ -30,6 +31,7 @@ export const useArticleState = create<State & Action>((set) => ({
     title: null,
     content: null,
     cover: {
+      name: null,
       type: null,
       src: null,
     },
@@ -50,6 +52,7 @@ export const useArticleState = create<State & Action>((set) => ({
         title: null,
         content: null,
         cover: {
+          name: null,
           type: null,
           src: null,
         },

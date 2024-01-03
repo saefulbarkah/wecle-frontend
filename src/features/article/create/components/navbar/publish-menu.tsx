@@ -14,8 +14,8 @@ import { useAuth } from "@/stores/auth-store";
 import { usePublishArticle } from "@/features/article/api/publish-article";
 import { cn } from "@/lib/utils";
 import { UploadIcon } from "lucide-react";
-import { useImbbUpload } from "@/features/article/api/upload-image";
 import toast from "react-hot-toast";
+import { useUploaImage } from "@/hooks/use-upload-image";
 
 type Tbutton = ButtonProps & {
   withIcon?: boolean;
@@ -52,7 +52,7 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
       });
     },
   });
-  const { mutateAsync: uploadCover } = useImbbUpload({
+  const { uploadCoverArticle } = useUploaImage({
     onMutate: () => {
       toast.loading("Publishing your article, please wait...", {
         id: idOnPublishing,
@@ -62,16 +62,7 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
 
   const handlePublish = async () => {
     if (isDisabled) return;
-    let cover: string | null = null;
-    if (article.cover?.type === "BASE64") {
-      const response = await uploadCover({
-        image: article.cover.src as string,
-      });
-      cover = response.data.data.url;
-    } else if (article.cover?.type === "URL") {
-      cover = article.cover.src;
-    }
-
+    const cover = await uploadCoverArticle(article);
     if (!article._id) {
       return publishArticle({
         data: {
@@ -84,12 +75,13 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
         token: token as string,
       });
     }
+
     UpdateArticle({
       data: {
         author: article.author as string,
         content: article.content,
         title: article.title,
-        cover: article.cover,
+        cover: cover,
         status: "RELEASE",
       },
       id: article._id as string,

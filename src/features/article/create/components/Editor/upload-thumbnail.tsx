@@ -5,14 +5,19 @@ import toast from "react-hot-toast";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useArticleState } from "@/stores/article-store";
 import { ArticleTypeResponse } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Timage = {
-  type?: "URL" | "BASE64";
+  type?: "URL" | "BASE64" | null;
   src?: string | null;
   name?: string | null;
 };
 
 const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
+  const queryClient = useQueryClient();
+  const isRefetching = queryClient.isFetching({
+    queryKey: ["find-draft", data?._id],
+  });
   const setArticle = useArticleState((state) => state.setArticle);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [images, setImages] = useState<Timage>({});
@@ -43,6 +48,7 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
           });
           setArticle({
             cover: {
+              name: file.name,
               type: "BASE64",
               src: base64String,
             },
@@ -64,13 +70,22 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
   });
   useEffect(() => {
     if (data) {
+      if (data.cover?.src) {
+        setImages({
+          type: "URL",
+          src: data.cover.src,
+          name: data.cover.name,
+        });
+        setOpen(true);
+        return;
+      }
       setImages({
-        type: "URL",
-        src: data.cover,
+        type: null,
+        src: null,
       });
-      setOpen(true);
+      setOpen(false);
     }
-  }, [data]);
+  }, [data, isRefetching]);
 
   return (
     <div className="mt-5">
@@ -118,16 +133,18 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
             )}
 
             {images.src && (
-              <div className="relative h-[150px] w-[200px]">
+              <div className="relative h-[120px] w-[200px]">
                 <Image
                   src={
                     images.type === "URL"
                       ? images.src
                       : "data:image/png;base64," + images.src
                   }
-                  alt={images.name as string}
                   fill
-                  className="w-[150px] object-scale-down"
+                  quality={10}
+                  alt={images.name as string}
+                  className="object-scale-down"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 10vw, 10vw"
                 />
               </div>
             )}
@@ -147,6 +164,7 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
                     onClick={() => {
                       setOpen(false);
                       setImages({ src: null });
+                      setArticle({ cover: null });
                     }}
                     variant={"destructive"}
                     size={"sm"}

@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
 import Image from "next/image";
 import {
   useNotification,
@@ -107,14 +106,13 @@ export const NotificationMenu = () => {
                     }
                   >
                     <div className="flex gap-2">
-                      <Avatar className="h-8 w-8">
-                        <Image
-                          src={item.sender.author.avatar}
-                          alt="testing"
-                          fill
-                          unoptimized
-                        />
-                      </Avatar>
+                      <Image
+                        src={item.sender.author.avatar}
+                        alt="testing"
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
                       <div className="flex flex-col">
                         <p className="text-xs">{timeAgo(item.createdAt)}</p>
                         <p className="line-clamp-1 text-xs">

@@ -1,3 +1,4 @@
+import { articleType } from "@/stores/article-store";
 import { TDate } from "./global";
 
 export type ArticleType = TDate & {
@@ -9,7 +10,10 @@ export type ArticleType = TDate & {
     avatar: string;
     user: string;
   };
-  cover: string;
+  cover?: {
+    name: string;
+    src: string;
+  };
   content: string;
   slug: string;
 };
@@ -17,7 +21,8 @@ export type ArticleTypeResponse = TDate & {
   _id: string;
   title: string;
   author: string;
-  cover: string;
+  cover: articleType["cover"];
+  staus: articleType["status"];
   content: string;
   slug: string;
 };

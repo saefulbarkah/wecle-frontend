@@ -6,15 +6,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import API from "@/api";
 import toast from "react-hot-toast";
+import { TArticleRequestCreate } from "@/services/article";
 
 type response = AxiosResponse<ApiResponse<Partial<articleType>>>;
 
-type post = Pick<articleType, "content" | "title" | "author"> & {
-  cover?: string | null;
-  id?: string | undefined;
+type post = Pick<articleType, "content" | "title" | "author" | "cover"> & {
+  id?: string | undefined | null;
 };
 
-const saveToDraft = (data: Partial<post>, token: string) => {
+const saveToDraft = (data: post, token: string) => {
   return API.axios.post<any, response, post>(
     "/article/save/draft",
     {
@@ -32,11 +32,6 @@ const saveToDraft = (data: Partial<post>, token: string) => {
   );
 };
 
-type request = Required<Pick<articleType, "content" | "title" | "author">> & {
-  cover?: string | null;
-  id?: string;
-};
-
 type Toptions = {
   onSuccess?: (res: response) => void;
   onMutate?: () => void;
@@ -49,7 +44,7 @@ export const useSaveDraft = (options?: Toptions) => {
   return useMutation<
     response,
     AxiosError<ApiResponse>,
-    { data: request; token: string }
+    { data: TArticleRequestCreate; token: string }
   >({
     mutationKey: ["save-draft"],
     mutationFn: ({ data, token }) => saveToDraft(data, token),

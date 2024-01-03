@@ -53,11 +53,14 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                   {item.cover && (
                     <div className="relative ml-5 h-[100px] w-[150px] lg:h-[134px] lg:w-[200px]">
                       <Image
-                        src={item.cover}
+                        src={item.cover.src}
                         alt="testing"
                         fill
-                        quality={100}
-                        className="h-full w-full object-cover"
+                        placeholder="empty"
+                        blurDataURL={`/no-images.webp`}
+                        quality={50}
+                        priority
+                        className="h-full w-full object-scale-down"
                       />
                     </div>
                   )}

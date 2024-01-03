@@ -35,16 +35,21 @@ type ApiResponse = {
   status: number;
 };
 
-type TOptions = {
+export type TOptionsUploadMutation = {
   onSuccess?: () => void;
   onMutate?: () => void;
 };
 
-export const useImbbUpload = (options?: TOptions) => {
+export const useImbbUpload = (options?: TOptionsUploadMutation) => {
   return useMutation<AxiosResponse<ApiResponse>, AxiosError, { image: string }>(
     {
       mutationKey: ["upload-image"],
       mutationFn: (data) => UploadServices.Upload(data.image),
+      onSuccess: () => {
+        if (options?.onSuccess) {
+          options.onSuccess();
+        }
+      },
       onMutate: () => {
         if (options?.onMutate) {
           options.onMutate();

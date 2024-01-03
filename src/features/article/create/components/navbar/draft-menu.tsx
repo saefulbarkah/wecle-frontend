@@ -11,11 +11,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDraftLists } from "@/features/article/api/draft-list";
 import { cn } from "@/lib/utils";
 import { ArticleType } from "@/types";
-import { LucideArchive, Search } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Loader2, LucideArchive, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
 export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
+  const [isLoading, setLoading] = useState<{ [key: string]: boolean } | null>(
+    null,
+  );
+  const draftID = useSearchParams().get("draftId") || null;
+  const queryClient = useQueryClient();
   const router = useRouter();
   const query = useSearchParams().get("draftId");
   const [open, setOpen] = useState(false);
@@ -32,9 +38,16 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, data]);
 
-  const handleDraft = (data: ArticleType) => {
-    router.push("?draftId=" + data._id);
+  const handleDraft = async (data: ArticleType, index: number) => {
+    setLoading((state) => ({ ...state, [index]: true }));
+    if (draftID) {
+      await queryClient.refetchQueries({
+        queryKey: ["find-draft", draftID],
+      });
+    }
+    router.replace("?draftId=" + data._id);
     setOpen(false);
+    setLoading((state) => ({ ...state, [index]: false }));
   };
 
   useEffect(() => {
@@ -91,15 +104,25 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
                 {draft?.map((item, i) => (
                   <React.Fragment key={i}>
                     <button
-                      className={`flex w-full cursor-pointer items-center py-2 text-start hover:bg-blue-50 ${
+                      className={`flex w-full cursor-pointer items-center py-2 text-start hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50 ${
                         item._id === query && "bg-blue-50"
                       }`}
-                      onClick={() => handleDraft(item)}
+                      disabled={isLoading ? isLoading[i] : false}
+                      onClick={() => handleDraft(item, i)}
                     >
-                      <div className="px-4">
-                        <p className="text-md line-clamp-1 capitalize">
+                      <div className="flex w-full items-center justify-between px-4">
+                        <p className="text-md line-clamp-1 break-all capitalize">
                           {item.title}
                         </p>
+                        <div>
+                          {isLoading && (
+                            <>
+                              {isLoading[i] && (
+                                <Loader2 className="ml-5 mr-5 animate-spin" />
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </button>
                   </React.Fragment>

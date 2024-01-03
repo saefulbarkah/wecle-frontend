@@ -15,8 +15,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useImbbUpload } from "@/features/article/api/upload-image";
 import Link from "next/link";
+import { useUploaImage } from "@/hooks/use-upload-image";
 
 const NavigateBack = () => {
   const reset = useArticleState((state) => state.reset);
@@ -76,7 +76,7 @@ export const NavbarArticle = () => {
   );
   const article = useArticleState((state) => state.article);
   const [disableSaveToDraft, setDisableSaveToDraft] = useState<boolean>(true);
-  const { mutateAsync: uploadImage } = useImbbUpload({
+  const { uploadCoverArticle } = useUploaImage({
     onMutate: () => {
       toast.loading("Saving draft....", {
         id: isSavingID,
@@ -92,19 +92,12 @@ export const NavbarArticle = () => {
       setDisableSaveToDraft(true);
       return toast.error("Unauthorized");
     }
-    let cover: string | null | undefined = null;
-    if (article.cover?.type === "BASE64") {
-      const response = await uploadImage({
-        image: article.cover.src as string,
-      });
-      cover = response.data.data.url;
-    } else if (article.cover?.type === "URL") {
-      cover = article.cover.src;
-    }
+    // uploading image cover
+    const cover = await uploadCoverArticle(article);
 
     saveToDraft({
       data: {
-        id: article._id || undefined,
+        id: article._id,
         author: article.author as string,
         content: article.content,
         title: article.title,

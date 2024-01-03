@@ -91,7 +91,13 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
         <div className="flex w-full gap-2">
           <Avatar>
             {session && (
-              <Image fill src={session.avatar as string} alt="testing" />
+              <Image
+                src={session.avatar as string}
+                width={48}
+                height={48}
+                className="h-10 w-10"
+                alt={`${session.name}`}
+              />
             )}
             <AvatarFallback>US</AvatarFallback>
           </Avatar>

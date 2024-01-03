@@ -9,10 +9,8 @@ import { AxiosResponse } from "axios";
 
 export type TarticleEditor = Pick<
   articleType,
-  "_id" | "author" | "content" | "status" | "title"
-> & {
-  cover?: string;
-};
+  "_id" | "author" | "content" | "status" | "title" | "cover"
+> & {};
 
 type response = AxiosResponse<ApiResponse<TarticleEditor>>;
 
@@ -47,6 +45,5 @@ export const useFindDraft = ({ id }: { id: string | null }) => {
         { author_id: session?.author_id, id: id as string },
         session?.token as string,
       ),
-    retry: 0,
   });
 };
