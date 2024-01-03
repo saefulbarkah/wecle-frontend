@@ -29,6 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: "Article - " + article.data.title,
       description: article.data.title,
       keywords: [`${article.data.author.name}`, ...keywords],
+      openGraph: {
+        title: article.data.title,
+        description: article.data.title,
+        images: article.data.cover?.src,
+      },
     };
   } catch (error) {
     throw error;
