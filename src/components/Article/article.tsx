@@ -24,12 +24,7 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 prefetch={false}
               >
                 <Avatar className="h-[30px] w-[30px]">
-                  <Image
-                    alt={`avatar`}
-                    src={`${item.author.avatar}`}
-                    fill
-                    unoptimized
-                  />
+                  <Image alt={`avatar`} src={`${item.author.avatar}`} fill />
                 </Avatar>
                 <p className="text-sm font-semibold">{item.author.name}</p>
               </Link>
@@ -62,6 +57,7 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                         blurDataURL={`/no-images.webp`}
                         quality={50}
                         priority
+                        sizes="100%"
                         className="h-full w-full object-scale-down"
                       />
                     </div>

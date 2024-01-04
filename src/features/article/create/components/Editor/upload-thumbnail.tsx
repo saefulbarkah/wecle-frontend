@@ -135,11 +135,7 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
             {images.src && (
               <div className="relative h-[120px] w-[200px]">
                 <Image
-                  src={
-                    images.type === "URL"
-                      ? images.src
-                      : "data:image/png;base64," + images.src
-                  }
+                  src={"data:image/png;base64," + images.src}
                   fill
                   quality={10}
                   alt={images.name as string}

@@ -7,8 +7,8 @@ export type articleType = {
   author?: string | null;
   status?: "DRAFT" | "RELEASE";
   cover?: {
-    name: string | null;
-    src: string | null;
+    name?: string | null;
+    src?: string | null;
     type?: "BASE64" | "URL" | null;
   } | null;
 };

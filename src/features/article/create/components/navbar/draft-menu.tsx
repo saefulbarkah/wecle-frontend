@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
 export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
+  const [apiStatus, setApiStatus] = useState(false);
   const [isLoading, setLoading] = useState<{ [key: string]: boolean } | null>(
     null,
   );
@@ -25,8 +26,9 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
   const router = useRouter();
   const query = useSearchParams().get("draftId");
   const [open, setOpen] = useState(false);
-  const { data } = useDraftLists();
-
+  const { data, isFetching: loadingDraft } = useDraftLists({
+    enabled: apiStatus,
+  });
   const [search, setSearch] = useState<string>("");
 
   // memoize data client side
@@ -47,11 +49,14 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
     }
     router.replace("?draftId=" + data._id);
     setOpen(false);
-    setLoading((state) => ({ ...state, [index]: false }));
+    setLoading(null);
   };
 
   useEffect(() => {
     setSearch("");
+    if (open) {
+      setApiStatus(true);
+    }
   }, [open]);
 
   return (
@@ -85,14 +90,14 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
             </label>
 
             {/* check if not search and original data array 0 send a message */}
-            {draft?.length === 0 && !search && (
+            {draft?.length === 0 && !search && !loadingDraft && (
               <div className="mt-[120px] flex w-full items-center justify-center">
                 <p className="text-lg">Draft is empty</p>
               </div>
             )}
 
             {/* check if on search and results array 0 send a message */}
-            {draft?.length === 0 && search && (
+            {draft?.length === 0 && search && !loadingDraft && (
               <div className="mt-[120px] flex w-full items-center justify-center">
                 <p className="text-lg">Result not found</p>
               </div>
@@ -101,13 +106,20 @@ export const DraftMenu = ({ buttonProps }: { buttonProps?: ButtonProps }) => {
             {/* item draft */}
             <ScrollArea className="h-screen w-full sm:h-96">
               <div className="mb-5 mt-2 divide-y">
+                {loadingDraft && (
+                  <div className="flex h-72 w-full items-center justify-center">
+                    <div className="flex h-12 w-12 items-center justify-center">
+                      <Loader2 className="h-full w-full animate-spin" />
+                    </div>
+                  </div>
+                )}
                 {draft?.map((item, i) => (
                   <React.Fragment key={i}>
                     <button
                       className={`flex w-full cursor-pointer items-center py-2 text-start hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50 ${
                         item._id === query && "bg-blue-50"
                       }`}
-                      disabled={isLoading ? isLoading[i] : false}
+                      disabled={isLoading ? true : false}
                       onClick={() => handleDraft(item, i)}
                     >
                       <div className="flex w-full items-center justify-between px-4">

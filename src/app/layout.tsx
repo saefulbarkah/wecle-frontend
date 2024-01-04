@@ -4,7 +4,7 @@ import "./globals.css";
 import QueryProvider from "@/providers/query-provider";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
-import { description, keywords, title } from "@/lib/meta-data";
+import { description, keywords, metadataBase, title } from "@/lib/meta-data";
 import { getServerSession } from "@/hooks/sessions/server";
 import AuthProvider from "@/providers/auth-provider";
 import { CreatePortal } from "@/components/create-portal";
@@ -27,6 +27,7 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: metadataBase,
   title: title,
   description: description,
   keywords: keywords,

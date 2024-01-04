@@ -50,7 +50,11 @@ export const CreateArticle = () => {
           author: article.author,
           content: article.content,
           title: article.title,
-          cover: cover,
+          cover: {
+            name: cover?.name,
+            src: cover?.src,
+            type: "BASE64",
+          },
         });
       }
     };

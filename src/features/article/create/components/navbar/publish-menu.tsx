@@ -23,20 +23,23 @@ type Tbutton = ButtonProps & {
 
 export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
   const idOnPublishing = "publishing-article";
+  // state status
+  const [isDisabled, setDisabled] = useState(true);
+  const [isNotAllowed, setIsNotAllowed] = useState(true);
+  const [isOnPublish, setIsOnPublish] = useState(false);
 
   const router = useRouter();
   const resetState = useArticleState((state) => state.reset);
   const token = useAuth((state) => state.token);
   const [showAlert, setShowAlert] = useState(false);
   const article = useArticleState((state) => state.article);
-  const [isDisabled, setDisabled] = useState(true);
 
   const { mutate: UpdateArticle } = useUpdateArticle({
     onSuccess: () => {
       router.replace("/");
-      setTimeout(() => {
-        resetState();
-      }, 1000);
+      resetState();
+      setDisabled(false);
+      setIsOnPublish(false);
     },
     onSuccessAlertMsg: "Your article has been published",
     onMutateAlertMsg: "Publishing your article, please wait...",
@@ -45,6 +48,9 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
   const { mutateAsync: publishArticle } = usePublishArticle({
     onSuccess: () => {
       toast.success("Your article has been published", { id: idOnPublishing });
+      resetState();
+      setDisabled(false);
+      setIsOnPublish(false);
     },
     onMutate: () => {
       toast.loading("Publishing your article, please wait...", {
@@ -62,7 +68,11 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
 
   const handlePublish = async () => {
     if (isDisabled) return;
+    setDisabled(true);
+    setIsOnPublish(true);
     const cover = await uploadCoverArticle(article);
+
+    // direct publish article
     if (!article._id) {
       return publishArticle({
         data: {
@@ -76,6 +86,7 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
       });
     }
 
+    // just update a article for publishing
     UpdateArticle({
       data: {
         author: article.author as string,
@@ -94,7 +105,14 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
     if (article) {
       const isTitleEmpty = article.title;
       const isContentEmpty = article.content;
-      if (!isTitleEmpty || !isContentEmpty) return setDisabled(true);
+      if (!isTitleEmpty || !isContentEmpty) {
+        if (!isOnPublish) {
+          setDisabled(true);
+          setIsNotAllowed(true);
+        }
+        return;
+      }
+      setIsNotAllowed(false);
       setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,15 +122,16 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
     <>
       <div className="relative">
         <Popover
-          open={isDisabled ? showAlert : false}
+          open={isNotAllowed ? showAlert : false}
           onOpenChange={setShowAlert}
         >
           <PopoverTrigger asChild>
             <Button
               variant={"success"}
               size={buttonProps?.size || "sm"}
+              disabled={isDisabled}
               className={cn(
-                `${isDisabled ? "opacity-50" : "opacity-100"} w-full`,
+                `w-full disabled:pointer-events-none disabled:opacity-50`,
                 buttonProps!.className as string,
               )}
               onClick={() => handlePublish()}

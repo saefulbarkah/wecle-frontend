@@ -47,6 +47,7 @@ export const ShowArticle = ({ data }: { data: ArticleType }) => {
             src={article.cover.src}
             alt="testing"
             fill
+            sizes="100%"
             priority
             className="object-contain"
           />
