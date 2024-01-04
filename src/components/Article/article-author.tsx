@@ -30,6 +30,7 @@ export const ArticleAuthor = React.forwardRef<HTMLDivElement, articleProps>(
               <Link
                 href={`/article/${encodeURIComponent(item.slug)}`}
                 className="flex w-full justify-between gap-2"
+                prefetch={false}
               >
                 <div className="flex-1">
                   <h2 className="line-clamp-2 break-all text-[20px] font-bold">
