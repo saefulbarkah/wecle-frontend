@@ -1,11 +1,11 @@
 "use client";
 
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { useLikeCommentMutation } from "@/features/article/api/like-comment";
 import { timeAgo } from "@/lib/time";
 import { findCommentType } from "@/types";
-import { Dot, MessageCircle } from "lucide-react";
+import { Dot } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { LikeComment } from "./like-comment";
@@ -17,9 +17,9 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
 
   const { mutate: likeComment } = useLikeCommentMutation();
   const { mutate: dislikeComment } = useDislikeCommentMutation();
-  const handleReplyComment = () => {
-    console.log("reply");
-  };
+  // const handleReplyComment = () => {
+  //   console.log("reply");
+  // };
 
   const handleLikeComment = (id: string, likes: findCommentType["likes"]) => {
     if (!auth) return;
@@ -70,14 +70,14 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
                 userId={auth?.id as string}
               />
 
-              <Button
+              {/* <Button
                 variant={"ghost"}
                 className="mb-5 mt-2 active:bg-secondary/10"
                 onClick={() => handleReplyComment()}
               >
                 <MessageCircle size={18} className="mr-1" />
                 <span className="text-sm">Reply</span>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
