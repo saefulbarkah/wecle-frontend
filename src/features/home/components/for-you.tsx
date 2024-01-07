@@ -27,7 +27,7 @@ export const ForYou = () => {
       <div className="h-full w-full">
         <Article data={_articles} />
         <div ref={ref}></div>
-        {isFetching && <LoadingArticle count={1} />}
+        {isFetching && <LoadingArticle count={3} />}
       </div>
     </>
   );
