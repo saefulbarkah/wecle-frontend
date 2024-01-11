@@ -38,6 +38,8 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
     });
   };
 
+  if (!data) return;
+
   return (
     <div className="mt-10">
       {data?.map((item, i) => (

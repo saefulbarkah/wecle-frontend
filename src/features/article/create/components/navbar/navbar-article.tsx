@@ -104,7 +104,7 @@ export const NavbarArticle = () => {
   }, [session, article]);
 
   return (
-    <div className="sticky inset-x-0 top-0 z-50 w-full bg-white">
+    <div className="dark:bg-dark sticky inset-x-0 top-0 z-50 w-full bg-white">
       <div className="container flex h-[60px] items-center justify-between">
         <div className="flex items-center space-x-5">
           <h2 className="text-xl font-semibold">WeCle</h2>

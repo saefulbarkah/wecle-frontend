@@ -71,7 +71,12 @@ export const NotificationMenu = () => {
           )}
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="relative w-96 translate-y-2 p-0">
+      <DropdownMenuContent
+        className="relative w-96 translate-y-2 p-0"
+        align="end"
+        sideOffset={6}
+        alignOffset={-120}
+      >
         <div className="relative">
           <div className="flex items-center justify-between p-2">
             <h2 className="font-semibold">Notifications</h2>
@@ -88,7 +93,7 @@ export const NotificationMenu = () => {
               </Button>
             )}
           </div>
-          <hr />
+          <div className="h-[1px] w-full bg-white dark:bg-white/10"></div>
           <div className="h-80 overflow-y-auto">
             <div className="flex flex-col pb-10">
               {data?.map((item, i) => (
@@ -129,7 +134,7 @@ export const NotificationMenu = () => {
               ))}
             </div>
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex items-center justify-center border bg-white shadow">
+          <div className="dark:bg-dark absolute inset-x-0 bottom-0 flex items-center justify-center rounded-b border bg-white shadow dark:border-white/10">
             <Button variant={"link"}>View all notification</Button>
           </div>
         </div>

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import RecommendedTopics from './recommended-topics';
+import React from "react";
+import RecommendedTopics from "./recommended-topics";
 
 export const SideContent = () => {
   return (
-    <div className="pt-[25px] px-5 border-l w-72 invisible md:visible">
+    <div className="invisible w-72 border-l px-5 pt-[25px] dark:border-white/10 md:visible">
       <RecommendedTopics />
     </div>
   );

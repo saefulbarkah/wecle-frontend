@@ -15,7 +15,7 @@ import React from "react";
 
 const menuItems = [
   {
-    name: "Pro`fil`e",
+    name: "Profile",
     icon: <User className="h-5 w-5" />,
     href: "/profile",
   },
@@ -41,21 +41,28 @@ export const UserMenu = ({ session }: { session: SessionType }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Image
-          src={session!.avatar as string}
-          alt={session!.name as string}
-          width={40}
-          height={40}
-          className="h-10 w-10 rounded-full object-cover"
-        />
+        <button>
+          <Image
+            src={session!.avatar as string}
+            alt={session!.name as string}
+            width={40}
+            height={40}
+            className="h-10 w-10 rounded-full object-cover"
+          />
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-[250px] px-0 py-0">
+      <DropdownMenuContent
+        className="min-w-[250px] px-0 py-0"
+        align="end"
+        sideOffset={20}
+        alignOffset={-50}
+      >
         <div className="my-2 flex flex-col">
           {menuItems.map((item, i) => (
             <Link
               href={item.href}
               key={i}
-              className="bg-transparent text-secondary transition hover:bg-secondary/5 hover:text-black"
+              className="hover:dark:bg-dark-hover bg-transparent text-secondary transition hover:bg-secondary/5 hover:text-black hover:dark:text-white"
             >
               <div className="flex items-center gap-2 px-5 py-2">
                 <span>{item.icon}</span>
@@ -64,7 +71,7 @@ export const UserMenu = ({ session }: { session: SessionType }) => {
             </Link>
           ))}
         </div>
-        <hr />
+        <div className="h-[1px] w-full bg-secondary/10 dark:bg-white/10"></div>
         <div className="my-2">
           <button
             className="mt-2 flex w-full flex-col items-start gap-2 px-5 text-sm"

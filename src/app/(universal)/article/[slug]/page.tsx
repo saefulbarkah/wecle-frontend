@@ -54,7 +54,7 @@ export default async function Page({ params }: Props) {
   if (!article) return redirect("/");
 
   return (
-    <div className="mx-6 pt-[60px] sm:mx-auto sm:max-w-2xl">
+    <div className="mx-6 min-h-screen pt-[60px] sm:mx-auto sm:max-w-2xl">
       <ShowArticle data={article} />
       <Separator />
       <Comments article={article} />

@@ -4,7 +4,7 @@ import React from "react";
 
 const TopicItem = ({ name }: { name: string }) => {
   return (
-    <button className="rounded-xl bg-secondary/10 p-2 text-sm capitalize text-black">
+    <button className="rounded-xl bg-secondary/10 p-2 text-sm capitalize text-black dark:text-white">
       {name}
     </button>
   );

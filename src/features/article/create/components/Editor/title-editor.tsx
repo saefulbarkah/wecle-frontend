@@ -66,7 +66,7 @@ const TitleEditor = ({
     editorProps: {
       attributes: {
         class:
-          "outline-none prose prose-sm sm:prose-base lg:prose-xl xl:prose-2xl m-5 focus:outline-none pt-[2.5rem]",
+          "outline-none prose prose-sm sm:prose-base lg:prose-xl xl:prose-2xl m-5 focus:outline-none pt-[2.5rem] dark:prose-invert",
       },
     },
     autofocus: false,

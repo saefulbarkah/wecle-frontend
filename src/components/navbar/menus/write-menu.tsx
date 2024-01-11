@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useAuthOverlay } from "@/features/auth/store/auth-overlay-store";
 
 const classVariant = cva([
-  "hidden lg:flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2",
+  "hidden lg:flex items-center gap-2 text-secondary hover:text-black transition hover:bg-secondary-50/80 rounded-md p-2 hover:dark:bg-secondary-900 hover:dark:text-white/80",
 ]);
 
 const NavigateCreateArticle = ({ session }: { session: SessionType }) => {

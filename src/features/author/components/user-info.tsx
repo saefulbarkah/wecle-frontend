@@ -93,7 +93,7 @@ export const AuthorInfo = ({ author }: { author: author }) => {
   const { onUnFollow, isPending: unfollowingPending } = useUnFollow();
 
   return (
-    <div className="pt-10 md:w-52 md:border-l md:pt-14 lg:w-80">
+    <div className="pt-10 dark:border-white/10 md:w-52 md:border-l md:pt-14 lg:w-80">
       <div className="static top-[0px] md:sticky md:pl-7 md:pr-5">
         <div className="md:min-h-[calc(100vh-120px)]">
           <div className="flex items-center gap-5 md:flex-col md:items-start md:gap-0">

@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useAuth } from "@/stores/auth-store";
 import { useAuthOverlay } from "@/features/auth/store/auth-overlay-store";
+import { ThemeSwitch } from "./menus/theme-switch";
 
 export const Navbar = () => {
   const session = useAuth((state) => state.session);
@@ -17,7 +18,7 @@ export const Navbar = () => {
   return (
     <>
       <nav
-        className={`sticky left-0 right-0 top-0 z-40 border border-b bg-white transition`}
+        className={`dark:bg-dark sticky left-0 right-0 top-0 z-40 border-b bg-white dark:border-b dark:border-white/10`}
       >
         <div className="flex h-[60px] items-center justify-between px-10">
           <div className="flex items-center gap-2">
@@ -25,11 +26,7 @@ export const Navbar = () => {
             <SearchMenu />
             <div className="flex items-center gap-2">
               <Link href={"/"}>
-                <Button
-                  size={"sm"}
-                  variant={"ghost"}
-                  className="text-md text-secondary/80 hover:text-black"
-                >
+                <Button size={"sm"} variant={"ghost"} className="text-md">
                   Home
                 </Button>
               </Link>
@@ -56,6 +53,7 @@ export const Navbar = () => {
                 </Avatar>
               </button>
             )}
+            <ThemeSwitch />
           </div>
         </div>
       </nav>

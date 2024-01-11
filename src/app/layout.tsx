@@ -9,6 +9,7 @@ import { getServerSession } from "@/hooks/sessions/server";
 import AuthProvider from "@/providers/auth-provider";
 import { CreatePortal } from "@/components/create-portal";
 import { AuthOverlay } from "@/features/auth";
+import { ThemeProvider } from "@/providers/theme-provider";
 // import Script from "next/script";
 
 const quick = Quicksand({
@@ -42,16 +43,19 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${quick.variable} ${openSans.variable} font-sans`}>
-        <AuthProvider session={session}>
-          <CreatePortal>
-            <Toaster />
-          </CreatePortal>
-          <NextTopLoader />
-          <QueryProvider>
-            <AuthOverlay />
-            {children}
-          </QueryProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider session={session}>
+            <CreatePortal>
+              <Toaster />
+            </CreatePortal>
+            <NextTopLoader />
+            <QueryProvider>
+              <AuthOverlay />
+              {children}
+            </QueryProvider>
+          </AuthProvider>
+        </ThemeProvider>
+
         {/* <Script src="https://www.googletagmanager.com/gtag/js?id=G-97BGHVCZ7P" />
         <Script id="google-analytics">
           {`

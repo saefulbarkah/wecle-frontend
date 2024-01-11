@@ -17,7 +17,7 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
       <>
         {data?.map((item, i) => (
           <article className="h-full w-full" key={i} ref={ref}>
-            <div className="px-5 lg:px-10">
+            <div className="px-0 lg:pr-10">
               <Link
                 className="flex items-center gap-2"
                 href={"/author/" + item.author._id}

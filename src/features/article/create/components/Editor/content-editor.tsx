@@ -66,7 +66,7 @@ const ContentEditor = ({
     editorProps: {
       attributes: {
         class:
-          "outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem]",
+          "outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem] dark:prose-invert",
       },
     },
     content: "",

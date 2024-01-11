@@ -104,10 +104,10 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
           <div className="flex-1">
             <form onSubmit={handleSubmit(handleAddComment)}>
               <textarea
-                className={`w-full appearance-none rounded border-none p-3  outline-none ring-1 focus:ring-2 ${
+                className={`w-full appearance-none rounded border-none p-3 outline-none  ring-1 focus:ring-2 dark:bg-secondary-800/20 ${
                   errors.comment
                     ? "ring-danger"
-                    : "ring-secondary focus:ring-primary"
+                    : "ring-secondary focus:ring-primary dark:ring-white/10"
                 }`}
                 placeholder="Add your comment here"
                 rows={2}
