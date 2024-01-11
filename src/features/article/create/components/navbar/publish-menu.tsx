@@ -70,7 +70,12 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
     if (isDisabled) return;
     setDisabled(true);
     setIsOnPublish(true);
-    const cover = await uploadCoverArticle(article);
+    let cover;
+    try {
+      cover = await uploadCoverArticle(article);
+    } catch (error) {
+      throw error;
+    }
 
     // direct publish article
     if (!article._id) {
