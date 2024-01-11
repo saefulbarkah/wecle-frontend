@@ -53,7 +53,7 @@ export const ShowArticle = ({ data }: { data: ArticleType }) => {
           />
         </div>
       )}
-      <article className="prose prose-lg sm:prose-xl dark:text-secondary-400">
+      <article className="prose prose-lg dark:prose-invert sm:prose-xl">
         <div
           dangerouslySetInnerHTML={{ __html: article.content }}
           className="break-all"

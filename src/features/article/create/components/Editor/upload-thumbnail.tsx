@@ -111,7 +111,9 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
       {isOpen && (
         <div
           className={`mt-5 h-[150px] w-full border border-dashed transition-[border-color,transform] motion-reduce:transition-none ${
-            isDragActive ? "border-1 border-primary" : "border-black"
+            isDragActive
+              ? "border-1 border-primary"
+              : "border-black dark:border-white/50"
           }`}
         >
           <div className="relative flex h-full items-center justify-center gap-2">
@@ -124,7 +126,7 @@ const UploadThumbnail = ({ data }: { data?: ArticleTypeResponse }) => {
               >
                 <p
                   className={`text-sm transition-[color] motion-reduce:transition-none md:text-base ${
-                    isDragActive ? "text-primary" : "text-black"
+                    isDragActive ? "text-primary" : "text-black dark:text-white"
                   }`}
                 >
                   Drag drop an image here, or click to select an image

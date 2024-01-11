@@ -44,7 +44,7 @@ export const Comments = ({ article }: { article: ArticleType }) => {
   const { data: comment, isLoading } = useCommentListsArticle(article._id);
 
   return (
-    <div>
+    <div className="my-5">
       <h2 className="text-2xl font-bold">Top Comments {comment?.length} </h2>
       <WriteComment article={article} />
       {isLoading ? <CommentListLoader /> : <ListComment data={comment} />}
