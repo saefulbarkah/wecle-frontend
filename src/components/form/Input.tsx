@@ -36,16 +36,19 @@ const Text = React.forwardRef<HTMLInputElement, inputProps>(
       <div className={`relative ${error ? "my-2" : ""}`}>
         <input
           className={cn(
-            `peer w-full border-b border-black/50 font-semibold placeholder-transparent outline-none transition placeholder:pointer-events-none placeholder:select-none focus:border-primary motion-reduce:transition-none ${
-              error ? "border-b-danger" : ""
-            }`,
+            `peer w-full appearance-none bg-transparent p-1 placeholder-transparent outline-none transition selection:bg-yellow-50  placeholder:pointer-events-none placeholder:select-none autofill:bg-transparent focus:border-primary motion-reduce:transition-none dark:border-white/20 dark:focus:border-primary`,
             className,
           )}
           ref={ref}
           placeholder={placeholder}
           {...props}
         />
-        <label className="pointer-events-none absolute left-0 -translate-y-[1.1rem] text-sm transition-[transform] !duration-150 peer-placeholder-shown:-translate-y-1 peer-focus:-translate-y-[1.1rem] peer-focus:font-normal peer-focus:text-black motion-reduce:transition-none">
+        <div
+          className={`absolute h-[1px] w-full bg-black/20 transition-colors peer-focus:bg-primary motion-reduce:transition-none dark:bg-white/20 ${
+            error ? "bg-danger peer-focus:bg-danger" : ""
+          }`}
+        ></div>
+        <label className="pointer-events-none absolute left-[1px] -translate-y-[1.1rem] text-xs transition-[transform,font] !duration-150 peer-placeholder-shown:-translate-y-1 peer-placeholder-shown:text-sm peer-focus:-translate-y-[1.1rem] peer-focus:text-xs peer-focus:font-normal peer-focus:text-black motion-reduce:transition-none dark:peer-focus:text-white">
           {placeholder}
         </label>
         {error && (
