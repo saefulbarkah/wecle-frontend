@@ -18,13 +18,13 @@ export const ListArticle = () => {
   const [activeMenu, setActiveMenu] = React.useState(menus[0].value);
 
   return (
-    <div className="min-h-screen lg:flex-1">
+    <div className="h-full lg:flex-1">
       <TabUnderline.Tabs
         defaultValue={activeMenu}
         onValueChange={setActiveMenu}
         className="mt-5"
       >
-        <TabUnderline.Lists className="sticky top-[60px] z-10 flex h-full w-full items-center">
+        <TabUnderline.Lists className="sticky top-[60px] z-10 flex h-full w-full items-center px-7 lg:px-0">
           {menus.map((item, i) => (
             <TabUnderline.Item
               label={item.label}
@@ -34,7 +34,7 @@ export const ListArticle = () => {
             />
           ))}
         </TabUnderline.Lists>
-        <div className="mt-10">
+        <div className="mt-10 min-h-screen px-4 lg:px-0">
           <TabUnderline.Content value="for-you">
             <ForYou />
           </TabUnderline.Content>

@@ -9,8 +9,8 @@ export const AuthOverlay = () => {
   const overlayState = useAuthOverlay((state) => state);
   return (
     <Dialog open={overlayState.isOpen} onOpenChange={overlayState.setOpen}>
-      <DialogOverlay className="hidden bg-secondary/20 motion-reduce:transition-none dark:bg-black/60 sm:block" />
-      <DialogContent className="h-full  max-w-full transition-transform motion-reduce:transition-none md:h-[unset] md:max-w-md lg:max-w-md">
+      <DialogOverlay className="hidden bg-secondary/20 motion-reduce:transition-none dark:bg-neutral-100/10 sm:block" />
+      <DialogContent className="h-full  max-w-full transition-transform motion-reduce:transition-none dark:bg-neutral-900 md:h-[unset] md:max-w-md lg:max-w-md">
         <div className="mt-20 sm:mt-[unset]">
           {overlayState.menu === "LOGIN" && <Login />}
           {overlayState.menu === "REGISTER" && <Register />}

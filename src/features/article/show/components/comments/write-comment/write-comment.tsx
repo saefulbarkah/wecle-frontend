@@ -78,7 +78,7 @@ const WriteComment = ({ article }: { article: ArticleType }) => {
       <div className="relative mt-8">
         {session ? null : (
           <button
-            className="absolute inset-0 z-50 h-full w-full cursor-pointer bg-white/10"
+            className="absolute inset-0 z-50 h-full w-full cursor-pointer bg-transparent"
             onClick={() => {
               if (!session) {
                 toast("You need login first");
