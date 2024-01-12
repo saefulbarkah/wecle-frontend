@@ -48,7 +48,12 @@ export default async function RootLayout({
         <ThemeProvider>
           <AuthProvider session={session}>
             <CreatePortal>
-              <Toaster />
+              <Toaster
+                toastOptions={{
+                  className:
+                    "dark:bg-dark dark:text-white dark:border dark:border-white/20 dark:shadow-xl dark:shadow-neutral-700/10",
+                }}
+              />
             </CreatePortal>
             <NextTopLoader />
             <QueryProvider>
