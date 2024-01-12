@@ -51,8 +51,6 @@ export const useUpdateArticle = (options: overrideOptions = {}) => {
     mutationKey: ["update-article"],
     mutationFn: ({ data, id, token }) => post({ data, id, token: token }),
     onSuccess: (res, data) => {
-      console.log(data.data.cover);
-
       // alert on success
       if (options.onSuccessAlertMsg) {
         toast.success(options.onSuccessAlertMsg, { id: idLoading });

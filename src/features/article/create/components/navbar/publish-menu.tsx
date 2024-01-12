@@ -48,9 +48,9 @@ export const PublishMenu = ({ buttonProps }: { buttonProps: Tbutton }) => {
   const { mutateAsync: publishArticle } = usePublishArticle({
     onSuccess: () => {
       toast.success("Your article has been published", { id: idOnPublishing });
-      resetState();
       setDisabled(false);
       setIsOnPublish(false);
+      resetState();
     },
     onMutate: () => {
       toast.loading("Publishing your article, please wait...", {

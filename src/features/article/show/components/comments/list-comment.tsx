@@ -17,9 +17,6 @@ const ListComment = ({ data }: { data?: findCommentType[] }) => {
 
   const { mutate: likeComment } = useLikeCommentMutation();
   const { mutate: dislikeComment } = useDislikeCommentMutation();
-  // const handleReplyComment = () => {
-  //   console.log("reply");
-  // };
 
   const handleLikeComment = (id: string, likes: findCommentType["likes"]) => {
     if (!auth) return;

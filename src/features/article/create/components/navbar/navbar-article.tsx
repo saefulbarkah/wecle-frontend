@@ -63,12 +63,14 @@ export const NavbarArticle = () => {
     {
       onSuccess: (res) => {
         toast.success(res.data.message, {
+          position: "bottom-right",
           id: isSavingID,
         });
       },
       onMutate: () => {
         toast.loading("Saving draft....", {
           id: isSavingID,
+          position: "bottom-right",
         });
       },
     },
@@ -84,7 +86,6 @@ export const NavbarArticle = () => {
       setDisableSaveToDraft(true);
       return toast.error("Unauthorized");
     }
-    console.log(article.cover);
 
     saveToDraft({
       data: {

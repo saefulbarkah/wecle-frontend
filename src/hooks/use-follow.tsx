@@ -127,7 +127,6 @@ export const useFollow = (data: author) => {
 
   const isFollowing = useMemo(() => {
     if (!session) return;
-    console.log("execute me");
     return dataAuthor?.followers.some(
       (item) => item.author._id === session.author_id,
     );

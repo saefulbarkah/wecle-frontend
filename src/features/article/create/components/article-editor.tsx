@@ -76,7 +76,7 @@ export const CreateArticle = () => {
 
   return (
     <>
-      <div className="relative h-[calc(100vh-60px)] overflow-y-auto">
+      <div className="relative">
         <div className="container max-w-5xl">
           {isLoading && (
             <>

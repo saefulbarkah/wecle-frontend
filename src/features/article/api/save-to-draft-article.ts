@@ -71,7 +71,11 @@ export const useSaveDraft = (options?: Toptions) => {
         author,
         content,
         title,
-        cover,
+        cover: {
+          name: cover?.name,
+          src: cover?.src,
+          type: "BASE64",
+        },
       });
     },
     onError: (res) => {
