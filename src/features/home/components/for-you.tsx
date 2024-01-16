@@ -24,11 +24,17 @@ export const ForYou = () => {
 
   return (
     <>
-      <div className="h-full w-full">
-        <Article data={_articles} />
-        <div ref={ref}></div>
-        {isFetching && <LoadingArticle count={3} />}
-      </div>
+      {_articles?.length === 0 ? (
+        <div className="">
+          <p>No Articles</p>
+        </div>
+      ) : (
+        <div className="h-full w-full">
+          <Article data={_articles} />
+          <div ref={ref}></div>
+          {isFetching && <LoadingArticle count={3} />}
+        </div>
+      )}
     </>
   );
 };

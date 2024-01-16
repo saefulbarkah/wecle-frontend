@@ -43,7 +43,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quick.variable} ${openSans.variable} font-sans dark:selection:bg-white/10`}
+        className={`${quick.variable} ${openSans.variable} overflow-y-scroll font-sans dark:selection:bg-white/10`}
       >
         <ThemeProvider>
           <AuthProvider session={session}>

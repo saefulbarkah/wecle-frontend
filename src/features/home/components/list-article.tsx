@@ -34,7 +34,7 @@ export const ListArticle = () => {
             />
           ))}
         </TabUnderline.Lists>
-        <div className="mt-10 min-h-screen px-4 lg:px-0">
+        <div className="mt-10 px-4 lg:px-0">
           <TabUnderline.Content value="for-you">
             <ForYou />
           </TabUnderline.Content>
