@@ -5,5 +5,9 @@ import { ThemeProvider as Provider } from "next-themes";
 type Props = React.PropsWithChildren & {};
 
 export function ThemeProvider({ children }: Props) {
-  return <Provider attribute="class">{children}</Provider>;
+  return (
+    <Provider attribute="class" enableColorScheme={true}>
+      {children}
+    </Provider>
+  );
 }

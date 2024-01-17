@@ -1,18 +1,33 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Editor, FloatingMenu as Menu } from '@tiptap/react';
-import { ImagePlus, LucidePlus } from 'lucide-react';
-import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ZodError, z } from 'zod';
-import toast from 'react-hot-toast';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Editor, FloatingMenu as Menu } from "@tiptap/react";
+import { ImagePlus, LucidePlus } from "lucide-react";
+import React, { useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useDropzone, FileRejection, ErrorCode } from "react-dropzone";
+import toast from "react-hot-toast";
+import { create } from "zustand";
 
 type floatingProps = {
   editor: Editor | null;
 };
 
+type State = {
+  isOpen: boolean;
+};
+type Action = {
+  setOpen: (val: boolean) => void;
+  toggle: () => void;
+};
+
+const useFloatingState = create<State & Action>((set) => ({
+  isOpen: false,
+  setOpen: (val) => set({ isOpen: val }),
+  toggle: () => set((state) => ({ isOpen: !state.isOpen })),
+}));
+
 export const FloatingMenu = ({ editor }: floatingProps) => {
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const floating = useFloatingState((state) => state);
 
   if (!editor) return;
 
@@ -23,27 +38,27 @@ export const FloatingMenu = ({ editor }: floatingProps) => {
       tippyOptions={{ duration: 100 }}
     >
       <div className="relative">
-        <div className="flex items-center h-full w-full">
+        <div className="flex h-full w-full items-center">
           <Button
-            variant={isOpen ? 'secondary' : 'outline'}
-            className={`transition rounded-full cursor-pointer border-slate-900/50 ${
-              isOpen && 'rotate-45'
+            variant={floating.isOpen ? "secondary" : "outline"}
+            className={`cursor-pointer rounded-full border-slate-900/50 transition ${
+              floating.isOpen && "rotate-45"
             }`}
-            size={'icon'}
-            onClick={() => setOpen((state) => !state)}
+            size={"icon"}
+            onClick={() => floating.toggle()}
           >
             <LucidePlus className={`transition `} />
           </Button>
 
           <AnimatePresence>
-            {isOpen && (
+            {floating.isOpen && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, cursor: 'none', pointerEvents: 'none' }}
+                exit={{ opacity: 0, cursor: "none", pointerEvents: "none" }}
                 className="absolute -right-6 translate-x-full"
               >
-                <div className="min-w-[400px] bg-white">
+                <div className="min-w-[400px] bg-white dark:bg-dark">
                   <div className="flex items-center gap-3">
                     <UploadImage editor={editor} />
                   </div>
@@ -60,85 +75,67 @@ export const FloatingMenu = ({ editor }: floatingProps) => {
 // upload image component
 type uploadImageProps = React.PropsWithChildren & floatingProps & {};
 
-const MAX_FILE_SIZE = 50000;
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-];
+const UploadImage = ({ editor }: uploadImageProps) => {
+  const floating = useFloatingState((state) => state);
 
-const uploadImageSchema = z
-  .custom<File>()
-  .refine((file) => file.size <= MAX_FILE_SIZE, {
-    message: 'Max file size is 5MB',
-  })
-  .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-    message: '.jpg, .jpeg, .png and .webp files are accepted.',
+  const onDrop = useCallback(
+    (acceptedFiles: File[], FileRejection: FileRejection[]) => {
+      FileRejection.map((item) => {
+        item.errors.map(({ code, message }) => {
+          switch (code) {
+            case ErrorCode.FileTooLarge:
+              toast.error(message);
+              break;
+            case ErrorCode.FileInvalidType:
+              toast.error("Invalid image format");
+              break;
+
+            default:
+              // Handle other or unknown error codes
+              console.error(`Unknown error code: ${code}`);
+              break;
+          }
+        });
+      });
+
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          editor?.commands.setImage({
+            src: result,
+            alt: file.name,
+          });
+        };
+        reader.readAsDataURL(file);
+        setTimeout(() => {
+          editor?.commands.enter();
+        }, 200);
+      }
+      floating.setOpen(false);
+    },
+    [],
+  );
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    maxSize: 5242880,
+    maxFiles: 1,
+    noDrag: true,
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpeg", ".webp"],
+    },
   });
 
-const UploadImage = ({ editor }: uploadImageProps) => {
-  const fileRef = React.useRef<HTMLInputElement | null>(null);
-
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      await uploadImageSchema.parseAsync(file);
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        const ctx = canvas.getContext('2d');
-
-        ctx?.drawImage(img, 0, 0);
-
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) return;
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-
-            reader.onload = (e: ProgressEvent<FileReader>) => {
-              const result = reader.result as string;
-              editor?.chain().focus().setImage({ src: result }).run();
-            };
-          },
-          'image/jpeg',
-          0.5
-        );
-      };
-    } catch (error) {
-      if (error instanceof ZodError) {
-        toast.error(
-          <>
-            <ul className="list-disc ml-5">
-              {error.errors.map((item, i) => (
-                <li key={i}>{item.message}</li>
-              ))}
-            </ul>
-          </>
-        );
-      }
-    }
-  };
-
   return (
-    <label className="relative">
-      <input
-        type="file"
-        ref={fileRef}
-        className="hidden peer"
-        onChange={handleUploadImage}
-      />
+    <label className="relative" {...getRootProps}>
+      <input type="file" className="peer sr-only" {...getInputProps} />
       <Button
-        variant={'outline'}
-        className="rounded-full cursor-pointer border-slate-900/50"
-        size={'icon'}
-        onClick={() => fileRef.current?.click()}
+        variant={"outline"}
+        className="cursor-pointer rounded-full border-slate-900/50"
+        size={"icon"}
+        onClick={open}
       >
         <ImagePlus />
       </Button>

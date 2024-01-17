@@ -2,13 +2,15 @@
 "use client";
 
 import Paragraph from "@tiptap/extension-paragraph";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
 import HardBreak from "@tiptap/extension-hard-break";
-import Dropcursor from "@tiptap/extension-dropcursor";
 import Bold from "@tiptap/extension-bold";
 import Image from "@tiptap/extension-image";
 import History from "@tiptap/extension-history";
@@ -37,9 +39,11 @@ const ContentEditor = ({
       Document,
       Text,
       HardBreak,
-      Dropcursor,
       Bold,
       History,
+      BulletList,
+      ListItem,
+      OrderedList,
       Blockquote,
       Image.configure({
         allowBase64: true,
@@ -66,7 +70,7 @@ const ContentEditor = ({
     editorProps: {
       attributes: {
         class:
-          "outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem] dark:prose-invert",
+          "outline-none prose prose-sm lg:prose-lg xl:prose-xl m-5 focus:outline-none mb-[5rem] dark:prose-invert dark:border-b dark:border-white/10 max-w-full pb-2",
       },
     },
     content: "",

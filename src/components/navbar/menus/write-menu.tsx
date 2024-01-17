@@ -17,7 +17,7 @@ const NavigateCreateArticle = ({ session }: { session: SessionType }) => {
   const Comp = session ? Link : "button";
   return (
     <Comp
-      href={"/article/new"}
+      href={"/create"}
       className={cn(classVariant())}
       onClick={(e) => {
         if (!session) {
