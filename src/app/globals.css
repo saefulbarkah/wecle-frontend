@@ -29,7 +29,7 @@
     }
     /* Handle */
     ::-webkit-scrollbar-thumb {
-      @apply rounded-lg bg-dark;
+      @apply bg-dark;
     }
 
     /* Handle on hover */
