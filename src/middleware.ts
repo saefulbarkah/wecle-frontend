@@ -23,7 +23,7 @@ const isAuthenticated = async (req: NextRequest): Promise<SessionType> => {
 };
 
 export async function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname.startsWith("/article/new")) {
+  if (req.nextUrl.pathname.startsWith("/create")) {
     const isAuthorized = await isAuthenticated(req);
     if (!isAuthorized) {
       return NextResponse.redirect(new URL("/", req.url));
