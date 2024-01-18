@@ -16,11 +16,12 @@ export const ForYou = () => {
   });
 
   useEffect(() => {
+    console.log(data);
     if (entry?.isIntersecting) fetchNextPage();
   }, [entry]);
 
   if (isLoading) return <LoadingArticle count={5} />;
-  const _articles = data?.pages.flatMap((page) => page);
+  const _articles = data?.pages.flatMap((page) => page.results);
 
   return (
     <>

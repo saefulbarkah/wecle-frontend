@@ -4,8 +4,12 @@ export type ApiResponse<TData = null> = {
   message: string;
   error: any;
   data: TData;
-  totalPages?: number;
-  currentPage?: number;
+};
+
+export type TPagination<TData = null> = {
+  nextPage: number | null;
+  totalPages: number | null;
+  results: TData;
 };
 
 export type InfinitePage = {};
