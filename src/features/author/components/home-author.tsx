@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { ArticleAuthor, LoadingArticle } from "@/components/Article";
 import { articleServices } from "@/services/article";
 import { useIntersection } from "@mantine/hooks";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import React, { useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 
 type homeProps = {
   authorId?: string;

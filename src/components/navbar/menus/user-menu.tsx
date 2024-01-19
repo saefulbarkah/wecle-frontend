@@ -8,12 +8,32 @@ import {
 import { useLogout } from "@/features/auth/api/logout";
 import { SessionType } from "@/hooks/sessions/type";
 import { censorEmail } from "@/lib/utils";
-import { Bookmark, Paperclip, SignalHigh, User } from "lucide-react";
+import {
+  Bookmark,
+  Home,
+  Paperclip,
+  Plus,
+  SignalHigh,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const menuItems = [
+  {
+    name: "Create Article",
+    as: "mobile",
+    icon: <Plus className="h-5 w-5" />,
+    href: "/create",
+  },
+  {
+    name: "Home",
+    as: "mobile",
+    icon: <Home className="h-5 w-5" />,
+    href: "/",
+  },
   {
     name: "Profile",
     icon: <User className="h-5 w-5" />,
@@ -38,6 +58,7 @@ const menuItems = [
 
 export const UserMenu = ({ session }: { session: SessionType }) => {
   const { mutate: logout } = useLogout();
+  const path = usePathname();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -62,7 +83,10 @@ export const UserMenu = ({ session }: { session: SessionType }) => {
             <Link
               href={item.href}
               key={i}
-              className="hover:dark:bg-dark-hover bg-transparent text-secondary transition hover:bg-secondary/5 hover:text-black hover:dark:text-white"
+              className={`bg-transparent text-secondary transition hover:bg-secondary/5 hover:text-black hover:dark:bg-dark-hover hover:dark:text-white ${
+                path === item.href &&
+                "bg-secondary/5 text-black dark:bg-dark-hover dark:text-white"
+              } ${item.as === "mobile" && "md:hidden"}`}
             >
               <div className="flex items-center gap-2 px-5 py-2">
                 <span>{item.icon}</span>

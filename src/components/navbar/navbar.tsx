@@ -18,14 +18,14 @@ export const Navbar = () => {
   return (
     <>
       <nav
-        className={`dark:bg-dark sticky left-0 right-0 top-0 z-40 border-b bg-white dark:border-b dark:border-white/10`}
+        className={`sticky left-0 right-0 top-0 z-40 border-b bg-white dark:border-b dark:border-white/10 dark:bg-dark`}
       >
         <div className="flex h-[60px] items-center justify-between px-10">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">WeCle</h2>
             <SearchMenu />
             <div className="flex items-center gap-2">
-              <Link href={"/"}>
+              <Link href={"/"} className="hidden sm:block">
                 <Button size={"sm"} variant={"ghost"} className="text-md">
                   Home
                 </Button>

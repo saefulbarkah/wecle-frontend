@@ -28,17 +28,18 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 </Avatar>
                 <p className="text-sm font-semibold">{item.author.name}</p>
               </Link>
-              <div className="mt-5">
+              <div className="lg:mt-5">
                 <Link
                   href={`/article/${encodeURIComponent(item.slug)}`}
                   className="flex w-full justify-between gap-2"
                   prefetch={false}
                 >
-                  <div className="flex-1">
-                    <h2 className="line-clamp-2 break-all text-[20px] font-bold">
+                  {/* desktop view */}
+                  <div className="hidden flex-1 lg:block">
+                    <h2 className="line-clamp-2 break-all text-sm font-bold md:text-[20px]">
                       {item.title}
                     </h2>
-                    <div className="mt-2 hidden justify-between gap-5 lg:flex">
+                    <div className="mt-2 justify-between gap-5 lg:flex">
                       <p className="text-md line-clamp-3 break-all font-serif">
                         {limitText({
                           limit: 301,
@@ -47,8 +48,15 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                       </p>
                     </div>
                   </div>
+
+                  {/* mobile view */}
+                  <div className="flex flex-1 items-center lg:hidden">
+                    <h2 className="line-clamp-2 break-all text-base font-bold">
+                      {item.title}
+                    </h2>
+                  </div>
                   {item.cover && (
-                    <div className="relative ml-5 h-[100px] w-[150px] lg:h-[134px] lg:w-[200px]">
+                    <div className="relative ml-5 h-[100px] w-[120px] lg:h-[134px] lg:w-[200px]">
                       <Image
                         src={item.cover.src}
                         alt="testing"
@@ -65,7 +73,7 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 </Link>
               </div>
             </div>
-            <div className="py-10">
+            <div className="py-3 lg:py-10">
               <div className="h-[1px] w-full bg-secondary/10"></div>
             </div>
           </article>
