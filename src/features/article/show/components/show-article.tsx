@@ -2,11 +2,12 @@
 import { articleServices } from "@/services/article";
 import { ArticleType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { Dot } from "lucide-react";
+import { Dot, Loader2 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 export const ShowArticle = ({ data }: { data: ArticleType }) => {
+  const [isImgLoaded, setLoadedImage] = useState(false);
   const { data: article } = useQuery({
     queryKey: ["article", data.slug],
     queryFn: () => articleServices.findArticle(data.slug),
@@ -43,13 +44,20 @@ export const ShowArticle = ({ data }: { data: ArticleType }) => {
       </div>
       {article.cover && (
         <div className="relative aspect-video overflow-hidden">
+          {!isImgLoaded ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <Loader2 className="flex h-8 w-8 animate-spin lg:h-12 lg:w-12" />
+            </div>
+          ) : null}
           <Image
             src={article.cover.src}
             alt="testing"
             fill
             sizes="100%"
-            priority
             className="object-contain"
+            onLoad={() => {
+              setLoadedImage(true);
+            }}
           />
         </div>
       )}
