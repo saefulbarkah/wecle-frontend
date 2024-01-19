@@ -1,6 +1,5 @@
-import { TabUnderline } from "@/components/Tabs";
 import { AuthorInfo } from "@/features/author";
-import { HomeAuthor } from "@/features/author/components/home-author";
+import { AuthorMenus } from "@/features/author/components/author-menus";
 import { AuthorService } from "@/services/author/author-service";
 import React from "react";
 export const dynamic = "force-dynamic";
@@ -19,20 +18,7 @@ export default async function AuthorPage({
           {author.name}
         </h2>
         <div className="md:mt-5">
-          <TabUnderline.Tabs defaultValue="home">
-            <TabUnderline.Lists className="sticky top-[60px] z-10 flex h-full w-full items-center">
-              <TabUnderline.Item value="home" label="home" className="h-14" />
-              <TabUnderline.Item value="about" label="about" className="h-14" />
-            </TabUnderline.Lists>
-            <div className="mt-5">
-              <TabUnderline.Content value="about">
-                {author.about}
-              </TabUnderline.Content>
-              <TabUnderline.Content value="home">
-                <HomeAuthor authorId={author._id} />
-              </TabUnderline.Content>
-            </div>
-          </TabUnderline.Tabs>
+          <AuthorMenus author={author} />
         </div>
       </div>
       <AuthorInfo author={author} />

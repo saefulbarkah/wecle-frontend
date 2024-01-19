@@ -1,6 +1,6 @@
 import API from "@/api";
 import { articleType } from "@/stores/article-store";
-import { ApiResponse, ArticleType } from "@/types";
+import { ApiResponse, ArticleType, TPagination } from "@/types";
 
 export type TArticleRequestCreate = Pick<
   articleType,
@@ -20,10 +20,10 @@ export class articleServices {
   static async lists(params: {
     status: "RELEASE" | "DRAFT";
     authorId?: string;
-  }): Promise<ArticleType[]> {
-    const response = await API.axios.get<ApiResponse<ArticleType[]>>(
-      `/article/lists/?status=${params.status}&authorId=${params.authorId}`,
-    );
+  }): Promise<TPagination<ArticleType[]>> {
+    const response = await API.axios.get<
+      ApiResponse<TPagination<ArticleType[]>>
+    >(`/article/lists/?status=${params.status}&authorId=${params.authorId}`);
     return response.data.data;
   }
 

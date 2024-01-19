@@ -1,5 +1,12 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Tabs,
   TabsList,
@@ -8,56 +15,58 @@ import {
 } from "../ui/tabs";
 import { TabsListProps, TabsTriggerProps } from "@radix-ui/react-tabs";
 import { cn } from "@/lib/utils";
-import { create } from "zustand";
 
-type State = {
+type Context = {
   indicator: {
-    width?: number;
-    left?: number;
+    left: number;
+    width: number;
   };
-};
-type Action = {
-  setIndicator: (val: State["indicator"]) => void;
+  setIndicator: React.Dispatch<{ left: number; width: number }>;
 };
 
-const useUnderline = create<State & Action>((set) => ({
-  indicator: {
-    left: 0,
-    width: 0,
-  },
-  setIndicator: (val) => set({ indicator: val }),
-}));
+const context = createContext<Context | null>(null);
+const Provider = context.Provider;
 
 type listsProps = TabsListProps & {};
 const Lists = ({ children, className, ...props }: listsProps) => {
+  const [indicator, setIndicator] = useState<Context["indicator"]>({
+    left: 0,
+    width: 0,
+  });
+
   return (
-    <TabsList
-      className={cn(
-        `relative flex w-full items-center justify-start rounded-none bg-white p-0`,
-        className,
-      )}
-      {...props}
-    >
-      <div className="">
-        <div className="relative flex w-full items-center justify-center space-x-2">
-          {children}
+    <Provider value={{ indicator, setIndicator }}>
+      <TabsList
+        className={cn(
+          `relative flex w-full items-center justify-start rounded-none bg-white p-0`,
+          className,
+        )}
+        {...props}
+      >
+        <div className="">
+          <div className="relative flex w-full items-center justify-center">
+            {children}
+            <Indicator />
+          </div>
         </div>
-      </div>
-      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-black opacity-10 dark:bg-white" />
-    </TabsList>
+        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-black opacity-10 dark:bg-white" />
+      </TabsList>
+    </Provider>
   );
 };
 
 const Indicator = () => {
   const [initialRender, setInitialRender] = useState(true);
-  const state = useUnderline((state) => state.indicator);
+  const { indicator } = useContext(context) as Context;
 
   useEffect(() => setInitialRender(false), []);
   return (
     <span
       className="absolute bottom-0 block h-[2px] bg-black transition-all motion-reduce:transition-none dark:bg-white"
       style={
-        initialRender ? undefined : { left: state.left, width: state.width }
+        initialRender
+          ? undefined
+          : { left: indicator.left, width: indicator.width }
       }
     />
   );
@@ -67,13 +76,14 @@ type itemProps = TabsTriggerProps & {
   label: string;
 };
 const Item = ({ label, className, ...props }: itemProps) => {
-  const setIndicator = useUnderline((state) => state.setIndicator);
+  const { setIndicator } = useContext(context) as Context;
+
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
+    const currentTab = triggerRef?.current;
     const isActive =
       triggerRef?.current?.getAttribute("data-state") === "active";
-    const currentTab = triggerRef?.current;
 
     if (isActive && currentTab) {
       setIndicator({
@@ -89,14 +99,13 @@ const Item = ({ label, className, ...props }: itemProps) => {
       <TabsTrigger
         ref={triggerRef}
         className={cn(
-          "text-md group relative h-full rounded p-2 text-secondary/80 transition-[opacity,color] data-[state=active]:bg-transparent data-[state=active]:text-black data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:bg-transparent dark:data-[state=active]:text-white",
+          "text-md group relative h-full rounded text-secondary/80 transition-[opacity,color] data-[state=active]:bg-transparent data-[state=active]:text-black data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:bg-transparent dark:data-[state=active]:text-white",
           className,
         )}
         {...props}
       >
         <p className="capitalize">{label}</p>
       </TabsTrigger>
-      <Indicator />
     </div>
   );
 };
