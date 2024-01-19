@@ -9,8 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 const CommentListLoader = () => {
   return Array(3)
     .fill(null)
-    .map((item) => (
-      <React.Fragment key={item}>
+    .map((item, i) => (
+      <React.Fragment key={i}>
         <div className="mt-7">
           <div className="flex gap-2">
             <Skeleton className="h-10 w-10 rounded-full" />
