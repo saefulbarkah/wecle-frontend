@@ -16,7 +16,6 @@ export const ForYou = () => {
   });
 
   useEffect(() => {
-    console.log(data);
     if (entry?.isIntersecting) fetchNextPage();
   }, [entry]);
 
