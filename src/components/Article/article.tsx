@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar } from "@/components/ui/avatar";
 import { htmlToText, limitText } from "@/lib/utils";
 import { ArticleType } from "@/types";
 import Image from "next/image";
