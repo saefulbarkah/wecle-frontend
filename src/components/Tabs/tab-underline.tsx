@@ -27,8 +27,15 @@ type Context = {
 const context = createContext<Context | null>(null);
 const Provider = context.Provider;
 
-type listsProps = TabsListProps & {};
-const Lists = ({ children, className, ...props }: listsProps) => {
+type listsProps = TabsListProps & {
+  bottomShadow?: boolean;
+};
+const Lists = ({
+  children,
+  className,
+  bottomShadow = false,
+  ...props
+}: listsProps) => {
   const [indicator, setIndicator] = useState<Context["indicator"]>({
     left: 0,
     width: 0,
@@ -43,13 +50,16 @@ const Lists = ({ children, className, ...props }: listsProps) => {
         )}
         {...props}
       >
-        <div className="">
+        <div>
           <div className="relative flex w-full items-center justify-center">
             {children}
             <Indicator />
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-black opacity-10 dark:bg-white" />
+        {bottomShadow ? (
+          <div className="dark:from-dark absolute bottom-0 h-[50px] w-full translate-y-full bg-gradient-to-b from-white"></div>
+        ) : null}
+        <div className="absolute inset-x-0 bottom-0 z-10 h-[1px] bg-black opacity-10 dark:bg-white" />
       </TabsList>
     </Provider>
   );

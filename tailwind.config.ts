@@ -28,6 +28,12 @@ const config: Config = {
         serif: ["var(--source-serif)", ...defaultTheme.fontFamily.serif],
       },
       colors: {
+        dark: {
+          DEFAULT: "#121212",
+        },
+        "dark-hover": {
+          DEFAULT: "#1A1A1A",
+        },
         "foreground-dark": {
           DEFAULT: colors.white,
         },

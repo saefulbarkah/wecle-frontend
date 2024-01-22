@@ -24,7 +24,10 @@ export const ListArticle = () => {
         onValueChange={setActiveMenu}
         className="mt-5"
       >
-        <TabUnderline.Lists className="sticky top-[60px] z-10 flex h-full w-full items-center px-7 lg:px-0">
+        <TabUnderline.Lists
+          bottomShadow={true}
+          className="sticky top-[60px] z-10 flex h-full w-full items-center px-7 lg:px-0"
+        >
           {menus.map((item, i) => (
             <TabUnderline.Item
               label={item.label}

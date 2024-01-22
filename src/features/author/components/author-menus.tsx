@@ -25,7 +25,10 @@ export const AuthorMenus = ({ author }: { author: author }) => {
         defaultValue={activeMenu}
         onValueChange={setActiveMenu}
       >
-        <TabUnderline.Lists className="sticky top-[60px] z-10 flex h-full w-full items-center">
+        <TabUnderline.Lists
+          className="sticky top-[60px] z-10 flex h-full w-full items-center"
+          bottomShadow={true}
+        >
           {menus.map((item, i) => (
             <TabUnderline.Item
               label={item.label}
