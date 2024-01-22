@@ -23,9 +23,13 @@ const Article = React.forwardRef<HTMLDivElement, articleProps>(
                 href={"/author/" + item.author._id}
                 prefetch={false}
               >
-                <Avatar className="h-[30px] w-[30px]">
-                  <Image alt={`avatar`} src={`${item.author.avatar}`} fill />
-                </Avatar>
+                <Image
+                  alt={`avatar`}
+                  src={`${item.author.avatar}`}
+                  height={30}
+                  width={30}
+                  className="rounded-full"
+                />
                 <p className="text-sm font-semibold">{item.author.name}</p>
               </Link>
               <div className="lg:mt-5">
